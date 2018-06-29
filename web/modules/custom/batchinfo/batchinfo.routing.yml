@@ -1,0 +1,25 @@
+#
+batchinfo.importLillyMeeting.guide:
+  path: '/batchinfo/importlillymeeting/guide'
+  defaults:
+    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::guideImportLillyMeeting'
+    _title: 'Batchinfo Guide Import Lilly Meeting'
+  requirements:
+    _permission: 'access content'
+
+batchinfo.importLillyMeeting.run:
+  path: '/batchinfo/importlillymeeting/run'
+  defaults:
+    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::runImportLillyMeeting'
+    _title: 'Batchinfo Run Import Lilly Meeting'
+  requirements:
+    _permission: 'access content'
+
+batchinfo.importLillyPool.run:
+  path: '/batchinfo/importlillypool/run'
+  defaults:
+    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::runImportLillyPool'
+    _title: 'Batchinfo Run Import Lilly Pool'
+  requirements:
+    _permission: 'access content'
+

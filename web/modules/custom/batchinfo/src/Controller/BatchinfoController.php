@@ -39,7 +39,7 @@ class BatchinfoController extends ControllerBase {
     $build = array(
       '#type' => 'markup',
       '#markup' => $markup,
-      // '#allowed_tags' => \Drupal::getContainer()->get('flexinfo.setting.service')->adminTag(),
+      '#allowed_tags' => \Drupal::getContainer()->get('flexinfo.setting.service')->adminTag(),
     );
 
     return $build;
@@ -66,7 +66,7 @@ class BatchinfoController extends ControllerBase {
     $operations = [];
     foreach ($chunk as $piece) {
       $operations[] = array(
-        '\Drupal\batchinfo\Content\RunImportJsonToNode::checkAllianceMeetingGroupExist',   // function name
+        '\Drupal\batchinfo\Content\RunImportJsonToNode::checkJsonAndCreateEntity',   // function name
         array($piece)
       );
     }

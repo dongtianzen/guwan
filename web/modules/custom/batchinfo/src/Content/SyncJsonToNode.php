@@ -295,6 +295,39 @@ class SyncJsonToNode extends GetEntityFromJson {
 
   /**
    *
+   require_once(DRUPAL_ROOT . '/modules/custom/phpdebug/import_json/import_node_meeting.php');
+   $SyncLillyMeeting = new SyncLillyMeeting();
+   $SyncLillyMeeting->checkBiHaveSameMeetingAndSaveToSheet(5603);
+   */
+  public function runBatchinfoCreateNodeEntity($liily_meeting_nid = NULL) {
+    if (TRUE) {
+      $meeting_json = $this->getLillyEntityJsonContent($liily_meeting_nid);
+
+      $meeting_nids = $this->queryBiMeetingFiveCondition($meeting_json);
+
+      if (count($meeting_nids) > 1) {
+        drupal_set_message($liily_meeting_nid . ' have - ' . count($meeting_nids) . ' - same item', 'error');
+
+        return;
+      }
+      elseif (count($meeting_nids) == 1) {
+        $bi_meeting_nid = $meeting_nids[0];
+
+        drupal_set_message($liily_meeting_nid . ' have - ' . count($meeting_nids) . ' - same item');
+        $this->saveEntityNidsToData($bi_meeting_nid, $liily_meeting_nid, $this->json_meeting_path);
+      }
+      else {
+        $this->checkTermExistBeforeRunCreateMeeting($meeting_json);
+
+        $this->runCreateMeetingOnBidash($meeting_json);
+      }
+    }
+
+    return;
+  }
+
+  /**
+   *
    */
   public function runCreateMeetingOnBidash($meeting_json = NULL) {
     $fields_value = $this->generateNodefieldsValue($meeting_json);

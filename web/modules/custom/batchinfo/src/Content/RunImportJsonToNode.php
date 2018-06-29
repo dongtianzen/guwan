@@ -16,13 +16,13 @@ class RunImportJsonToNode {
   /**
    *
    */
-  public static function checkAllianceMeetingGroupExist($piece, &$context) {
+  public static function checkJsonAndCreateEntity($piece, &$context) {
     foreach ($piece as $row) {
-      self::checkAllianceMeetingNidExist($row);
+      self::batchinfoCreateNodeEntity($row);
     }
     $result = count($piece);
 
-    $message = 'Running Batch checkAllianceMeetingNidExist() function ...';
+    $message = 'Running Batch batchinfoCreateNodeEntity() function ...';
     $context['message'] = $message;
     $context['results'][] = $result;
 
@@ -50,9 +50,9 @@ class RunImportJsonToNode {
   /**
    *
    */
-  public static function checkAllianceMeetingNidExist($data = array()) {
+  public static function batchinfoCreateNodeEntity($data = array()) {
     $SyncJsonToNode = new SyncJsonToNode();
-    $SyncJsonToNode->checkBiHaveSameMeetingAndSaveToSheet($data);
+    $SyncJsonToNode->batchinfoCreateNodeEntity($data);
   }
 
 }

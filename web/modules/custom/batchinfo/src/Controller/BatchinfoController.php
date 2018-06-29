@@ -11,7 +11,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
 use Drupal\batchinfo\Content\SyncJsonToNode;
-use Drupal\dashpage\Content\DashpageCacheContent;
 
 /**
  * Controller routines for theme example routes.
@@ -40,7 +39,7 @@ class BatchinfoController extends ControllerBase {
     $build = array(
       '#type' => 'markup',
       '#markup' => $markup,
-      '#allowed_tags' => \Drupal::getContainer()->get('flexinfo.setting.service')->adminTag(),
+      // '#allowed_tags' => \Drupal::getContainer()->get('flexinfo.setting.service')->adminTag(),
     );
 
     return $build;

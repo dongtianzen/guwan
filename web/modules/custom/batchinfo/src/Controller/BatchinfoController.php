@@ -56,7 +56,7 @@ class BatchinfoController extends ControllerBase {
     if ($lilly_meeting_nids && is_array($lilly_meeting_nids)) {
     }
     else {
-      drupal_set_message('All of meeting had sync, Please check Lilly meeting nids', 'warning');
+      drupal_set_message('All of JSON had sync, Please check Lilly meeting nids', 'warning');
     }
 
     $every_time_excute_max_number = 1;
@@ -68,7 +68,7 @@ class BatchinfoController extends ControllerBase {
     $operations = [];
     foreach ($chunk as $piece) {
       $operations[] = array(
-        '\Drupal\batchinfo\Content\RunImportLillyMeeting::checkAllianceMeetingGroupExist',   // function name
+        '\Drupal\batchinfo\Content\RunImportJsonToNode::checkAllianceMeetingGroupExist',   // function name
         array($piece)
       );
     }
@@ -76,12 +76,12 @@ class BatchinfoController extends ControllerBase {
     $batch = array(
       'title' => t('Running batch...'),
       'operations' => $operations,
-      'finished' => '\Drupal\batchinfo\Content\RunImportLillyMeeting::finishedCallback',
+      'finished' => '\Drupal\batchinfo\Content\RunImportJsonToNode::finishedCallback',
     );
 
     batch_set($batch);
 
-    $message = 'Run batch on runImportLillyMeeting()';
+    $message = 'Run batch on RunImportJsonToNode()';
     \Drupal::logger('batchinfo')->notice($message);
 
 

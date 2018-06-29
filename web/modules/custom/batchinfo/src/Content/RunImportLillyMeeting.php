@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\batchinfo\Content\RunImportLillyMeeting.php
+ * Contains \Drupal\batchinfo\Content\RunImportJsonToNode.php
  */
 
 namespace Drupal\batchinfo\Content;
@@ -11,7 +11,7 @@ use Drupal\node\Entity\Node;
 
 use Drupal\batchinfo\Content\SyncLillyMeeting;
 
-class RunImportLillyMeeting {
+class RunImportJsonToNode {
 
   /**
    *
@@ -23,22 +23,6 @@ class RunImportLillyMeeting {
     $result = count($piece);
 
     $message = 'Running Batch checkAllianceMeetingNidExist() function ...';
-    $context['message'] = $message;
-    $context['results'][] = $result;
-
-    // \Drupal::logger('batchinfo')->error($message);
-  }
-
-  /**
-   *
-   */
-  public static function checkAlliancePoolGroupExist($piece, &$context) {
-    foreach ($piece as $row) {
-      self::checkAlliancePoolNidExist($row);
-    }
-    $result = count($piece);
-
-    $message = 'Running Batch checkAlliancePoolNidExist() function ...';
     $context['message'] = $message;
     $context['results'][] = $result;
 
@@ -69,14 +53,6 @@ class RunImportLillyMeeting {
   public static function checkAllianceMeetingNidExist($data = array()) {
     $SyncLillyMeeting = new SyncLillyMeeting();
     $SyncLillyMeeting->checkBiHaveSameMeetingAndSaveToSheet($data);
-  }
-
-  /**
-   *
-   */
-  public static function checkAlliancePoolNidExist($data = array()) {
-    $SyncLillyMeeting = new SyncLillyMeeting();
-    $SyncLillyMeeting->checkBiHaveSamePoolAndSaveToSheet($data);
   }
 
 }

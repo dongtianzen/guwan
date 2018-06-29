@@ -475,50 +475,11 @@ class SyncLillyMeeting extends GetEntityFromJson {
    *
    */
   public function filterLillyAllianceMeetingNids() {
-    $lilly_meeting_nids = $this->lillyAllianceMeetingNids();
-    // $lilly_meeting_nids = $this->lillyAllianceEntityNidsFromFeedUrl('meeting');
-
-    drupal_set_message('Total have - ' . count($lilly_meeting_nids) . ' - meetings');
-
     $json_file_content = \Drupal::getContainer()->get('flexinfo.json.service')->fetchConvertJsonToArrayFromInternalPath($this->json_meeting_path);
 
+    drupal_set_message('Total have - ' . count($json_file_content) . ' - records');
+
     $output = $this->filterLillyAllianceNids($lilly_meeting_nids, $json_file_content);
-
-    return $output;
-  }
-
-  /**
-   *
-   */
-  public function lillyAllianceEntityNidsFromFeedUrl($entity_bundle = 'meeting') {
-    $output = array();
-
-    $feed_url = 'http://lillymedical.education/superexport/' . $entity_bundle . '/entitylist';
-
-    $json_file_content = \Drupal::getContainer()->get('flexinfo.json.service')->fetchConvertJsonToArrayFromUrl($feed_url);
-
-    $alliance_bundle_list = 'alliance' . ucfirst($entity_bundle) . 'List';
-
-    if (isset($json_file_content[$alliance_bundle_list])) {
-      $output = $json_file_content[$alliance_bundle_list];
-    }
-
-    return $output;
-  }
-
-  /**
-   *
-   */
-  public function filterLillyAllianceNids($lilly_entity_nids, $json_file_content) {
-    $output = array();
-
-    if ($lilly_entity_nids) {
-      foreach ($lilly_entity_nids as $lilly_entity_nid) {
-        if (!isset($json_file_content[$lilly_entity_nid])) {
-          $output[] = $lilly_entity_nid;
-        }
-      }
-    }
 
     return $output;
   }
@@ -580,35 +541,6 @@ class SyncLillyMeeting extends GetEntityFromJson {
     );
 
     return $meeting_fields;
-  }
-
-  /**
-   * https://lillymedical.education/superexport/meeting/entitylist
-   */
-  public function lillyAllianceMeetingNids() {
-    $nids = array(
-      "60532",
-      "60778",
-      "60799",
-      "60823",
-      "60845",
-      "60871",
-      "61107",
-      "61178",
-      "61222",
-      "61244",
-      "61289",
-      "61555",
-      "61582",
-      "61695",
-      "61722",
-      "61746",
-      "61780",
-      "61814",
-      "61838"
-    );
-
-    return $nids;
   }
 
 }

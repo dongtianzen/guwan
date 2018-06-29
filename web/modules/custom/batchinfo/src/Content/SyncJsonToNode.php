@@ -138,22 +138,6 @@ class GetEntityFromJson {
   }
 
   /**
-   * @param, $entity_type = 'user', 'taxonomy/term'
-   */
-  public function getEntityFieldAllTargetIdsNameFromJson($field = NULL, $json = NULL, $entity_type = 'user') {
-    $entity_names = NULL;
-
-    $entity_ids = $this->getEntityFieldAllTargetIdsFromJson($field, $json);
-    if ($entity_ids && is_array($entity_ids)) {
-      foreach ($entity_ids as $entity_id) {
-        $entity_names[] = $this->getEntityTargetIdNameFromJson($entity_id, $json, $entity_type);
-      }
-    }
-
-    return $entity_names;
-  }
-
-  /**
    *
    */
   public function getEntityFieldFirstTargetIdFromJson($field = NULL, $json = NULL) {
@@ -163,32 +147,6 @@ class GetEntityFromJson {
     }
 
     return $target_id;
-  }
-
-  /**
-   *
-   */
-  public function getEntityFieldAllValueFromJson($field = NULL, $json = NULL) {
-    $output = array();
-    if (isset($json[$field][0]['value'])) {
-      foreach ($json[$field] as $row) {
-        $output[] = $row['value'];
-      }
-    }
-
-    return $output;
-  }
-
-  /**
-   *
-   */
-  public function getEntityFieldFirstValueFromJson($field = NULL, $json = NULL) {
-    $output = NULL;
-    if (isset($json[$field][0]['value'])) {
-      $output = $json[$field][0]['value'];
-    }
-
-    return $output;
   }
 
 }
@@ -214,22 +172,22 @@ class SyncJsonToNode extends GetEntityFromJson {
    $SyncLillyMeeting = new SyncLillyMeeting();
    $SyncLillyMeeting->checkBiHaveSameMeetingAndSaveToSheet(5603);
    */
-  public function runBatchinfoCreateNodeEntity($liily_meeting_nid = NULL) {
+  public function runBatchinfoCreateNodeEntity($json_content_piece = NULL) {
     if (TRUE) {
-      $meeting_json = $this->getLillyEntityJsonContent($liily_meeting_nid);
+      $json_content_piece = $this->getLillyEntityJsonContent($liily_meeting_nid);
 
-      $meeting_nids = $this->queryBiMeetingFiveCondition($meeting_json);
+      $node_nids = $this->queryNodeToCheckExist($json_content_piece);
 
-      if (count($meeting_nids) > 1) {
-        drupal_set_message('Node have - ' . count($meeting_nids) . ' - few same item', 'error');
+      if (count($node_nids) > 1) {
+        drupal_set_message('Node have - ' . count($node_nids) . ' - few same item', 'error');
         return;
       }
-      elseif (count($meeting_nids) > 0) {
-        drupal_set_message('Node have - ' . count($meeting_nids) . ' - same item');
+      elseif (count($node_nids) > 0) {
+        drupal_set_message('Node have - ' . count($node_nids) . ' - same item');
         return;
       }
       else {
-        $this->runCreateMeetingOnBidash($meeting_json);
+        $this->runCreateMeetingOnBidash($json_content_piece);
       }
     }
 
@@ -287,26 +245,13 @@ class SyncJsonToNode extends GetEntityFromJson {
   /**
    *
    */
-  public function queryBiMeetingFiveCondition($meeting_json = NULL) {
-    $meeting_date = $this->getEntityFieldFirstValueFromJson('field_meeting_date', $meeting_json);
+  public function queryNodeToCheckExist($json_content_piece = NULL) {
+    $meeting_date = $this->getEntityFieldFirstValueFromJson('field_day_date', $meeting_json);
 
-    $speaker_name = $this->getEntityFieldFirstTargetIdNameFromJson('field_meeting_speaker', $meeting_json, 'user');
-    // $rep_name     = $this->getEntityFieldFirstTargetIdNameFromJson('field_meeting_representative', $meeting_json, 'user');
-
-    $city_name = $this->getEntityFieldFirstTargetIdNameFromJson('field_meeting_city', $meeting_json, 'taxonomy/term');
-    $program_name = $this->getEntityFieldFirstTargetIdNameFromJson('field_meeting_program', $meeting_json, 'taxonomy/term');
-    $province_name = $this->getEntityFieldFirstTargetIdNameFromJson('field_meeting_province', $meeting_json, 'taxonomy/term');
-
-    $address = $this->getEntityFieldFirstValueFromJson('field_meeting_address', $meeting_json);
-    $evaluationnum = $this->getEntityFieldFirstValueFromJson('field_meeting_evaluationnum', $meeting_json);
-    $signature  = $this->getEntityFieldFirstValueFromJson('field_meeting_signature', $meeting_json);
-    $venue_name = $this->getEntityFieldFirstValueFromJson('field_meeting_venuename', $meeting_json);
-
-    // query
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
-    $query = $query_container->queryNidsByBundle('meeting');
+    $query = $query_container->queryNidsByBundle('day');
 
-    $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_date', $meeting_date);
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $meeting_date);
     $query->condition($group);
 
     /* user */
@@ -314,17 +259,8 @@ class SyncJsonToNode extends GetEntityFromJson {
     // $query->condition($group);
 
     /* term */
-    $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_city.entity.name', $city_name);
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_code.entity.name', $city_name);
     $query->condition($group);
-
-    $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_program.entity.name', $program_name);
-    $query->condition($group);
-
-    // $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_province.entity.name', $province_name);
-    // $query->condition($group);
-
-    // $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_representative.entity.name', $rep_name);
-    // $query->condition($group);
 
     /* value */
     if ($address) {
@@ -332,24 +268,9 @@ class SyncJsonToNode extends GetEntityFromJson {
       $query->condition($group);
     }
 
-    if ($evaluationnum) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_evaluationnum', $evaluationnum);
-      $query->condition($group);
-    }
+    $nids = $query_container->runQueryWithGroup($query);
 
-    if ($signature) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_signature', $signature);
-      $query->condition($group);
-    }
-
-    if ($venue_name) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_venuename', $venue_name);
-      $query->condition($group);
-    }
-
-    $meeting_nids = $query_container->runQueryWithGroup($query);
-
-    return $meeting_nids;
+    return $nids;
   }
 
   /**

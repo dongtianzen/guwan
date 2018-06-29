@@ -133,45 +133,6 @@ trait GetEntityFromBIDash {
     return $term_tid;
   }
 
-  /**
-   *
-   */
-  public function getUserAllTidsOnBidash($entity_field = array(), $meeting_json) {
-    $entity_ids = array();
-
-    $entity_names = $this->getEntityFieldAllTargetIdsNameFromJson($entity_field['field_name'], $meeting_json, 'user');
-    if ($entity_names) {
-      foreach ($entity_names as $key => $entity_name) {
-        $user_uid = $this->getUserUidOnBidash($entity_name);
-
-        if ($user_uid) {
-          $entity_ids[] = $user_uid;
-        }
-        else {
-          drupal_set_message($liily_meeting_nid . ' have not this speaker name - ' . $entity_name, 'error');
-          $this->createUserNoNameOnBidash($entity_name, $meeting_json, $key);
-        }
-      }
-    }
-
-    return $entity_ids;
-  }
-
-  /**
-   *
-   */
-  public function getUserUidOnBidash($entity_name = NULL) {
-    $user_uid = \Drupal::getContainer()->get('flexinfo.user.service')->getUidByUserName($entity_name);
-
-    if ($user_uid) {
-    }
-    else {
-      $user_uid = \Drupal::getContainer()->get('flexinfo.user.service')->getUidByMail($entity_name . '@noemail.ca');
-    }
-
-    return $user_uid;
-  }
-
 }
 
 class GetEntityFromJson {
@@ -375,7 +336,7 @@ class SyncLillyMeeting extends GetEntityFromJson {
    *
    */
   public function runCreateMeetingOnBidash($meeting_json = NULL) {
-    $fields_value = $this->generateMeetingfieldsValue($meeting_json);
+    $fields_value = $this->generateNodefieldsValue($meeting_json);
 
     \Drupal::getContainer()->get('flexinfo.node.service')->entityCreateNode($fields_value);
 
@@ -385,13 +346,13 @@ class SyncLillyMeeting extends GetEntityFromJson {
   /**
    *
    */
-  public function generateMeetingfieldsValue($meeting_json = NULL) {
-    $entity_bundle = 'meeting';
+  public function generateNodefieldsValue($meeting_json = NULL) {
+    $entity_bundle = 'day';
     $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
     $fields_value = array(
       'type' => $entity_bundle,
-      'title' => 'Entity Create Alliance ' . $entity_bundle,
+      'title' => 'Entity Create By Import From JSON ' . $entity_bundle,
       'langcode' => $language,
       'uid' => 1,
       'status' => 1,
@@ -401,15 +362,14 @@ class SyncLillyMeeting extends GetEntityFromJson {
       520,  // BI Representative
     );
 
-    $meeting_fields = $this->allBidashMeetingFields();
+    $meeting_fields = $this->allNodeBundleFields();
     foreach ($meeting_fields as $row) {
       if (isset($row['vocabulary'])) {
         $term_tids = $this->getTermAllTidsOnBidash($row, $meeting_json);
         $fields_value[$row['field_name']] = $term_tids;
       }
       elseif (isset($row['userRole'])) {
-        $user_uids = $this->getUserAllTidsOnBidash($row, $meeting_json);
-        $fields_value[$row['field_name']] = $user_uids;
+
       }
       else {
         $fields_value[$row['field_name']] = $this->getEntityFieldAllValueFromJson($row['field_name'], $meeting_json);
@@ -423,8 +383,7 @@ class SyncLillyMeeting extends GetEntityFromJson {
    *
    */
   public function checkTermExistBeforeRunCreateMeeting($meeting_json = NULL) {
-    $this->checkBidashHaveSameTerm($meeting_json, $term_fields = $this->allBidashMeetingFields());
-    $this->checkBidashHaveSameUser($meeting_json);
+    $this->checkBidashHaveSameTerm($meeting_json, $term_fields = $this->allNodeBundleFields());
 
     return;
   }
@@ -441,22 +400,6 @@ class SyncLillyMeeting extends GetEntityFromJson {
       }
     }
 
-    return;
-  }
-
-  /**
-   *
-   */
-  public function checkBidashHaveSameUser($meeting_json = NULL) {
-    $meeting_fields = $this->allBidashMeetingFields();
-
-    $user_uids = array();
-
-    foreach ($meeting_fields as $row) {
-      if (isset($row['userRole'])) {
-        $user_uids = $this->getUserAllTidsOnBidash($row, $meeting_json);
-      }
-    }
     return;
   }
 
@@ -612,102 +555,28 @@ class SyncLillyMeeting extends GetEntityFromJson {
   /**
    *
    */
-  public function allBidashMeetingFields() {
+  public function allNodeBundleFields() {
     $meeting_fields = array(
       // user
-      array(
-        'field_name' => 'field_meeting_speaker',
-        'userRole' => 'speaker',
-      ),
+      // array(
+      //   'field_name' => 'field_meeting_speaker',
+      //   'userRole' => 'speaker',
+      // ),
 
       // term
       array(
-        'field_name' => 'field_meeting_city',
-        'vocabulary' => 'city',
-      ),
-      array(
-        'field_name' => 'field_meeting_evaluationform',
-        'vocabulary' => 'evaluationform',
-      ),
-      array(
-        'field_name' => 'field_meeting_location',
-        'vocabulary' => 'meetinglocation',
-      ),
-      array(
-        'field_name' => 'field_meeting_meetingformat',
-        'vocabulary' => 'meetingformat',
-      ),
-      array(
-        'field_name' => 'field_meeting_module',
-        'vocabulary' => 'module',
-      ),
-      array(
-        'field_name' => 'field_meeting_program',
-        'vocabulary' => 'program',
-      ),
-      array(
-        'field_name' => 'field_meeting_programclass',
-        'vocabulary' => 'programclass',
-      ),
-      array(
-        'field_name' => 'field_meeting_province',
-        'vocabulary' => 'province',
-      ),
-      array(
-        'field_name' => 'field_meeting_received',
-        'vocabulary' => 'meetingreceived',
-      ),
-      array(
-        'field_name' => 'field_meeting_usergroup',
-        'vocabulary' => 'usergroup',
+        'field_name' => 'field_day_code',
+        'vocabulary' => 'code',
       ),
 
       // value
       array(
-        'field_name' => 'field_meeting_address',
+        'field_name' => 'field_day_date',
       ),
       array(
-        'field_name' => 'field_meeting_catering',
+        'field_name' => 'field_day_open',
       ),
-      array(
-        'field_name' => 'field_meeting_date',
-      ),
-      array(
-        'field_name' => 'field_meeting_evaluationnum',
-      ),
-      array(
-        'field_name' => 'field_meeting_eventme',
-      ),
-      array(
-        'field_name' => 'field_meeting_foodcost',
-      ),
-      array(
-        'field_name' => 'field_meeting_honorarium',
-      ),
-      array(
-        'field_name' => 'field_meeting_latitude',
-      ),
-      array(
-        'field_name' => 'field_meeting_longitude',
-      ),
-      array(
-        'field_name' => 'field_meeting_longitude',
-      ),
-      array(
-        'field_name' => 'field_meeting_multitherapeutic',  // list
-      ),
-      array(
-        'field_name' => 'field_meeting_postalcode',
-      ),
-      array(
-        'field_name' => 'field_meeting_signature',
-      ),
-      array(
-        'field_name' => 'field_meeting_summaryevaluation',  // boolean
-      ),
-      array(
-        'field_name' => 'field_meeting_venuename',  // boolean
-      ),
+
     );
 
     return $meeting_fields;

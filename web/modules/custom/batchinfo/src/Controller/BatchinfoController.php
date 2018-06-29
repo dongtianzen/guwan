@@ -56,7 +56,7 @@ class BatchinfoController extends ControllerBase {
     if ($lilly_meeting_nids && is_array($lilly_meeting_nids)) {
     }
     else {
-      drupal_set_message('All of JSON had sync, Please check Lilly meeting nids', 'warning');
+      drupal_set_message('All of JSON had sync, Please check JSON file', 'warning');
     }
 
     $every_time_excute_max_number = 1;
@@ -84,8 +84,8 @@ class BatchinfoController extends ControllerBase {
     $message = 'Run batch on RunImportJsonToNode()';
     \Drupal::logger('batchinfo')->notice($message);
 
-
-    return batch_process('batchinfo/importlillymeeting/guide');        // You have to return batch_process('url') - set redirect page path,
+    // You have to return batch_process('url') - set redirect page path,
+    return batch_process('batchinfo/importjson/guide');
   }
 
 }

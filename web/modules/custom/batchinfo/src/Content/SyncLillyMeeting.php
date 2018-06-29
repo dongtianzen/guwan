@@ -285,19 +285,12 @@ class SyncLillyMeeting extends GetEntityFromJson {
   public $json_meeting_filename;
   public $json_meeting_path;
 
-  public $json_pool_filename;
-  public $json_pool_path;
-
   /**
    *
    */
   public function __construct() {
-    $this->json_meeting_filename = 'bi_lilly_meeting_sheet.json';
-    $this->json_pool_filename   = 'bi_lilly_pool_sheet.json';
-
-    $this->json_meeting_path = '/sites/default/files/json/' . $this->json_meeting_filename;
-    $this->json_pool_path   = '/sites/default/files/json/' . $this->json_pool_filename;
-  }
+    $this->json_meeting_filename = 'import_record_node_day.json';
+    $this->json_meeting_path = '/modules/custom/batchinfo/json/' . $this->json_meeting_filename;
 
   /**
    *

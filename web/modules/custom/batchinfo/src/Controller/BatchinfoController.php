@@ -21,25 +21,18 @@ class BatchinfoController extends ControllerBase {
   /**
    *
    */
-  public function guideImportLillyMeeting() {
-    $import_meeting_internal_url = Url::fromRoute('batchinfo.importLillyMeeting.run');
-    $import_pool_internal_url = Url::fromRoute('batchinfo.importLillyPool.run');
+  public function guideImportJson() {
+    $import_json_internal_url = Url::fromRoute('batchinfo.importJson.run');
 
     $markup = '<div class="panel panel-default">';
       $markup .= '<div class="panel-body">';
-        $markup .= $this->t('Well Done Run Import Lilly Meeting Task');
+        $markup .= $this->t('Well Done Run Import JSON Task');
         $markup .= '<hr />';
       $markup .= '</div>';
 
       $markup .= '<div class="panel-body">';
         $markup .= '<div class="btn btn-default">';
-          $markup .= \Drupal::l(t('Run Batch Import Lilly Meeting'), $import_meeting_internal_url);
-        $markup .= '</div>';
-      $markup .= '</div>';
-
-      $markup .= '<div class="panel-body">';
-        $markup .= '<div class="btn btn-default">';
-          $markup .= \Drupal::l(t('Run Batch Import Lilly Pool'), $import_pool_internal_url);
+          $markup .= \Drupal::l(t('Run Batch Import JSON to System'), $import_json_internal_url);
         $markup .= '</div>';
       $markup .= '</div>';
     $markup .= '</div>';
@@ -56,7 +49,7 @@ class BatchinfoController extends ControllerBase {
   /**
    *
    */
-  public function runImportLillyMeeting() {
+  public function runImportJson() {
     $SyncLillyMeeting = new SyncLillyMeeting();
     $lilly_meeting_nids = $SyncLillyMeeting->filterLillyAllianceMeetingNids();
 

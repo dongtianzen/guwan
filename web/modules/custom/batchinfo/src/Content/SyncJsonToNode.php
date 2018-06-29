@@ -49,23 +49,6 @@ trait GetEntityFromBIDash {
   /**
    *
    */
-  public function createUserNoNameOnBidash($entity_name, $meeting_json, $key = 0) {
-    $meeting_nid = $meeting_json['nid'][0]['value'];
-
-    $user_info = array(
-      'name' => 'noname' . $meeting_nid . $key,
-      'email' => $entity_name . '@noemail.ca',
-      'roles' => array('speaker'),
-    );
-
-    \Drupal::getContainer()->get('flexinfo.user.service')->entityCreateUser($user_info);
-
-    return;
-  }
-
-  /**
-   *
-   */
   public function getTermAllTidsOnBidash($term_field = array(), $meeting_json) {
     $term_tids = array();
 
@@ -135,45 +118,10 @@ trait GetEntityFromBIDash {
 
 }
 
+/**
+ *
+ */
 class GetEntityFromJson {
-
-  /**
-   *
-   */
-  public function getJsonFromHttpUrl($url) {
-    $response = \Drupal::httpClient()
-      ->get(
-        $url,
-        array(
-          'auth' => ['siteadmin', 'flexia123'],
-        )
-        // array('allow_redirects' => false)
-      );
-
-    $json_string = (string) $response->getBody();
-    $json_array = json_decode($json_string, TRUE);
-
-    return $json_array;
-  }
-
-  /**
-   * @param, $entity_type = 'node', 'user', 'taxonomy/term'
-   */
-  public function getLillyEntityJsonUrl($liily_meeting_nid = NULL, $entity_type = 'node') {
-    $url = 'http://lillymedical.education/' . $entity_type . '/' . $liily_meeting_nid . '?_format=json';
-
-    return $url;
-  }
-
-  /**
-   * @param, $entity_type = 'node', 'user', 'taxonomy/term'
-   */
-  public function getLillyEntityJsonContent($liily_meeting_nid = NULL, $entity_type = 'node') {
-    $url = $this->getLillyEntityJsonUrl($liily_meeting_nid, $entity_type);
-    $output = $this->getJsonFromHttpUrl($url);
-
-    return $output;
-  }
 
   /**
    *
@@ -218,16 +166,6 @@ class GetEntityFromJson {
   }
 
   /**
-   * @param, $entity_type = 'user', 'taxonomy/term'
-   */
-  public function getEntityFieldFirstTargetIdNameFromJson($field = NULL, $json = NULL, $entity_type = 'user') {
-    $entity_id = $this->getEntityFieldFirstTargetIdFromJson($field, $json);
-    $entity_name = $this->getEntityTargetIdNameFromJson($entity_id, $json, $entity_type);
-
-    return $entity_name;
-  }
-
-  /**
    *
    */
   public function getEntityFieldAllValueFromJson($field = NULL, $json = NULL) {
@@ -251,29 +189,6 @@ class GetEntityFromJson {
     }
 
     return $output;
-  }
-
-  /**
-   * @param, $entity_type = 'user', 'taxonomy/term'
-   */
-  public function getEntityTargetIdNameFromJson($entity_id = NULL, $json = NULL, $entity_type = 'user') {
-    $entity_name = NULL;
-
-    if ($entity_id) {
-      $entity_json = $this->getLillyEntityJsonContent($entity_id, $entity_type);
-
-      $entity_name = $this->getEntityFieldFirstValueFromJson('name', $entity_json);
-    }
-
-    return $entity_name;
-  }
-
-  /**
-   *
-   */
-  public function getUserFirstNameFromMeetingJson($field_name = NULL, $meeting_json = NULL) {
-    $uer_name = $this->getEntityFieldFirstTargetIdNameFromJson($field_name, $meeting_json, 'user');
-    return $uer_name;
   }
 
 }
@@ -306,19 +221,14 @@ class SyncJsonToNode extends GetEntityFromJson {
       $meeting_nids = $this->queryBiMeetingFiveCondition($meeting_json);
 
       if (count($meeting_nids) > 1) {
-        drupal_set_message($liily_meeting_nid . ' have - ' . count($meeting_nids) . ' - same item', 'error');
-
+        drupal_set_message('Node have - ' . count($meeting_nids) . ' - few same item', 'error');
         return;
       }
-      elseif (count($meeting_nids) == 1) {
-        $bi_meeting_nid = $meeting_nids[0];
-
-        drupal_set_message($liily_meeting_nid . ' have - ' . count($meeting_nids) . ' - same item');
-        $this->saveEntityNidsToData($bi_meeting_nid, $liily_meeting_nid, $this->json_meeting_path);
+      elseif (count($meeting_nids) > 0) {
+        drupal_set_message('Node have - ' . count($meeting_nids) . ' - same item');
+        return;
       }
       else {
-        $this->checkTermExistBeforeRunCreateMeeting($meeting_json);
-
         $this->runCreateMeetingOnBidash($meeting_json);
       }
     }
@@ -372,30 +282,6 @@ class SyncJsonToNode extends GetEntityFromJson {
     }
 
     return $fields_value;
-  }
-
-  /**
-   *
-   */
-  public function checkTermExistBeforeRunCreateMeeting($meeting_json = NULL) {
-    $this->checkBidashHaveSameTerm($meeting_json, $term_fields = $this->allNodeBundleFields());
-
-    return;
-  }
-
-  /**
-   *
-   */
-  public function checkBidashHaveSameTerm($entity_json = NULL, $term_fields) {
-    if ($term_fields) {
-      foreach ($term_fields as $key => $row) {
-        if (isset($row['vocabulary'])) {
-          $term_tids = $this->getTermAllTidsOnBidash($row, $entity_json);
-        }
-      }
-    }
-
-    return;
   }
 
   /**

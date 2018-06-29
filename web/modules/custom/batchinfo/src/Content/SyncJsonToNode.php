@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Contains \Drupal\batchinfo\Content\SyncLillyMeeting.
+ * Contains \Drupal\batchinfo\Content\SyncJsonToNode.
  */
 
 /**
  * An example controller.
-   $SyncLillyMeeting = new SyncLillyMeeting();
-   $SyncLillyMeeting->_run_create_meeting_from_json();
+   $SyncJsonToNode = new SyncJsonToNode();
+   $SyncJsonToNode->_run_create_meeting_from_json();
  */
 
 namespace Drupal\batchinfo\Content;
@@ -278,7 +278,7 @@ class GetEntityFromJson {
 
 }
 
-class SyncLillyMeeting extends GetEntityFromJson {
+class SyncJsonToNode extends GetEntityFromJson {
 
   use GetEntityFromBIDash;
 
@@ -291,39 +291,6 @@ class SyncLillyMeeting extends GetEntityFromJson {
   public function __construct() {
     $this->json_meeting_filename = 'import_record_node_day.json';
     $this->json_meeting_path = '/modules/custom/batchinfo/json/' . $this->json_meeting_filename;
-
-  /**
-   *
-   require_once(DRUPAL_ROOT . '/modules/custom/phpdebug/import_json/import_node_meeting.php');
-   $SyncLillyMeeting = new SyncLillyMeeting();
-   $SyncLillyMeeting->checkBiHaveSameMeetingAndSaveToSheet(5603);
-   */
-  public function checkBiHaveSameMeetingAndSaveToSheet($liily_meeting_nid = NULL) {
-    if (TRUE) {
-      $meeting_json = $this->getLillyEntityJsonContent($liily_meeting_nid);
-
-      $meeting_nids = $this->queryBiMeetingFiveCondition($meeting_json);
-
-      if (count($meeting_nids) > 1) {
-        drupal_set_message($liily_meeting_nid . ' have - ' . count($meeting_nids) . ' - same item', 'error');
-
-        return;
-      }
-      elseif (count($meeting_nids) == 1) {
-        $bi_meeting_nid = $meeting_nids[0];
-
-        drupal_set_message($liily_meeting_nid . ' have - ' . count($meeting_nids) . ' - same item');
-        $this->saveEntityNidsToData($bi_meeting_nid, $liily_meeting_nid, $this->json_meeting_path);
-      }
-      else {
-        $this->checkTermExistBeforeRunCreateMeeting($meeting_json);
-
-        $this->runCreateMeetingOnBidash($meeting_json);
-      }
-    }
-
-    return;
-  }
 
   /**
    *
@@ -351,12 +318,13 @@ class SyncLillyMeeting extends GetEntityFromJson {
       'status' => 1,
     );
 
-    $fields_value['field_meeting_representative'] = array(
-      520,  // BI Representative
-    );
+    // special fix value
+    // $fields_value['field_day_code'] = array(
+    //   520,  // sample tid
+    // );
 
-    $meeting_fields = $this->allNodeBundleFields();
-    foreach ($meeting_fields as $row) {
+    $node_bundle_fields = $this->allNodeBundleFields();
+    foreach ($node_bundle_fields as $row) {
       if (isset($row['vocabulary'])) {
         $term_tids = $this->getTermAllTidsOnBidash($row, $meeting_json);
         $fields_value[$row['field_name']] = $term_tids;
@@ -467,27 +435,14 @@ class SyncLillyMeeting extends GetEntityFromJson {
   /**
    *
    */
-  public function filterLillyAllianceMeetingNids() {
-    $json_file_content = \Drupal::getContainer()->get('flexinfo.json.service')->fetchConvertJsonToArrayFromInternalPath($this->json_meeting_path);
+  public function getImportJsonContent() {
+    $output = \Drupal::getContainer()
+      ->get('flexinfo.json.service')
+      ->fetchConvertJsonToArrayFromInternalPath($this->json_meeting_path);
 
-    drupal_set_message('Total have - ' . count($json_file_content) . ' - records');
-
-    $output = $this->filterLillyAllianceNids($lilly_meeting_nids, $json_file_content);
+    drupal_set_message('Total have - ' . count($output) . ' - records');
 
     return $output;
-  }
-
-  /**
-   *
-   */
-  public function saveJsonDataToFile($json_data, $entity_bundle = 'meeting') {
-    $destination = 'public://json/' . $this->json_meeting_filename;
-
-    if ($entity_bundle == 'pool') {
-      $destination = 'public://json/' . $this->json_pool_filename;
-    }
-
-    $file = file_save_data($json_data, $destination, FILE_EXISTS_REPLACE);
   }
 
   /**
@@ -503,14 +458,13 @@ class SyncLillyMeeting extends GetEntityFromJson {
     ksort($json_file_content);
 
     $json_data = json_encode($json_file_content, JSON_PRETTY_PRINT);
-    $this->saveJsonDataToFile($json_data, $entity_bundle);
   }
 
   /**
    *
    */
   public function allNodeBundleFields() {
-    $meeting_fields = array(
+    $node_bundle_fields = array(
       // user
       // array(
       //   'field_name' => 'field_meeting_speaker',
@@ -533,7 +487,7 @@ class SyncLillyMeeting extends GetEntityFromJson {
 
     );
 
-    return $meeting_fields;
+    return $node_bundle_fields;
   }
 
 }

@@ -9,7 +9,7 @@ namespace Drupal\batchinfo\Content;
 
 use Drupal\node\Entity\Node;
 
-use Drupal\batchinfo\Content\SyncLillyMeeting;
+use Drupal\batchinfo\Content\SyncJsonToNode;
 
 class RunImportJsonToNode {
 
@@ -51,8 +51,8 @@ class RunImportJsonToNode {
    *
    */
   public static function checkAllianceMeetingNidExist($data = array()) {
-    $SyncLillyMeeting = new SyncLillyMeeting();
-    $SyncLillyMeeting->checkBiHaveSameMeetingAndSaveToSheet($data);
+    $SyncJsonToNode = new SyncJsonToNode();
+    $SyncJsonToNode->checkBiHaveSameMeetingAndSaveToSheet($data);
   }
 
 }

@@ -10,7 +10,7 @@ namespace Drupal\batchinfo\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
-use Drupal\batchinfo\Content\SyncLillyMeeting;
+use Drupal\batchinfo\Content\SyncJsonToNode;
 use Drupal\dashpage\Content\DashpageCacheContent;
 
 /**
@@ -50,20 +50,19 @@ class BatchinfoController extends ControllerBase {
    *
    */
   public function runImportJson() {
-    $SyncLillyMeeting = new SyncLillyMeeting();
-    $lilly_meeting_nids = $SyncLillyMeeting->filterLillyAllianceMeetingNids();
+    $SyncJsonToNode = new SyncJsonToNode();
+    $json_content = $SyncJsonToNode->getImportJsonContent();
 
-    if ($lilly_meeting_nids && is_array($lilly_meeting_nids)) {
+    if ($json_content && is_array($json_content)) {
     }
     else {
       drupal_set_message('All of JSON had sync, Please check JSON file', 'warning');
     }
 
     $every_time_excute_max_number = 1;
-    $chunk = array_chunk($lilly_meeting_nids, $every_time_excute_max_number, TRUE);
+    $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
 
-    dpm('after filter total have - ' . count($lilly_meeting_nids) . ' - meetings');
-    dpm('every time only excute - ' . $every_time_excute_max_number . ' - meetings');
+    dpm('every time only excute - ' . $every_time_excute_max_number . ' - save node');
 
     $operations = [];
     foreach ($chunk as $piece) {

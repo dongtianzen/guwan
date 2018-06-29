@@ -1,16 +1,16 @@
 #
-batchinfo.importLillyMeeting.guide:
-  path: '/batchinfo/importlillymeeting/guide'
+batchinfo.importJson.guide:
+  path: '/batchinfo/importjson/guide'
   defaults:
-    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::guideImportLillyMeeting'
-    _title: 'Batchinfo Guide Import Lilly Meeting'
+    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::guideImportJson'
+    _title: 'Batchinfo Guide Import Json'
   requirements:
     _permission: 'access content'
 
-batchinfo.importLillyMeeting.run:
-  path: '/batchinfo/importlillymeeting/run'
+batchinfo.importJson.run:
+  path: '/batchinfo/importjson/run'
   defaults:
-    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::runImportLillyMeeting'
-    _title: 'Batchinfo Run Import Lilly Meeting'
+    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::runImportJson'
+    _title: 'Batchinfo Run Import Json'
   requirements:
     _permission: 'access content'

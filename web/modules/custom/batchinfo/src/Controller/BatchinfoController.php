@@ -95,47 +95,4 @@ class BatchinfoController extends ControllerBase {
     return batch_process('batchinfo/importlillymeeting/guide');        // You have to return batch_process('url') - set redirect page path,
   }
 
-  /**
-   *
-   */
-  public function runImportLillyPool() {
-    $SyncLillyMeeting = new SyncLillyMeeting();
-    $lilly_pool_nids = $SyncLillyMeeting->filterLillyAlliancePoolNids();
-
-    if ($lilly_pool_nids && count($lilly_pool_nids) > 0) {
-    }
-
-    else {
-      drupal_set_message('All of Pool had sync, Please check Lilly Pool nids', 'warning');
-    }
-
-    $every_time_excute_max_number = 5;
-    $chunk = array_chunk($lilly_pool_nids, $every_time_excute_max_number, TRUE);
-
-    drupal_set_message('after filter total have - ' . count($lilly_pool_nids) . ' - pools');
-    drupal_set_message('every time only excute - ' . $every_time_excute_max_number . ' - pools');
-
-    $operations = [];
-    foreach ($chunk as $piece) {
-      $operations[] = array(
-        '\Drupal\batchinfo\Content\RunImportLillyMeeting::checkAlliancePoolGroupExist',   // function name
-        array($piece)
-      );
-    }
-
-    $batch = array(
-      'title' => t('Running batch...'),
-      'operations' => $operations,
-      'finished' => '\Drupal\batchinfo\Content\RunImportLillyMeeting::finishedCallback',
-    );
-
-    batch_set($batch);
-
-    $message = 'Run batch on runImportLillyPool()';
-    \Drupal::logger('batchinfo')->notice($message);
-
-
-    return batch_process('batchinfo/importlillymeeting/guide');        // You have to return batch_process('url') - set redirect page path,
-  }
-
 }

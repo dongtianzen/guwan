@@ -291,6 +291,7 @@ class SyncJsonToNode extends GetEntityFromJson {
   public function __construct() {
     $this->json_meeting_filename = 'import_record_node_day.json';
     $this->json_meeting_path = '/modules/custom/batchinfo/json/' . $this->json_meeting_filename;
+  }
 
   /**
    *
@@ -443,21 +444,6 @@ class SyncJsonToNode extends GetEntityFromJson {
     drupal_set_message('Total have - ' . count($output) . ' - records');
 
     return $output;
-  }
-
-  /**
-   * @param, $json_meeting_path = $this->json_meeting_path
-   */
-  public function saveEntityNidsToData($bi_entity_nid, $liily_entity_nid, $json_entity_url, $entity_bundle = 'meeting') {
-    $json_file_content = \Drupal::getContainer()->get('flexinfo.json.service')->fetchConvertJsonToArrayFromInternalPath($json_entity_url);
-
-    if (!isset($json_file_content[$liily_entity_nid])) {
-      $json_file_content[$liily_entity_nid] = $bi_entity_nid;
-    }
-
-    ksort($json_file_content);
-
-    $json_data = json_encode($json_file_content, JSON_PRETTY_PRINT);
   }
 
   /**

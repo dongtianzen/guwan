@@ -281,10 +281,10 @@ class SyncJsonToNode extends GetEntityFromJson {
     // );
 
     /** value sample */
-    $node_bundle_fields[] = array(
-      'field_name' => 'field_day_open',
-      'json_key' => 'open',
-    );
+    // $node_bundle_fields[] = array(
+    //   'field_name' => 'field_day_open',
+    //   'json_key' => 'open',
+    // );
 
     $json_content_piece = array(
       "open" => 12.0,

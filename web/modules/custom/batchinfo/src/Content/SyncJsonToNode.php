@@ -31,20 +31,20 @@ trait GetEntityFromBIDash {
   /**
    *
    */
-  public function getTermAllTidsOnBidash($term_field = array(), $meeting_json) {
+  public function getTermAllTidsByName($term_field = array(), $json_content_piece) {
     $term_tids = array();
 
-    $term_names = $this->getEntityFieldAllTargetIdsNameFromJson($term_field['field_name'], $meeting_json, 'taxonomy/term');
+    $term_names = $this->getEntityFieldAllTargetIdsNameFromJson($term_field['field_name'], $json_content_piece, 'taxonomy/term');
     if ($term_names) {
       foreach ($term_names as $term_name) {
-        $term_tid = $this->getTermTidOnBidash($term_name, $term_field['field_name'], $term_field['vocabulary'], $meeting_json);
+        $term_tid = $this->getTermTidOnBidash($term_name, $term_field['field_name'], $term_field['vocabulary'], $json_content_piece);
 
         // only when have result, push to output
         if ($term_tid) {
           $term_tids[] = $term_tid;
         }
         else {
-          $term_tids[] = $this->createTermOnBidash($term_name, $term_field, $meeting_json);
+          $term_tids[] = $this->createTermOnBidash($term_name, $term_field, $json_content_piece);
         }
       }
     }
@@ -55,9 +55,9 @@ trait GetEntityFromBIDash {
   /**
    *
    */
-  public function getTermFirstTidOnBidash($term_field = array(), $meeting_json) {
-    $term_name = $this->getEntityFieldFirstTargetIdNameFromJson($term_field['field_name'], $meeting_json, 'taxonomy/term');
-    $term_tid = $this->getTermTidOnBidash($term_name, $term_field['field_name'], $term_field['vocabulary'], $meeting_json);
+  public function getTermFirstTidByName($term_field = array(), $json_content_piece) {
+    $term_name = $this->getEntityFieldFirstTargetIdNameFromJson($term_field['field_name'], $json_content_piece, 'taxonomy/term');
+    $term_tid = $this->getTermTidOnBidash($term_name, $term_field['field_name'], $term_field['vocabulary'], $json_content_piece);
 
     return $term_tid;
   }
@@ -65,7 +65,7 @@ trait GetEntityFromBIDash {
   /**
    *
    */
-  public function getTermTidOnBidash($term_name = NULL, $field_name = NULL, $vocabulary = NULL, $meeting_json) {
+  public function getTermTidOnBidash($term_name = NULL, $field_name = NULL, $vocabulary = NULL, $json_content_piece) {
     $term_tid = \Drupal::getContainer()->get('flexinfo.term.service')->getTidByTermName($term_name, $vocabulary);
 
     return $term_tid;
@@ -130,8 +130,13 @@ class SyncJsonToNode extends GetEntityFromJson {
    * @param, @key is date
    */
   public function runBatchinfoCreateNodeEntity($key, $json_content_piece = NULL) {
+    $explodeKeyArray = $this->explodeKeyByCodeAndDate($key);
+
+    $code = $explodeKeyArray['code'];
+    $date = $explodeKeyArray['date'];
+
     if (TRUE) {
-      $node_nids = $this->queryNodeToCheckExist($key, $json_content_piece);
+      $node_nids = $this->queryNodeToCheckExist($code, $date, $json_content_piece);
 
       if (count($node_nids) > 1) {
         drupal_set_message('Node have - ' . count($node_nids) . ' - few same item', 'error');
@@ -142,7 +147,7 @@ class SyncJsonToNode extends GetEntityFromJson {
         return;
       }
       else {
-        $this->runCreateNodeEntity($key, $json_content_piece);
+        $this->runCreateNodeEntity($code, $date, $json_content_piece);
       }
     }
 
@@ -152,8 +157,8 @@ class SyncJsonToNode extends GetEntityFromJson {
   /**
    *
    */
-  public function runCreateNodeEntity($key, $json_content_piece = NULL) {
-    $fields_value = $this->generateNodefieldsValue($json_content_piece);
+  public function runCreateNodeEntity($code, $date, $json_content_piece = NULL) {
+    $fields_value = $this->generateNodefieldsValue($code, $date, $json_content_piece);
 
     \Drupal::getContainer()->get('flexinfo.node.service')->entityCreateNode($fields_value);
 
@@ -163,7 +168,7 @@ class SyncJsonToNode extends GetEntityFromJson {
   /**
    *
    */
-  public function generateNodefieldsValue($meeting_json = NULL) {
+  public function generateNodefieldsValue($code, $date, $json_content_piece = NULL) {
     $entity_bundle = 'day';
     $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
@@ -176,21 +181,22 @@ class SyncJsonToNode extends GetEntityFromJson {
     );
 
     // special fix value
-    // $fields_value['field_day_code'] = array(
-    //   520,  // sample tid
-    // );
+    $code_tid = $this->getTermFirstTidByName($code);
+    $fields_value['field_day_code'] = array(
+      $code_tid,  // term tid
+    );
 
     $node_bundle_fields = $this->allNodeBundleFields();
     foreach ($node_bundle_fields as $row) {
       if (isset($row['vocabulary'])) {
-        $term_tids = $this->getTermAllTidsOnBidash($row, $meeting_json);
+        $term_tids = $this->getTermAllTidsByName($row, $json_content_piece);
         $fields_value[$row['field_name']] = $term_tids;
       }
       elseif (isset($row['userRole'])) {
 
       }
       else {
-        $fields_value[$row['field_name']] = $this->getEntityFieldAllValueFromJson($row['field_name'], $meeting_json);
+        $fields_value[$row['field_name']] = $this->getEntityFieldAllValueFromJson($row['field_name'], $json_content_piece);
       }
     }
 
@@ -200,21 +206,18 @@ class SyncJsonToNode extends GetEntityFromJson {
   /**
    *
    */
-  public function queryNodeToCheckExist($key, $json_content_piece = NULL) {
-    $explodeKeyArray = $this->explodeKeyByCodeAndDate($key);
-
+  public function queryNodeToCheckExist($code, $date, $json_content_piece = NULL) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');
 
-
-    if (isset($explodeKeyArray['date'])) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $explodeKeyArray['date']);
+    if (isset($date)) {
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $date);
       $query->condition($group);
     }
 
     /* term */
-    if (isset($explodeKeyArray['code'])) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_day_code.entity.name', $explodeKeyArray['code']);
+    if (isset($code)) {
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_code.entity.name', $code);
       $query->condition($group);
     }
 
@@ -277,10 +280,10 @@ class SyncJsonToNode extends GetEntityFromJson {
       // ),
 
       // term
-      array(
-        'field_name' => 'field_day_code',
-        'vocabulary' => 'code',
-      ),
+      // array(
+      //   'field_name' => 'field_day_code',
+      //   'vocabulary' => 'code',
+      // ),
 
       // value
       array(

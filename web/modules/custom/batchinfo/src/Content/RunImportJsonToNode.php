@@ -17,8 +17,8 @@ class RunImportJsonToNode {
    *
    */
   public static function checkJsonAndCreateEntity($piece, &$context) {
-    foreach ($piece as $row) {
-      self::batchinfoCreateNodeEntity($row);
+    foreach ($piece as $key => $row) {
+      self::batchinfoCreateNodeEntity($key, $row);
     }
     $result = count($piece);
 
@@ -50,9 +50,9 @@ class RunImportJsonToNode {
   /**
    *
    */
-  public static function batchinfoCreateNodeEntity($data = array()) {
+  public static function batchinfoCreateNodeEntity($key, $data = array()) {
     $SyncJsonToNode = new SyncJsonToNode();
-    $SyncJsonToNode->batchinfoCreateNodeEntity($data);
+    $SyncJsonToNode->runBatchinfoCreateNodeEntity($key, $data);
   }
 
 }

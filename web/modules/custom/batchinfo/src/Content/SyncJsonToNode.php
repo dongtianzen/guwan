@@ -20,28 +20,10 @@ trait GetEntityFromBIDash {
   /**
    *
    */
-  public function createTermOnBidash($term_name, $term_field, $meeting_json) {
-    $tid = NULL;
-
-    if ($term_field['vocabulary'] == 'city') {
-      $city_tid = $this->getEntityFieldFirstTargetIdFromJson($term_field['field_name'], $meeting_json, 'taxonomy/term');
-      $city_json = $this->getLillyEntityJsonContent($city_tid, 'taxonomy/term');
-
-      // Lilly and BI have same Province Tid
-      $province_tid = $this->getEntityFieldFirstTargetIdFromJson('field_city_province', $city_json);
-
-      $fields_value = array(
-        array(
-          'field_name' => 'field_city_province',
-          'value' => array($province_tid),
-          'vid' => 'province',
-        )
-      );
-      $tid = \Drupal::getContainer()->get('flexinfo.term.service')->entityCreateTermWithFieldsValue($term_name, $term_field['vocabulary'], $fields_value);
-    }
-    else {
-      $tid = \Drupal::getContainer()->get('flexinfo.term.service')->entityCreateTerm($term_name, $term_field['vocabulary']);
-    }
+  public function createTermOnBidash($term_name, $term_field) {
+    $tid = \Drupal::getContainer()
+      ->get('flexinfo.term.service')
+      ->entityCreateTerm($term_name, $term_field['vocabulary']);
 
     return $tid;
   }
@@ -84,34 +66,7 @@ trait GetEntityFromBIDash {
    *
    */
   public function getTermTidOnBidash($term_name = NULL, $field_name = NULL, $vocabulary = NULL, $meeting_json) {
-    $term_tid = NULL;
-
-    if ($term_name) {
-      if ($vocabulary == 'city') {
-        $city_tid = $this->getEntityFieldFirstTargetIdFromJson($field_name, $meeting_json, 'taxonomy/term');
-        $city_json = $this->getLillyEntityJsonContent($city_tid, 'taxonomy/term');
-
-        $province_tid = $this->getEntityFieldFirstTargetIdFromJson('field_city_province', $city_json);
-        $bi_city_tid = \Drupal::getContainer()
-          ->get('flexinfo.term.service')
-          ->getTidByCityNameAndProvinceTid($term_name, $vocabulary, $province_tid);
-
-        $term_tid = $bi_city_tid;
-      }
-      elseif ($vocabulary == 'questionlibrary') {
-        $lilly_question_tid = $this->getEntityFieldFirstTargetIdFromJson($field_name, $meeting_json, 'taxonomy/term');
-        $lilly_question_json = $this->getLillyEntityJsonContent($lilly_question_tid, 'taxonomy/term');
-        $lilly_question_fieldtype_tid = $this->getEntityFieldFirstTargetIdFromJson('field_queslibr_fieldtype', $lilly_question_json);
-
-        $bi_question_tid = \Drupal::getContainer()
-          ->get('flexinfo.term.service')
-          ->getTidByQuestionNameAndFieldTypeTid($term_name, $vocabulary, $lilly_question_fieldtype_tid);
-        $term_tid = $bi_question_tid;
-      }
-      else {
-        $term_tid = \Drupal::getContainer()->get('flexinfo.term.service')->getTidByTermName($term_name, $vocabulary);
-      }
-    }
+    $term_tid = \Drupal::getContainer()->get('flexinfo.term.service')->getTidByTermName($term_name, $vocabulary);
 
     return $term_tid;
   }
@@ -171,12 +126,12 @@ class SyncJsonToNode extends GetEntityFromJson {
    require_once(DRUPAL_ROOT . '/modules/custom/phpdebug/import_json/import_node_meeting.php');
    $SyncLillyMeeting = new SyncLillyMeeting();
    $SyncLillyMeeting->checkBiHaveSameMeetingAndSaveToSheet(5603);
+   *
+   * @param, @key is date
    */
-  public function runBatchinfoCreateNodeEntity($json_content_piece = NULL) {
+  public function runBatchinfoCreateNodeEntity($key, $json_content_piece = NULL) {
     if (TRUE) {
-      $json_content_piece = $this->getLillyEntityJsonContent($liily_meeting_nid);
-
-      $node_nids = $this->queryNodeToCheckExist($json_content_piece);
+      $node_nids = $this->queryNodeToCheckExist($key, $json_content_piece);
 
       if (count($node_nids) > 1) {
         drupal_set_message('Node have - ' . count($node_nids) . ' - few same item', 'error');
@@ -187,7 +142,7 @@ class SyncJsonToNode extends GetEntityFromJson {
         return;
       }
       else {
-        $this->runCreateMeetingOnBidash($json_content_piece);
+        $this->runCreateMeetingOnBidash($key, $json_content_piece);
       }
     }
 
@@ -197,8 +152,8 @@ class SyncJsonToNode extends GetEntityFromJson {
   /**
    *
    */
-  public function runCreateMeetingOnBidash($meeting_json = NULL) {
-    $fields_value = $this->generateNodefieldsValue($meeting_json);
+  public function runCreateMeetingOnBidash($key, $json_content_piece = NULL) {
+    $fields_value = $this->generateNodefieldsValue($json_content_piece);
 
     \Drupal::getContainer()->get('flexinfo.node.service')->entityCreateNode($fields_value);
 
@@ -245,7 +200,7 @@ class SyncJsonToNode extends GetEntityFromJson {
   /**
    *
    */
-  public function queryNodeToCheckExist($json_content_piece = NULL) {
+  public function queryNodeToCheckExist($key, $json_content_piece = NULL) {
     $meeting_date = $this->getEntityFieldFirstValueFromJson('field_day_date', $meeting_json);
 
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');

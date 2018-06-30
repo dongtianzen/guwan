@@ -55,9 +55,8 @@ trait GetEntityFromBIDash {
   /**
    *
    */
-  public function getTermFirstTidByName($term_field = array(), $json_content_piece) {
-    $term_name = $this->getEntityFieldFirstTargetIdNameFromJson($term_field['field_name'], $json_content_piece, 'taxonomy/term');
-    $term_tid = $this->getTermTidOnBidash($term_name, $term_field['field_name'], $term_field['vocabulary'], $json_content_piece);
+  public function getTermFirstTidByName($term_name, $vocabulary = NULL) {
+    $term_tid = $this->getTermTidOnBidash($term_name, $term_field['field_name'], $term_field['vocabulary']);
 
     return $term_tid;
   }
@@ -65,8 +64,10 @@ trait GetEntityFromBIDash {
   /**
    *
    */
-  public function getTermTidOnBidash($term_name = NULL, $field_name = NULL, $vocabulary = NULL, $json_content_piece) {
-    $term_tid = \Drupal::getContainer()->get('flexinfo.term.service')->getTidByTermName($term_name, $vocabulary);
+  public function getTermTidOnBidash($term_name = NULL, $vocabulary = NULL) {
+    $term_tid = \Drupal::getContainer()
+      ->get('flexinfo.term.service')
+      ->getTidByTermName($term_name, $vocabulary);
 
     return $term_tid;
   }

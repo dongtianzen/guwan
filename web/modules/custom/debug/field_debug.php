@@ -1,5 +1,11 @@
 <?php
-_run_batch_entity_create_fields();
+
+/**
+ *
+  require_once(DRUPAL_ROOT . '/modules/custom/debug/field_debug.php');
+  _run_batch_entity_create_fields();
+ */
+
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 
@@ -23,11 +29,38 @@ function _run_batch_entity_create_fields() {
   integer
  */
 function _entity_fields_info() {
-  $fields[] = array(
-    'field_name' => 'field_day_close',
-    'type'       => 'float',
-    'label'      => t('Close'),
-  );
+  /** field sample */
+  // $fields[] = array(
+  //   'field_name' => 'field_day_close',
+  //   'type'       => 'float',
+  //   'label'      => t('Close'),
+  // );
+
+  /**
+   * array sample
+   */
+  // $json_content_piece = array(
+  //   "high" => 12.8,
+  //   "low" => 11.07,
+  //   "volume" => 1472901.6200000001,
+  //   "price_change" => 0.4,
+  //   "p_change" => 3.25,
+  //   "ma5" => 12.7,
+  //   "ma10" => 12.7,
+  //   "ma20" => 12.7,
+  //   "v_ma5" => 1472901.6200000001,
+  //   "v_ma10" => 1472901.6200000001,
+  //   "v_ma20" => 1472901.6200000001
+  // );
+
+  // foreach ($json_content_piece as $key => $value) {
+  //   $fields[] = array(
+  //     'field_name' => 'field_day_' . $key,
+  //     'type'       => 'float',
+  //     'label'      => t(ucfirst($key)),
+  //   );
+  // }
+
   return $fields;
 }
 

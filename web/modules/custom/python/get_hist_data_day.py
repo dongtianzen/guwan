@@ -18,6 +18,3 @@ df = ts.get_hist_data(code, ktype='D')
 
 # 生成Json格式的文件
 df.to_json('000875_60m.json', orient='index')
-
-
-

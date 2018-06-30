@@ -182,7 +182,7 @@ class SyncJsonToNode extends GetEntityFromJson {
       $date,
     );
 
-    $node_bundle_fields = $this->allNodeBundleFields();
+    $node_bundle_fields = $this->allNodeBundleFields($json_content_piece);
     foreach ($node_bundle_fields as $row) {
       if (isset($row['vocabulary'])) {
         $term_tids = $this->getTermAllTidsByName($row, $json_content_piece);
@@ -267,27 +267,47 @@ class SyncJsonToNode extends GetEntityFromJson {
   /**
    *
    */
-  public function allNodeBundleFields() {
-    $node_bundle_fields = array(
-      // user
-      // array(
-      //   'field_name' => 'field_meeting_speaker',
-      //   'userRole' => 'speaker',
-      // ),
+  public function allNodeBundleFields($json_content_piece = array()) {
+    /** user sample */
+    // $node_bundle_fields[] = array(
+    //   'field_name' => 'field_meeting_speaker',
+    //   'userRole' => 'speaker',
+    // );
 
-      // term
-      // array(
-      //   'field_name' => 'field_day_code',
-      //   'vocabulary' => 'code',
-      // ),
+    /** term sample */
+    // $node_bundle_fields[] = array(
+    //   'field_name' => 'field_day_code',
+    //   'vocabulary' => 'code',
+    // );
 
-      // value
-      array(
-        'field_name' => 'field_day_open',
-        'json_key' => 'open',
-      ),
-
+    /** value sample */
+    $node_bundle_fields[] = array(
+      'field_name' => 'field_day_open',
+      'json_key' => 'open',
     );
+
+    $json_content_piece = array(
+      "open" => 12.0,
+      "high" => 12.8,
+      "close" => 12.7,
+      "low" => 11.07,
+      "volume" => 1472901.6200000001,
+      "price_change" => 0.4,
+      "p_change" => 3.25,
+      "ma5" => 12.7,
+      "ma10" => 12.7,
+      "ma20" => 12.7,
+      "v_ma5" => 1472901.6200000001,
+      "v_ma10" => 1472901.6200000001,
+      "v_ma20" => 1472901.6200000001
+    );
+
+    foreach ($json_content_piece as $key => $value) {
+      $node_bundle_fields[] = array(
+        'field_name' => 'field_day_' . $key,
+        'json_key' => $key,
+      );
+    }
 
     return $node_bundle_fields;
   }

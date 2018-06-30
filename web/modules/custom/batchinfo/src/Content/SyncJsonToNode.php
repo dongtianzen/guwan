@@ -201,31 +201,55 @@ class SyncJsonToNode extends GetEntityFromJson {
    *
    */
   public function queryNodeToCheckExist($key, $json_content_piece = NULL) {
-    $meeting_date = $this->getEntityFieldFirstValueFromJson('field_day_date', $meeting_json);
+    $explodeKeyArray = $this->explodeKeyByCodeAndDate($key);
 
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');
 
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $meeting_date);
-    $query->condition($group);
+
+    if (isset($explodeKeyArray['date'])) {
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $explodeKeyArray['date']);
+      $query->condition($group);
+    }
+
+    /* term */
+    if (isset($explodeKeyArray['code'])) {
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_code.entity.name', $explodeKeyArray['code']);
+      $query->condition($group);
+    }
+
+    /* value */
+    if (isset($json_content_piece['open'])) {
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_open', NULL, 'IS NOT NULL');
+      $query->condition($group);
+    }
 
     /* user */
     // $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_speaker.entity.name', $speaker_name);
     // $query->condition($group);
 
-    /* term */
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_code.entity.name', $city_name);
-    $query->condition($group);
-
-    /* value */
-    if ($address) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_meeting_address', $address);
-      $query->condition($group);
-    }
-
     $nids = $query_container->runQueryWithGroup($query);
 
     return $nids;
+  }
+
+  /**
+   *
+   */
+  public function explodeKeyByCodeAndDate($key) {
+    $output['code'] = NULL;
+    $output['date'] = NULL;
+
+    $pieces = explode("_", $key);
+
+    if (isset($pieces[0])) {
+      $output['code'] = $pieces[0];
+    }
+    if (isset($pieces[1])) {
+      $output['date'] = $pieces[1];
+    }
+
+    return $output;
   }
 
   /**

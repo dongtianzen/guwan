@@ -142,7 +142,7 @@ class SyncJsonToNode extends GetEntityFromJson {
         return;
       }
       else {
-        $this->runCreateMeetingOnBidash($key, $json_content_piece);
+        $this->runCreateNodeEntity($key, $json_content_piece);
       }
     }
 
@@ -152,7 +152,7 @@ class SyncJsonToNode extends GetEntityFromJson {
   /**
    *
    */
-  public function runCreateMeetingOnBidash($key, $json_content_piece = NULL) {
+  public function runCreateNodeEntity($key, $json_content_piece = NULL) {
     $fields_value = $this->generateNodefieldsValue($json_content_piece);
 
     \Drupal::getContainer()->get('flexinfo.node.service')->entityCreateNode($fields_value);

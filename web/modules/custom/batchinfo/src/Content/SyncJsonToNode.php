@@ -37,7 +37,7 @@ trait GetEntityFromBIDash {
     $term_names = $this->getEntityFieldAllTargetIdsNameFromJson($term_field['field_name'], $json_content_piece, 'taxonomy/term');
     if ($term_names) {
       foreach ($term_names as $term_name) {
-        $term_tid = $this->getTermTidOnBidash($term_name, $term_field['field_name'], $term_field['vocabulary'], $json_content_piece);
+        $term_tid = $this->getTermFirstTidByName($term_name, $term_field['vocabulary']);
 
         // only when have result, push to output
         if ($term_tid) {
@@ -56,15 +56,6 @@ trait GetEntityFromBIDash {
    *
    */
   public function getTermFirstTidByName($term_name, $vocabulary = NULL) {
-    $term_tid = $this->getTermTidOnBidash($term_name, $term_field['field_name'], $term_field['vocabulary']);
-
-    return $term_tid;
-  }
-
-  /**
-   *
-   */
-  public function getTermTidOnBidash($term_name = NULL, $vocabulary = NULL) {
     $term_tid = \Drupal::getContainer()
       ->get('flexinfo.term.service')
       ->getTidByTermName($term_name, $vocabulary);
@@ -187,6 +178,10 @@ class SyncJsonToNode extends GetEntityFromJson {
       $code_tid,  // term tid
     );
 
+    $fields_value['field_day_date'] = array(
+      $date,
+    );
+
     $node_bundle_fields = $this->allNodeBundleFields();
     foreach ($node_bundle_fields as $row) {
       if (isset($row['vocabulary'])) {
@@ -197,7 +192,7 @@ class SyncJsonToNode extends GetEntityFromJson {
 
       }
       else {
-        $fields_value[$row['field_name']] = $this->getEntityFieldAllValueFromJson($row['field_name'], $json_content_piece);
+        $fields_value[$row['field_name']] = $json_content_piece[$row['json_key']];
       }
     }
 
@@ -288,10 +283,8 @@ class SyncJsonToNode extends GetEntityFromJson {
 
       // value
       array(
-        'field_name' => 'field_day_date',
-      ),
-      array(
         'field_name' => 'field_day_open',
+        'json_key' => 'open',
       ),
 
     );

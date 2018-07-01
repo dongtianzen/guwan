@@ -36,7 +36,7 @@ function _runCreateTermsWithFieldsValue() {
       ->get('flexinfo.term.service')
       ->entityCreateTermWithFieldsValue($row[0], $vid = 'code', $fields_value);
 
-    if ($key > 0) {
+    if ($key > 1880) {
       break;
     }
 

@@ -22,6 +22,15 @@ function _runCreateTermsWithFieldsValue() {
       )
     );
 
+    $check_term_exist = \Drupal::getContainer()
+      ->get('flexinfo.term.service')
+      ->getTidByTermName($row[0], $vid = 'code');
+
+
+    if ($check_term_exist) {
+      dpm('The term exist - ' . $row[0]);
+      continue;
+    }
 
     \Drupal::getContainer()
       ->get('flexinfo.term.service')

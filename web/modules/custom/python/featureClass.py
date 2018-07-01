@@ -1,11 +1,6 @@
 # get_hist_data and save JSON file
 
 import tushare as ts
-from datetime import date, timedelta
-
-# todayDate is like '2017-12-26'
-todayDate = str(date.today())
-yesterday = str(date.today() - timedelta(3))
 
 # define a class
 class GetFeatureClass:
@@ -17,6 +12,6 @@ class GetFeatureClass:
     return
 
   # get Day data
-  def getHistoryData(self, code):
-    histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
+  def getHistoryData(self, code, startDay):
+    histData = ts.get_hist_data(code, ktype = 'D', start = startDay)
     return histData

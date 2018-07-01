@@ -8,9 +8,12 @@
 # print (cc)
 
 #
+from datetime import date, timedelta
 import pandas as pd
 import time
+
 from featureClass import GetFeatureClass
+
 
 # for print execution time start
 start_time = time.time()
@@ -18,11 +21,16 @@ start_time = time.time()
 codeList = ['600006', '600007', '600008', '600009', '600010']
 allHistoryDataFrames = [];
 
+# todayDate is like '2017-12-26'
+todayDate = str(date.today())
+yesterday = str(date.today() - timedelta(3))
+startDay = yesterday
+
 getFeature = GetFeatureClass();
 
 #
 for code in codeList:
-  histData = getFeature.getHistoryData(code,)
+  histData = getFeature.getHistoryData(code, startDay)
 
   for row in histData.index.values:
     histDataCache = histData.rename(index={row: (code + '_' + row)})

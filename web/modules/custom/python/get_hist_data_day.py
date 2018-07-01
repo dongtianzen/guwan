@@ -14,6 +14,10 @@ import time
 
 from featureClass import GetFeatureClass
 
+import tushare as ts
+
+print (ts.cap_tops())
+exit()
 
 # for print execution time start
 start_time = time.time()

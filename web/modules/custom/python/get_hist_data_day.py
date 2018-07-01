@@ -14,18 +14,23 @@ from datetime import date, timedelta
 todayDate = str(date.today())
 yesterday = str(date.today() - timedelta(5))
 
-df = ts.get_hist_data('000875', ktype = 'D', start = yesterday)
-print (df.index.values)
+code = '000875'
 
-df2 = df.rename(index={"2018-06-29": 'mu2018-06-29'})
+histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
+# print (histData.index.values)
+# print (type(histData.index.values))
 
-print (df)
-print (df2)
+for row in histData.index.values:
+  print (row)
+  histDataCache = histData.rename(index={row: (code + '_' + row)})
+  histData = histDataCache
+
+print (histData)
 #
 def getHistoryData():
   # get Day data
   code = '000875'
-  df = ts.get_hist_data(code, ktype = 'D', start = yesterday)
+  histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
 
   # 生成Json格式的文件
-  df.to_json('000875_60m.json', orient='index')
+  histData.to_json('000875_60m.json', orient='index')

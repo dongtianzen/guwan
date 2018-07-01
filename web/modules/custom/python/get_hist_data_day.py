@@ -24,10 +24,13 @@ def getHistoryData(code):
 import tushare as ts
 from datetime import date, timedelta
 import pandas as pd
+import time
+
+start_time = time.time()
 
 # todayDate is like '2017-12-26'
 todayDate = str(date.today())
-yesterday = str(date.today() - timedelta(300))
+yesterday = str(date.today() - timedelta(3))
 
 codeList = ['600006', '600007', '600008', '600009', '600010']
 allHistoryDataFrames = [];
@@ -49,3 +52,4 @@ allHistoryData = pd.concat(allHistoryDataFrames)
 # exit()
 
 generateHistoryDataToJson(allHistoryData)
+print("--- %s seconds ---" % (time.time() - start_time))

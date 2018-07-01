@@ -16,10 +16,10 @@ function _runCreateTermsWithFieldsValue() {
         'field_name' => 'field_code_name',
         'value' => array($row[1]),
       ),
-      // array(
-      //   'field_name' => 'field_code_listing_date',
-      //   'value' => $row[2],
-      // )
+      array(
+        'field_name' => 'field_code_listing_date',
+        'value' => array($row[2]),
+      )
     );
 
     $check_term_exist = \Drupal::getContainer()

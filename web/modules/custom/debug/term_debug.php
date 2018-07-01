@@ -14,12 +14,12 @@ function _runCreateTermsWithFieldsValue() {
     $fields_value = array(
       array(
         'field_name' => 'field_code_name',
-        'value' => $row[1],
+        'value' => array($row[1]),
       ),
-      array(
-        'field_name' => 'field_code_listing_date',
-        'value' => $row[2],
-      )
+      // array(
+      //   'field_name' => 'field_code_listing_date',
+      //   'value' => array($row[2]),
+      // )
     );
 
     $check_term_exist = \Drupal::getContainer()
@@ -32,13 +32,15 @@ function _runCreateTermsWithFieldsValue() {
       continue;
     }
 
-    \Drupal::getContainer()
-      ->get('flexinfo.term.service')
-      ->entityCreateTermWithFieldsValue($row[0], $vid = 'code', $fields_value);
 
     if ($key > 0) {
       break;
     }
+
+    \Drupal::getContainer()
+      ->get('flexinfo.term.service')
+      ->entityCreateTermWithFieldsValue($row[0], $vid = 'code', $fields_value);
+
 
   }
 }

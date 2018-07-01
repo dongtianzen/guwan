@@ -1,5 +1,11 @@
 <?php
 
+/**
+ *
+  require_once(DRUPAL_ROOT . '/modules/custom/debug/term_debug.php');
+  _runCreateTermsWithFieldsValue();
+ */
+
 function _runCreateTermsWithFieldsValue() {
 
   $codeList = getShanghaiList();
@@ -565,10 +571,10 @@ function getShanghaiList() {
     array(600648,“外高桥“,1993-05-04),
     array(600649,“城投控股“,1993-05-18),
     array(600650,“锦江投资“,1993-06-07),
-    array(600651,“飞乐音响“,"1990-12-19),
-    array(600652,“游久游戏“,"1986-09-26),
-    array(600653,“申华控股“,"1986-09-26),
-    array(600654,“中安消“,"1986-09-26),
+    array(600651,“飞乐音响“,1990-12-19),
+    array(600652,“游久游戏“,1986-09-26),
+    array(600653,“申华控股“,1986-09-26),
+    array(600654,“中安消“,1986-09-26),
     array(600655,“豫园商城“,1992-09-02),
     array(600657,“信达地产“,1993-05-24),
     array(600658,“电子城“,1993-05-24),

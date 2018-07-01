@@ -19,18 +19,16 @@ from featureClass import GetFeatureClass
 start_time = time.time()
 
 codeList = ['600006', '600007', '600008', '600009', '600010']
+codeList = ['600006', '600007']
 allHistoryDataFrames = [];
 
 # todayDate is like '2017-12-26'
 todayDate = str(date.today())
-yesterday = str(date.today() - timedelta(3))
-startDay = yesterday
-
-getFeature = GetFeatureClass();
+startDay = str(date.today() - timedelta(2))
 
 #
 for code in codeList:
-  histData = getFeature.getHistoryData(code, startDay)
+  histData = GetFeatureClass().getHistoryData(code, startDay)
 
   for row in histData.index.values:
     histDataCache = histData.rename(index={row: (code + '_' + row)})
@@ -44,7 +42,7 @@ allHistoryData = pd.concat(allHistoryDataFrames)
 # print (allHistoryData)
 # exit()
 
-getFeature.generateHistoryDataToJson(allHistoryData)
+GetFeatureClass().generateHistoryDataToJson(allHistoryData)
 
 # for print execution time end
 print("--- %s seconds ---" % (time.time() - start_time))

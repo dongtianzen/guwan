@@ -12,10 +12,15 @@ from datetime import date, timedelta
 
 # todayDate is like '2017-12-26'
 todayDate = str(date.today())
-yesterday = str(date.today() - timedelta(10))
+yesterday = str(date.today() - timedelta(5))
 
-print (yesterday)
+df = ts.get_hist_data('000875', ktype = 'D', start = yesterday)
+print (df.index.values)
 
+df2 = df.rename(index={"2018-06-29": 'mu2018-06-29'})
+
+print (df)
+print (df2)
 #
 def getHistoryData():
   # get Day data

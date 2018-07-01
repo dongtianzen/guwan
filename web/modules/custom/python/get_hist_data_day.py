@@ -7,18 +7,19 @@
 # cc = ts.get_k_data('399300', index=True, start='2016-10-01', end='2017-01-31')
 # print (cc)
 
+# define a class
+class GetFeatureClass:
+  # 生成Json格式的文件
+  def generateHistoryDataToJson(self, allHistoryData):
+    allHistoryData.to_json('historyDataDat.json', orient='index')
 
-# 生成Json格式的文件
-def generateHistoryDataToJson(allHistoryData):
-  allHistoryData.to_json('historyDataDat.json', orient='index')
+    print ('JSON generate success')
+    return
 
-  print ('JSON generate success')
-  return
-
-# get Day data
-def getHistoryData(code):
-  histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
-  return histData
+  # get Day data
+  def getHistoryData(self, code):
+    histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
+    return histData
 
 #
 import tushare as ts
@@ -35,9 +36,11 @@ yesterday = str(date.today() - timedelta(3))
 codeList = ['600006', '600007', '600008', '600009', '600010']
 allHistoryDataFrames = [];
 
+getFeature = GetFeatureClass();
+
 #
 for code in codeList:
-  histData = getHistoryData(code)
+  histData = getFeature.getHistoryData(code)
 
   for row in histData.index.values:
     histDataCache = histData.rename(index={row: (code + '_' + row)})
@@ -51,5 +54,5 @@ allHistoryData = pd.concat(allHistoryDataFrames)
 # print (allHistoryData)
 # exit()
 
-generateHistoryDataToJson(allHistoryData)
+getFeature.generateHistoryDataToJson(allHistoryData)
 print("--- %s seconds ---" % (time.time() - start_time))

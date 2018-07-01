@@ -12,6 +12,9 @@
 def generateHistoryDataToJson(allHistoryData):
   allHistoryData.to_json('historyDataDat.json', orient='index')
 
+  print ('JSON generate success')
+  return
+
 # get Day data
 def getHistoryData(code):
   histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
@@ -24,10 +27,9 @@ import pandas as pd
 
 # todayDate is like '2017-12-26'
 todayDate = str(date.today())
-yesterday = str(date.today() - timedelta(3))
+yesterday = str(date.today() - timedelta(300))
 
 codeList = ['600006', '600007', '600008', '600009', '600010']
-codeList = ['600006', '600007']
 allHistoryDataFrames = [];
 
 #
@@ -43,7 +45,7 @@ for code in codeList:
 allHistoryData = pd.concat(allHistoryDataFrames)
 
 # debug
-print (allHistoryData)
-exit()
+# print (allHistoryData)
+# exit()
 
 generateHistoryDataToJson(allHistoryData)

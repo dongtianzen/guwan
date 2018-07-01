@@ -7,33 +7,43 @@
 # cc = ts.get_k_data('399300', index=True, start='2016-10-01', end='2017-01-31')
 # print (cc)
 
-#
-import tushare as ts
-from datetime import date, timedelta
 
-# todayDate is like '2017-12-26'
-todayDate = str(date.today())
-yesterday = str(date.today() - timedelta(5))
-
-code = '000875'
+# 生成Json格式的文件
+def generateHistoryDataToJson(allHistoryData):
+  allHistoryData.to_json('historyDataDat.json', orient='index')
 
 # get Day data
 def getHistoryData(code):
   histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
   return histData
 
-histData = getHistoryData(code)
+#
+import tushare as ts
+from datetime import date, timedelta
+import pandas as pd
 
-for row in histData.index.values:
-  histDataCache = histData.rename(index={row: (code + '_' + row)})
-  histData = histDataCache
+# todayDate is like '2017-12-26'
+todayDate = str(date.today())
+yesterday = str(date.today() - timedelta(3))
+
+codeList = ['600006', '600007', '600008', '600009', '600010']
+codeList = ['600006', '600007']
+allHistoryDataFrames = [];
+
+#
+for code in codeList:
+  histData = getHistoryData(code)
+
+  for row in histData.index.values:
+    histDataCache = histData.rename(index={row: (code + '_' + row)})
+    histData = histDataCache
+
+  allHistoryDataFrames.append(histData)
+
+allHistoryData = pd.concat(allHistoryDataFrames)
 
 # debug
-# print (histData)
-# exit()
+print (allHistoryData)
+exit()
 
-# 生成Json格式的文件
-def generateHistoryDataToJson():
-  histData.to_json('historyDataDat.json', orient='index')
-
-generateHistoryDataToJson()
+generateHistoryDataToJson(allHistoryData)

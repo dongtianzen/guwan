@@ -16,21 +16,23 @@ yesterday = str(date.today() - timedelta(5))
 
 code = '000875'
 
-histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
-# print (histData.index.values)
-# print (type(histData.index.values))
+# get Day data
+def getHistoryData(code):
+  histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
+  return histData
+
+
+histData = getHistoryData(code)
+
+
+print (histData)
+exit()
 
 for row in histData.index.values:
-  print (row)
   histDataCache = histData.rename(index={row: (code + '_' + row)})
   histData = histDataCache
 
-print (histData)
-#
-def getHistoryData():
-  # get Day data
-  code = '000875'
-  histData = ts.get_hist_data(code, ktype = 'D', start = yesterday)
 
-  # 生成Json格式的文件
-  histData.to_json('000875_60m.json', orient='index')
+# 生成Json格式的文件
+def generateHistoryDataToJson():
+  histData.to_json('historyDataDat.json', orient='index')

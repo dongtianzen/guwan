@@ -11,6 +11,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 
 use Drupal\batchinfo\Content\SyncJsonToNode;
+use Drupal\batchinfo\Content\SyncJsonToTerm;
 
 /**
  * Controller routines for theme example routes.
@@ -99,8 +100,8 @@ class BatchinfoController extends ControllerBase {
    *
    */
   public function runCreateTerm() {
-    $SyncJsonToNode = new SyncJsonToNode();
-    $json_content = $SyncJsonToNode->getImportJsonContent();
+    $SyncJsonToTerm = new SyncJsonToTerm();
+    $json_content = $SyncJsonToTerm->getShanghaiList();
 
     if ($json_content && is_array($json_content)) {
     }
@@ -108,7 +109,7 @@ class BatchinfoController extends ControllerBase {
       drupal_set_message('All of JSON had sync, Please check JSON file', 'warning');
     }
 
-    $every_time_excute_max_number = 1;
+    $every_time_excute_max_number = 5;
     $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
 
     dpm('every time only excute - ' . $every_time_excute_max_number . ' - save node');
@@ -116,7 +117,7 @@ class BatchinfoController extends ControllerBase {
     $operations = [];
     foreach ($chunk as $piece) {
       $operations[] = array(
-        '\Drupal\batchinfo\Content\RunImportJsonToNode::checkJsonAndCreateEntity',   // function name
+        '\Drupal\batchinfo\Content\RunImportJsonToTerm::checkJsonAndCreateEntity',   // function name
         array($piece)
       );
     }
@@ -124,12 +125,12 @@ class BatchinfoController extends ControllerBase {
     $batch = array(
       'title' => t('Running batch...'),
       'operations' => $operations,
-      'finished' => '\Drupal\batchinfo\Content\RunImportJsonToNode::finishedCallback',
+      'finished' => '\Drupal\batchinfo\Content\RunImportJsonToTerm::finishedCallback',
     );
 
     batch_set($batch);
 
-    $message = 'Run batch on RunImportJsonToNode()';
+    $message = 'Run batch on RunImportJsonToTerm()';
     \Drupal::logger('batchinfo')->notice($message);
 
     // You have to return batch_process('url') - set redirect page path,

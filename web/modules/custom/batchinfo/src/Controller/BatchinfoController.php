@@ -101,7 +101,7 @@ class BatchinfoController extends ControllerBase {
    */
   public function runCreateTerm() {
     $SyncJsonToTerm = new SyncJsonToTerm();
-    $json_content = $SyncJsonToTerm->getShanghaiList();
+    $json_content = $SyncJsonToTerm->getShenzhenList();
 
     if ($json_content && is_array($json_content)) {
     }

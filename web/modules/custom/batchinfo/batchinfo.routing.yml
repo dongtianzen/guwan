@@ -14,3 +14,20 @@ batchinfo.importJson.run:
     _title: 'Batchinfo Run Import Json'
   requirements:
     _permission: 'access content'
+
+#
+batchinfo.createTerm.guide:
+  path: '/batchinfo/createterm/guide'
+  defaults:
+    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::guideCreateTerm'
+    _title: 'Batchinfo Guide Create Term'
+  requirements:
+    _permission: 'access content'
+
+batchinfo.createTerm.run:
+  path: '/batchinfo/createterm/run'
+  defaults:
+    _controller: '\Drupal\batchinfo\Controller\BatchinfoController::runCreateTerm'
+    _title: 'Batchinfo Run Create Term'
+  requirements:
+    _permission: 'access content'

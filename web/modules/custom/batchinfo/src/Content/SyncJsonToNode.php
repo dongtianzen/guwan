@@ -15,92 +15,7 @@ namespace Drupal\batchinfo\Content;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-trait GetEntityFromBIDash {
-
-  /**
-   *
-   */
-  public function createTermOnBidash($term_name, $term_field) {
-    $tid = \Drupal::getContainer()
-      ->get('flexinfo.term.service')
-      ->entityCreateTerm($term_name, $term_field['vocabulary']);
-
-    return $tid;
-  }
-
-  /**
-   *
-   */
-  public function getTermAllTidsByName($term_field = array(), $json_content_piece) {
-    $term_tids = array();
-
-    $term_names = $this->getEntityFieldAllTargetIdsNameFromJson($term_field['field_name'], $json_content_piece, 'taxonomy/term');
-    if ($term_names) {
-      foreach ($term_names as $term_name) {
-        $term_tid = $this->getTermFirstTidByName($term_name, $term_field['vocabulary']);
-
-        // only when have result, push to output
-        if ($term_tid) {
-          $term_tids[] = $term_tid;
-        }
-        else {
-          $term_tids[] = $this->createTermOnBidash($term_name, $term_field, $json_content_piece);
-        }
-      }
-    }
-
-    return $term_tids;
-  }
-
-  /**
-   *
-   */
-  public function getTermFirstTidByName($term_name, $vocabulary = NULL) {
-    $term_tid = \Drupal::getContainer()
-      ->get('flexinfo.term.service')
-      ->getTidByTermName($term_name, $vocabulary);
-
-    return $term_tid;
-  }
-
-}
-
-/**
- *
- */
-class GetEntityFromJson {
-
-  /**
-   *
-   */
-  public function getEntityFieldAllTargetIdsFromJson($field = NULL, $json = NULL) {
-    $target_ids = array();
-    if (isset($json[$field][0]['target_id'])) {
-      foreach ($json[$field] as $row) {
-        $target_ids[] = $row['target_id'];
-      }
-    }
-
-    return $target_ids;
-  }
-
-  /**
-   *
-   */
-  public function getEntityFieldFirstTargetIdFromJson($field = NULL, $json = NULL) {
-    $target_id = NULL;
-    if (isset($json[$field][0]['target_id'])) {
-      $target_id = $json[$field][0]['target_id'];
-    }
-
-    return $target_id;
-  }
-
-}
-
-class SyncJsonToNode extends GetEntityFromJson {
-
-  use GetEntityFromBIDash;
+class SyncJsonToNode {
 
   public $json_filename;
   public $json_file_path;
@@ -186,7 +101,9 @@ class SyncJsonToNode extends GetEntityFromJson {
     );
 
     // special fix value
-    $code_tid = $this->getTermFirstTidByName($code);
+    $code_tid = \Drupal::getContainer()
+      ->get('flexinfo.term.service')
+      ->getTidByTermName($code, $vocabulary_name = 'code');
 
     $fields_value['field_day_code'] = array(
       'target_id' => $code_tid,  // term tid
@@ -199,8 +116,7 @@ class SyncJsonToNode extends GetEntityFromJson {
     $node_bundle_fields = $this->allNodeBundleFields($json_content_piece);
     foreach ($node_bundle_fields as $row) {
       if (isset($row['vocabulary'])) {
-        $term_tids = $this->getTermAllTidsByName($row, $json_content_piece);
-        $fields_value[$row['field_name']] = $term_tids;
+
       }
       elseif (isset($row['userRole'])) {
 
@@ -209,7 +125,7 @@ class SyncJsonToNode extends GetEntityFromJson {
         $fields_value[$row['field_name']] = $json_content_piece[$row['json_key']];
       }
     }
-dpm($fields_value);
+
     return $fields_value;
   }
 

@@ -68,7 +68,7 @@ class BatchinfoController extends ControllerBase {
       drupal_set_message('All of JSON had sync, Please check JSON file', 'warning');
     }
 
-    $every_time_excute_max_number = 1;
+    $every_time_excute_max_number = 3;
     $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
 
     dpm('every time only excute - ' . $every_time_excute_max_number . ' - save node');
@@ -112,7 +112,7 @@ class BatchinfoController extends ControllerBase {
     $every_time_excute_max_number = 5;
     $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
 
-    dpm('every time only excute - ' . $every_time_excute_max_number . ' - save node');
+    dpm('every time only excute - ' . $every_time_excute_max_number . ' - save term');
 
     $operations = [];
     foreach ($chunk as $piece) {

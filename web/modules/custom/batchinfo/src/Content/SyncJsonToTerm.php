@@ -23,10 +23,11 @@ class SyncJsonToTerm {
   public function __construct() {
     $this->vid = 'code';
     $this->termJsonContent = $this->getShenzhenList();
+    $this->termJsonContent = array();
   }
 
   public function getTermJsonContent() {
-    // return $this->termJsonContent;
+    return $this->termJsonContent;
   }
 
   public function runBatchinfoCreateTermEntity($json_content_piece = NULL) {

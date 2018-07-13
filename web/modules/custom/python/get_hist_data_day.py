@@ -29,7 +29,7 @@ allHistoryDataFrames = [];
 
 # todayDate is like '2017-12-26'
 todayDate = str(date.today())
-startDay = str(date.today() - timedelta(2))
+startDay = str(date.today() - timedelta(200))
 
 #
 for code in codeList:

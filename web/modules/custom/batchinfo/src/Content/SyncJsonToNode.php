@@ -177,22 +177,23 @@ class SyncJsonToNode extends GetEntityFromJson {
     $entity_bundle = 'day';
     $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-    // special fix value
-    $code_tid = $this->getTermFirstTidByName($code);
-    $fields_value['field_day_code'] = array(
-      $code_tid,  // term tid
-    );
-
-    $fields_value['field_day_date'] = array(
-      $date,
-    );
-
     $fields_value = array(
       'type' => $entity_bundle,
       'title' =>  $entity_bundle . ' From JSON ' . $code . ' - ' . $date,
       'langcode' => $language,
       'uid' => 1,
       'status' => 1,
+    );
+
+    // special fix value
+    $code_tid = $this->getTermFirstTidByName($code);
+
+    $fields_value['field_day_code'] = array(
+      'target_id' => $code_tid,  // term tid
+    );
+
+    $fields_value['field_day_date'] = array(
+      $date,
     );
 
     $node_bundle_fields = $this->allNodeBundleFields($json_content_piece);
@@ -208,7 +209,7 @@ class SyncJsonToNode extends GetEntityFromJson {
         $fields_value[$row['field_name']] = $json_content_piece[$row['json_key']];
       }
     }
-
+dpm($fields_value);
     return $fields_value;
   }
 

@@ -17,11 +17,23 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SyncJsonToTerm {
 
+  public $vid;
+  public $termJsonContent;
+
+  public function __construct() {
+    $this->vid = 'code';
+    $this->termJsonContent = $this->getShenzhenList();
+  }
+
+  public function getTermJsonContent() {
+    // return $this->termJsonContent;
+  }
+
   public function runBatchinfoCreateTermEntity($json_content_piece = NULL) {
     if (TRUE) {
       $check_term_exist = \Drupal::getContainer()
         ->get('flexinfo.term.service')
-        ->getTidByTermName($json_content_piece[0], $vid = 'code');
+        ->getTidByTermName($json_content_piece[0], $vid = $this->vid);
 
       if ($check_term_exist) {
         dpm('The term exist - ' . $json_content_piece[0]);
@@ -49,7 +61,7 @@ class SyncJsonToTerm {
 
     \Drupal::getContainer()
       ->get('flexinfo.term.service')
-      ->entityCreateTermWithFieldsValue($json_content_piece[0], $vid = 'code', $fields_value);
+      ->entityCreateTermWithFieldsValue($json_content_piece[0], $vid = $this->vid, $fields_value);
   }
 
   public function getShenzhenList() {

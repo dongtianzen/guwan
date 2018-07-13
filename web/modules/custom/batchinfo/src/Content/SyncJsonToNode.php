@@ -43,11 +43,7 @@ class SyncJsonToNode {
 
   /**
    *
-   require_once(DRUPAL_ROOT . '/modules/custom/phpdebug/import_json/import_node_meeting.php');
-   $SyncLillyMeeting = new SyncLillyMeeting();
-   $SyncLillyMeeting->checkBiHaveSameMeetingAndSaveToSheet(5603);
-   *
-   * @param, @key is date
+   * @param, @key is code and date
    */
   public function runBatchinfoCreateNodeEntity($key, $json_content_piece = NULL) {
     $explodeKeyArray = $this->explodeKeyByCodeAndDate($key);

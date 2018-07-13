@@ -109,8 +109,8 @@ class SyncJsonToNode extends GetEntityFromJson {
    *
    */
   public function __construct() {
-    $this->json_filename = 'import_record_node_day.json';
-    $this->json_file_path = '/modules/custom/batchinfo/json/' . $this->json_filename;
+    $this->json_filename = 'historyDataDat.json';
+    $this->json_file_path = '/sites/default/files/json/tushare/' . $this->json_filename;
   }
 
   /**
@@ -189,7 +189,7 @@ class SyncJsonToNode extends GetEntityFromJson {
 
     $fields_value = array(
       'type' => $entity_bundle,
-      'title' =>  $entity_bundle . ' From JSON ' . $code_tid . ' - ' . $date,
+      'title' =>  $entity_bundle . ' From JSON ' . $code . ' - ' . $date,
       'langcode' => $language,
       'uid' => 1,
       'status' => 1,

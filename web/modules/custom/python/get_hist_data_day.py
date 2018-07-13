@@ -1,11 +1,12 @@
+"""
 # get_hist_data and save JSON file
-
-# cd web/modules/custom/python
-# python3 get_hist_data_day.py
+# python3 web/modules/custom/python/get_hist_data_day.py
 
 # alternative ts.get_k_data
 # cc = ts.get_k_data('399300', index=True, start='2016-10-01', end='2017-01-31')
 # print (cc)
+
+"""
 
 #
 from datetime import date, timedelta
@@ -16,8 +17,8 @@ from featureClass import GetFeatureClass
 
 import tushare as ts
 
-print (ts.cap_tops())
-exit()
+# print (ts.cap_tops())
+# exit()
 
 # for print execution time start
 start_time = time.time()

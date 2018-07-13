@@ -102,15 +102,28 @@ class SyncJsonToNode extends GetEntityFromJson {
 
   use GetEntityFromBIDash;
 
-  public $json_meeting_filename;
-  public $json_meeting_path;
+  public $json_filename;
+  public $json_file_path;
 
   /**
    *
    */
   public function __construct() {
-    $this->json_meeting_filename = 'import_record_node_day.json';
-    $this->json_meeting_path = '/modules/custom/batchinfo/json/' . $this->json_meeting_filename;
+    $this->json_filename = 'import_record_node_day.json';
+    $this->json_file_path = '/modules/custom/batchinfo/json/' . $this->json_filename;
+  }
+
+  /**
+   *
+   */
+  public function getImportJsonContent() {
+    $output = \Drupal::getContainer()
+      ->get('flexinfo.json.service')
+      ->fetchConvertJsonToArrayFromInternalPath($this->json_file_path);
+
+    drupal_set_message('Total have - ' . count($output) . ' - records');
+
+    return $output;
   }
 
   /**
@@ -164,14 +177,6 @@ class SyncJsonToNode extends GetEntityFromJson {
     $entity_bundle = 'day';
     $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-    $fields_value = array(
-      'type' => $entity_bundle,
-      'title' => 'Entity Create By Import From JSON ' . $entity_bundle,
-      'langcode' => $language,
-      'uid' => 1,
-      'status' => 1,
-    );
-
     // special fix value
     $code_tid = $this->getTermFirstTidByName($code);
     $fields_value['field_day_code'] = array(
@@ -180,6 +185,14 @@ class SyncJsonToNode extends GetEntityFromJson {
 
     $fields_value['field_day_date'] = array(
       $date,
+    );
+
+    $fields_value = array(
+      'type' => $entity_bundle,
+      'title' =>  $entity_bundle . ' From JSON ' . $code_tid . ' - ' . $date,
+      'langcode' => $language,
+      'uid' => 1,
+      'status' => 1,
     );
 
     $node_bundle_fields = $this->allNodeBundleFields($json_content_piece);
@@ -247,19 +260,6 @@ class SyncJsonToNode extends GetEntityFromJson {
     if (isset($pieces[1])) {
       $output['date'] = $pieces[1];
     }
-
-    return $output;
-  }
-
-  /**
-   *
-   */
-  public function getImportJsonContent() {
-    $output = \Drupal::getContainer()
-      ->get('flexinfo.json.service')
-      ->fetchConvertJsonToArrayFromInternalPath($this->json_meeting_path);
-
-    drupal_set_message('Total have - ' . count($output) . ' - records');
 
     return $output;
   }

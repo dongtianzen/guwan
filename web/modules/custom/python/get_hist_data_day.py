@@ -28,22 +28,23 @@ start_time = time.time()
 
 urlPath = ("http://localhost:8888/agu/web/views/json/debug-term-code-table?_format=json")
 with urllib.request.urlopen(urlPath) as url:
-    data = json.loads(url.read().decode())
-    print(data)
+  termCodeData = json.loads(url.read().decode())
 
+fullCodeList = []
+for termCodeRow in termCodeData:
+  fullCodeList.append(termCodeRow['name'][0]['value'])
 
-exit()
+# exit()
 
-
-codeList = ['600006', '600007', '600008', '600009', '600010']
-codeList = ['600006', '600007']
+# fullCodeList = ['600006', '600007', '600008', '600009', '600010']
+# fullCodeList = ['600006', '600007']
 
 # startDate is today('2018-06-23') 减去 想开始的日期个数
 startDate = str(date.today() - timedelta(3))
 
 #
 allHistoryDataFrames = [];
-for code in codeList:
+for code in fullCodeList:
   histData = GetFeatureClass().getHistoryData(code, startDate)
 
   for row in histData.index.values:

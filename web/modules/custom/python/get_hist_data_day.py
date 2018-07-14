@@ -25,15 +25,15 @@ start_time = time.time()
 
 codeList = ['600006', '600007', '600008', '600009', '600010']
 codeList = ['600006', '600007']
-allHistoryDataFrames = [];
 
 # todayDate is like '2017-12-26'
 todayDate = str(date.today())
-startDay = str(date.today() - timedelta(200))
+startDate = str(date.today() - timedelta(3))
 
 #
+allHistoryDataFrames = [];
 for code in codeList:
-  histData = GetFeatureClass().getHistoryData(code, startDay)
+  histData = GetFeatureClass().getHistoryData(code, startDate)
 
   for row in histData.index.values:
     histDataCache = histData.rename(index={row: (code + '_' + row)})
@@ -43,10 +43,7 @@ for code in codeList:
 
 allHistoryData = pd.concat(allHistoryDataFrames)
 
-# debug
-# print (allHistoryData)
-# exit()
-
+#
 GetFeatureClass().generateHistoryDataToJson(allHistoryData)
 
 # for print execution time end

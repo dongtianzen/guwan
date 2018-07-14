@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_cron().
+ *
+ * @see Drupal\taskinfo\Plugin\QueueWorker\EntityCreateDayQueue
+ */
+function taskinfo_cron() {
+  $message = 'Starting execution of taskinfo_cron()';
+  \Drupal::logger('taskinfo')->notice($message);
+
+  $queue = \Drupal::queue('entity_create_day_queue', TRUE);
+  $item = [ 'entity_type' => 'node', 'id' => 1 ];
+  $queue->createItem($item);
+}

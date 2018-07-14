@@ -10,6 +10,8 @@ function taskinfo_cron() {
   \Drupal::logger('taskinfo')->notice($message);
 
   $queue = \Drupal::queue('entity_create_day_queue', TRUE);
-  $item = [ 'entity_type' => 'node', 'id' => 1 ];
+
+  $item = 'entity_type node ';
+
   $queue->createItem($item);
 }

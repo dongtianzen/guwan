@@ -22,8 +22,7 @@ class EntityCreateDayQueue extends QueueWorkerBase {
    * {@inheritdoc}
    */
   public function processItem($data) {
-    dpm($data);
-    // // Process data here.
-    // throw new \Exception('Process data ' . json_encode($data));
+    $message = '222 ProcessItem ' . $data;
+    \Drupal::logger('taskinfo')->notice($message);
   }
 }

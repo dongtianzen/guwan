@@ -16,7 +16,7 @@ class RunImportJsonToNode {
   /**
    *
    */
-  public static function checkJsonAndCreateEntity($piece, &$context) {
+  public static function checkJsonAndCreateEntityNode($piece, &$context) {
     foreach ($piece as $key => $row) {
       self::batchinfoCreateNodeEntity($key, $row);
     }

@@ -16,7 +16,7 @@ class RunImportJsonToTerm {
   /**
    *
    */
-  public static function checkJsonAndCreateEntity($piece, &$context) {
+  public static function checkJsonAndCreateEntityTerm($piece, &$context) {
     foreach ($piece as $key => $row) {
       self::batchinfoCreateNodeEntity($row);
     }

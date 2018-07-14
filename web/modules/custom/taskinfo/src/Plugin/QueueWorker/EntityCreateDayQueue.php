@@ -14,7 +14,7 @@ use Drupal\Core\Queue\QueueWorkerBase;
  * @QueueWorker(
  *   id = "entity_create_day_queue",
  *   title = @Translation("entity create day queue"),
- *   cron = {"time" = 10}
+ *   cron = {"time" = 60}
  * )
  */
 class EntityCreateDayQueue extends QueueWorkerBase {

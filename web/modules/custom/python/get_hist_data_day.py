@@ -37,10 +37,10 @@ for termCodeRow in termCodeData:
 # exit()
 
 # fullCodeList = ['600006', '600007', '600008', '600009', '600010']
-# fullCodeList = ['600006', '600007']
+fullCodeList = ['600006', '600017']
 
 # startDate is today('2018-06-23') 减去 想开始的日期个数
-startDate = str(date.today() - timedelta(10))
+startDate = str(date.today() - timedelta(3))
 
 #
 allHistoryDataFrames = [];

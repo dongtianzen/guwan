@@ -1,7 +1,11 @@
 <?php
 
+use Drupal\batchinfo\Content\RunImportJsonToNode;
+use Drupal\batchinfo\Controller\BatchinfoController;
+
 /**
  * Implements hook_cron().
+ * \Drupal\batchinfo\Content\RunImportJsonToNode.php
  *
  * @see Drupal\taskinfo\Plugin\QueueWorker\EntityCreateDayQueue
  */
@@ -9,9 +13,26 @@ function taskinfo_cron() {
   $message = 'Starting execution of taskinfo_cron()';
   \Drupal::logger('taskinfo')->notice($message);
 
-  $queue = \Drupal::queue('entity_create_day_queue', TRUE);
 
-  $item = 'entity_type node ';
+  $code_tids = \Drupal::getContainer()
+    ->get('flexinfo.term.service')
+    ->getTidsFromVidName($vid = 'code');
 
-  $queue->createItem($item);
+  $BatchinfoController = new BatchinfoController();
+  $BatchinfoController->runImportJson();
+
+  // \Drupal\batchinfo\Content\RunImportJsonToNode::checkJsonAndCreateEntityNode();
+
+
+  // Build the command string
+  // $cmd = '/usr/local/bin/python3 modules/custom/python/get_hist_data_day.py';
+
+  // // Execute the script and store the output in a variable
+  // $py_output = shell_exec($cmd);
+
+  // dpm($py_output);
+
+
+  // $queue = \Drupal::queue('entity_create_day_queue', TRUE);
+  // $queue->createItem($code_tids);
 }

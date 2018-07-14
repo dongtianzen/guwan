@@ -10,24 +10,35 @@
 
 #
 from datetime import date, timedelta
+
+import json
 import pandas as pd
 import time
 
-from featureClass import GetFeatureClass
-
 import tushare as ts
 
-# print (ts.cap_tops())
-# exit()
+from featureClass import GetFeatureClass
+
+import urllib.request
+
+
 
 # for print execution time start
 start_time = time.time()
 
+urlPath = ("http://localhost:8888/agu/web/views/json/debug-term-code-table?_format=json")
+with urllib.request.urlopen(urlPath) as url:
+    data = json.loads(url.read().decode())
+    print(data)
+
+
+exit()
+
+
 codeList = ['600006', '600007', '600008', '600009', '600010']
 codeList = ['600006', '600007']
 
-# todayDate is like '2017-12-26'
-todayDate = str(date.today())
+# startDate is today('2018-06-23') 减去 想开始的日期个数
 startDate = str(date.today() - timedelta(3))
 
 #

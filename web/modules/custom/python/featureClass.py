@@ -6,7 +6,8 @@ import tushare as ts
 class GetFeatureClass:
   # 生成Json格式的文件
   def generateHistoryDataToJson(self, allHistoryData):
-    allHistoryData.to_json('web/sites/default/files/json/tushare/historyDataDat.json', orient='index')
+    # allHistoryData.to_json('web/sites/default/files/json/tushare/historyDataDat.json', orient='index')
+    allHistoryData.to_json('/Applications/MAMP/htdocs/agu/web/sites/default/files/json/tushare/historyDataDat.json', orient='index')
 
     print ('JSON generate success')
     return

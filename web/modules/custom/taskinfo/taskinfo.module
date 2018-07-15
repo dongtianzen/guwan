@@ -3,36 +3,55 @@
 use Drupal\batchinfo\Content\RunImportJsonToNode;
 use Drupal\batchinfo\Controller\BatchinfoController;
 
+use Drupal\batchinfo\Content\SyncJsonToNode;
+
 /**
  * Implements hook_cron().
- * \Drupal\batchinfo\Content\RunImportJsonToNode.php
  *
  * @see Drupal\taskinfo\Plugin\QueueWorker\EntityCreateDayQueue
  */
 function taskinfo_cron() {
-  $message = 'Starting execution of taskinfo_cron()';
-  \Drupal::logger('taskinfo')->notice($message);
-
-
   $code_tids = \Drupal::getContainer()
     ->get('flexinfo.term.service')
     ->getTidsFromVidName($vid = 'code');
 
-  $BatchinfoController = new BatchinfoController();
-  $BatchinfoController->runImportJson();
+
+  // _taskinfo_run_batch_create_node();
 
   // \Drupal\batchinfo\Content\RunImportJsonToNode::checkJsonAndCreateEntityNode();
 
 
   // Build the command string
-  // $cmd = '/usr/local/bin/python3 modules/custom/python/get_hist_data_day.py';
+  $cmd = '/usr/local/bin/python3 modules/custom/python/get_hist_data_day.py';
 
   // // Execute the script and store the output in a variable
-  // $py_output = shell_exec($cmd);
+  $py_output = shell_exec($cmd);
 
-  // dpm($py_output);
+  drupal_set_message($py_output);
+
 
 
   // $queue = \Drupal::queue('entity_create_day_queue', TRUE);
   // $queue->createItem($code_tids);
 }
+
+/**
+ * Implements hook_cron().
+ */
+function _taskinfo_run_batch_create_node() {
+  $SyncJsonToNode = new SyncJsonToNode();
+  $json_content = $SyncJsonToNode->getImportJsonContent();
+
+  $every_time_excute_max_number = 2;
+  $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
+
+  foreach ($chunk as $key => $row) {
+    foreach ($row as $subkey => $subrow) {
+      $SyncJsonToNode->runBatchinfoCreateNodeEntity($subkey, $subrow);
+    }
+
+    sleep(0.5);
+  }
+}
+
+

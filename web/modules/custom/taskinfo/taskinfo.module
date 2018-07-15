@@ -16,11 +16,17 @@ function taskinfo_cron() {
     ->getTidsFromVidName($vid = 'code');
 
 
+  // _taskinfo_run_python_code();
   // _taskinfo_run_batch_create_node();
 
-  // \Drupal\batchinfo\Content\RunImportJsonToNode::checkJsonAndCreateEntityNode();
+  // $queue = \Drupal::queue('entity_create_day_queue', TRUE);
+  // $queue->createItem($code_tids);
+}
 
-
+/**
+ * @see hook_cron().
+ */
+function _taskinfo_run_python_code() {
   // Build the command string
   $cmd = '/usr/local/bin/python3 modules/custom/python/get_hist_data_day.py';
 
@@ -28,15 +34,10 @@ function taskinfo_cron() {
   $py_output = shell_exec($cmd);
 
   drupal_set_message($py_output);
-
-
-
-  // $queue = \Drupal::queue('entity_create_day_queue', TRUE);
-  // $queue->createItem($code_tids);
 }
 
 /**
- * Implements hook_cron().
+ * @see hook_cron().
  */
 function _taskinfo_run_batch_create_node() {
   $SyncJsonToNode = new SyncJsonToNode();

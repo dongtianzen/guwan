@@ -15,12 +15,9 @@ import json
 import pandas as pd
 import time
 
-import tushare as ts
-
 from featureClass import GetFeatureClass
 
 import urllib.request
-
 
 
 # for print execution time start

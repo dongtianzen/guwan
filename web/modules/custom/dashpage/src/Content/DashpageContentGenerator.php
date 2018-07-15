@@ -58,12 +58,17 @@ class DashpageContentGenerator extends ControllerBase {
       }
     }
 
+    $num = 1;
+    $output = ' ';
     $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids_array);
     foreach ($terms as $key => $term) {
-      $output = $term->getName();
+      $output .= $num . ' ';
+      $output .= $term->getName();
       $output .= ' ';
       $output .= \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($term, 'field_code_name');
       $output .= '<br />';
+
+      $num++;
     }
 
     return $output;
@@ -88,9 +93,9 @@ class DashpageContentGenerator extends ControllerBase {
   }
 
   /**
-   *
+   * @param $code_tid is tid, not code name like 600117
    */
-  public function queryDayByCodeByDateGreater($code_tid, $date = NULL) {
+  public function queryDayNidsByCodeByDateGreater($code_tid = NULL, $date = NULL) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');
 
@@ -102,6 +107,7 @@ class DashpageContentGenerator extends ControllerBase {
     $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', '2018-07-13', '<');
     $query->condition($group);
 
+    $query = $query_container->sort('field_day_date', 'DESC');
     $nids = $query_container->runQueryWithGroup($query);
 
     return $nids;
@@ -116,7 +122,7 @@ class DashpageContentGenerator extends ControllerBase {
     $today_entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
 
     if ($today_entity) {
-      $previous_nids = $this->queryDayByCodeByDateGreater($code_tid);
+      $previous_nids = $this->queryDayNidsByCodeByDateGreater($code_tid);
       $previous_entitys = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($previous_nids);
 
       if ($previous_entitys) {
@@ -129,7 +135,6 @@ class DashpageContentGenerator extends ControllerBase {
 
             if ($today_volume > $row_volume) {
               $output = TRUE;
-              dpm($row_volume);
             }
             else {
               $output = FALSE;

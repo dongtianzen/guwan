@@ -1,0 +1,8 @@
+# modal
+dashpage.rank.page:
+  path: '/dashpage/rank/{section}'
+  defaults:
+    _controller: '\Drupal\dashpage\Controller\DashpageController::standardRankPage'
+    _title: 'Rank Page'
+  requirements:
+    _permission: 'access content'

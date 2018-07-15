@@ -1,0 +1,5 @@
+dashpage.rank.page.menu:
+  title: 'Rank Page'
+  route_name: dashpage.rank.page
+  route_parameters: { section: 'page' }
+  menu_name: main

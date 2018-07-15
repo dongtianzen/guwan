@@ -8,16 +8,14 @@
 
 """
 
-#
 from datetime import date, timedelta
 
 import json
 import pandas as pd
 import time
+import urllib.request
 
 from featureClass import GetFeatureClass
-
-import urllib.request
 
 
 # for print execution time start
@@ -55,6 +53,4 @@ GetFeatureClass().generateHistoryDataToJson(allHistoryData)
 
 # for print execution time end
 print("--- %s seconds ---" % (time.time() - start_time))
-
-print("555")
 exit()

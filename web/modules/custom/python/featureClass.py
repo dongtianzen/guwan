@@ -23,14 +23,14 @@ class GetFeatureClass:
 
   def getJsonFilePath(self):
 
-    # 如果运行文件从command line
+    # 运行文件从command line
     filePath = 'web/sites/default/files/json/tushare/historyDataDat.json';
     my_file = Path(filePath)
     if my_file.is_file():
       print('is exist from command line')
       return filePath
 
-    # 如果保存文件，要使用当前系统下的完全路径
+    # 运行文件从Drupal file or Devel or PHP , 要使用当前系统下的完全路径
     filePath = '/Applications/MAMP/htdocs/agu/web/sites/default/files/json/tushare/historyDataDat.json';
     my_file = Path(filePath)
     if my_file.is_file():

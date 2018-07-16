@@ -14,7 +14,7 @@ class FlexTushareBasic:
   # @param codeList is list like ['600290', '600291']
   # @param startDate is string like "2018-06-23"
   def downloadHistDataByCode(self, codeList, startDate):
-    #
+
     allHistoryDataFrames = [];
     for code in codeList:
       histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate)

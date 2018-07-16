@@ -16,18 +16,23 @@ import time
 import urllib.request
 
 from featureClass import GetFeatureClass
-
+from FlexJsonClass import FlexJsonBasic
 
 # for print execution time start
 start_time = time.time()
 
-urlPath = ("http://localhost:8888/agu/web/views/json/debug-term-code-table?_format=json")
-with urllib.request.urlopen(urlPath) as url:
-  termCodeData = json.loads(url.read().decode())
+# urlPath = ("http://localhost:8888/agu/web/views/json/debug-term-code-table?_format=json")
+# with urllib.request.urlopen(urlPath) as url:
+#   termCodeData = json.loads(url.read().decode())
+
+termCodeData = FlexJsonBasic().readJsonDecode()
 
 fullCodeList = []
 for termCodeRow in termCodeData:
   fullCodeList.append(termCodeRow['name'][0]['value'])
+
+print(fullCodeList)
+exit()
 
 # fullCodeList = ['600006', '600007', '600008', '600009', '600010']
 fullCodeList = ['600290', '600291']

@@ -54,5 +54,3 @@ function _taskinfo_run_batch_create_node() {
     sleep(0.5);
   }
 }
-
-

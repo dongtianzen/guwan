@@ -11,10 +11,12 @@ import tushare as ts
 # define a class
 class FlexTushareBasic:
 
-  def downloadHistDataByCode(self, fullCodeList, startDate):
+  # @param codeList is list like ['600290', '600291']
+  # @param startDate is string like "2018-06-23"
+  def downloadHistDataByCode(self, codeList, startDate):
     #
     allHistoryDataFrames = [];
-    for code in fullCodeList:
+    for code in codeList:
       histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate)
 
       for row in histData.index.values:

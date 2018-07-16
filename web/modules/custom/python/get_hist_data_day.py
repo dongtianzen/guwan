@@ -20,17 +20,21 @@ from FlexTushareClass import FlexTushareBasic
 start_time = time.time()
 
 
-# fullCodeList = FlexJsonBasic().convertViewsJsonToTermCodeList()
-# print(fullCodeList)
+# codeList = FlexJsonBasic().convertViewsJsonToTermCodeList()
+# print(codeList)
 # exit()
 
-# fullCodeList = ['600006', '600007', '600008', '600009', '600010']
-fullCodeList = ['600290', '600291']
+# codeList = ['600006', '600007', '600008', '600009', '600010']
+codeList = ['600290', '600291']
+print(type(codeList))
 
 # startDate is today('2018-06-23') 减去 想开始的日期个数
 startDate = str(date.today() - timedelta(2))
+print(startDate)
+exit()
 
-allHistoryData = FlexTushareBasic().downloadHistDataByCode(fullCodeList, startDate)
+
+allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate)
 
 jsonFilePath = FlexJsonBasic().getJsonFilePath()
 FlexJsonBasic().generateJsonFromData(jsonFilePath, allHistoryData)

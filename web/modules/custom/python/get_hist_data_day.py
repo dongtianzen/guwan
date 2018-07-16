@@ -15,16 +15,17 @@ import pandas as pd
 import time
 import urllib.request
 
-from featureClass import GetFeatureClass
+import tushare as ts
+
 from FlexJsonClass import FlexJsonBasic
 
 # for print execution time start
 start_time = time.time()
 
 
-fullCodeList = FlexJsonBasic().convertViewsJsonToTermCodeList()
-print(fullCodeList)
-exit()
+# fullCodeList = FlexJsonBasic().convertViewsJsonToTermCodeList()
+# print(fullCodeList)
+# exit()
 
 # fullCodeList = ['600006', '600007', '600008', '600009', '600010']
 fullCodeList = ['600290', '600291']
@@ -35,7 +36,7 @@ startDate = str(date.today() - timedelta(3))
 #
 allHistoryDataFrames = [];
 for code in fullCodeList:
-  histData = GetFeatureClass().getHistoryData(code, startDate)
+  histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate)
 
   for row in histData.index.values:
     histDataCache = histData.rename(index={row: (code + '_' + row)})
@@ -47,7 +48,7 @@ for code in fullCodeList:
 allHistoryData = pd.concat(allHistoryDataFrames)
 
 #
-GetFeatureClass().generateHistoryDataToJson(allHistoryData)
+FlexJsonBasic().generateHistoryDataToJson(allHistoryData)
 
 # for print execution time end
 print("--- %s seconds ---" % (time.time() - start_time))

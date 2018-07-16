@@ -8,6 +8,25 @@ namespace Drupal\dashpage\Content;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
+ *
+ use Drupal\dashpage\Content\DashpageContentGenerator;
+ $DashpageContentGenerator = new DashpageContentGenerator();
+ $nids = $DashpageContentGenerator->queryDayNidsByCodeByDateGreater(2392);
+
+ dpm($nids);
+ $previous_entitys = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
+
+ foreach ($previous_entitys as $key => $row_entity) {
+   $row_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row_entity, 'field_day_volume');
+   $row_date = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row_entity, 'field_day_date');
+
+   dpm($row_date);
+   dpm($row_volume);
+   dpm(' - ');
+ }
+ */
+
+/**
  * An example controller.
  $DashpageContentGenerator = new DashpageContentGenerator();
  $DashpageContentGenerator->angularPage();
@@ -107,7 +126,8 @@ class DashpageContentGenerator extends ControllerBase {
     $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', '2018-07-13', '<');
     $query->condition($group);
 
-    $query = $query_container->sort('field_day_date', 'DESC');
+    $query->sort('field_day_date', 'DESC');
+    $query->range(0, 2);
     $nids = $query_container->runQueryWithGroup($query);
 
     return $nids;

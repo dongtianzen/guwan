@@ -8,14 +8,13 @@
 
 """
 
-from datetime import date, timedelta
-
 import pandas as pd
 import time
 
-import tushare as ts
+from datetime import date, timedelta
 
 from FlexJsonClass import FlexJsonBasic
+from FlexTushareClass import FlexTushareBasic
 
 # for print execution time start
 start_time = time.time()
@@ -31,22 +30,8 @@ fullCodeList = ['600290', '600291']
 # startDate is today('2018-06-23') 减去 想开始的日期个数
 startDate = str(date.today() - timedelta(2))
 
-#
-allHistoryDataFrames = [];
-for code in fullCodeList:
-  histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate)
+allHistoryData = FlexTushareBasic().downloadHistDataByCode(fullCodeList, startDate)
 
-  for row in histData.index.values:
-    histDataCache = histData.rename(index={row: (code + '_' + row)})
-    histData = histDataCache
-
-  allHistoryDataFrames.append(histData)
-
-# Concatenate multiple array to pandas objects
-allHistoryData = pd.concat(allHistoryDataFrames)
-print(allHistoryDataFrames)
-print(allHistoryData)
-exit()
 jsonFilePath = FlexJsonBasic().getJsonFilePath()
 FlexJsonBasic().generateJsonFromData(jsonFilePath, allHistoryData)
 

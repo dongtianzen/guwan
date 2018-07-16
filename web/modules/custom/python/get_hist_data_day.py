@@ -21,16 +21,8 @@ from FlexJsonClass import FlexJsonBasic
 # for print execution time start
 start_time = time.time()
 
-# urlPath = ("http://localhost:8888/agu/web/views/json/debug-term-code-table?_format=json")
-# with urllib.request.urlopen(urlPath) as url:
-#   termCodeData = json.loads(url.read().decode())
 
-termCodeData = FlexJsonBasic().readJsonDecode()
-
-fullCodeList = []
-for termCodeRow in termCodeData:
-  fullCodeList.append(termCodeRow['name'][0]['value'])
-
+fullCodeList = FlexJsonBasic().convertViewsJsonToTermCodeList()
 print(fullCodeList)
 exit()
 

@@ -10,10 +10,8 @@
 
 from datetime import date, timedelta
 
-import json
 import pandas as pd
 import time
-import urllib.request
 
 import tushare as ts
 
@@ -31,7 +29,7 @@ start_time = time.time()
 fullCodeList = ['600290', '600291']
 
 # startDate is today('2018-06-23') 减去 想开始的日期个数
-startDate = str(date.today() - timedelta(3))
+startDate = str(date.today() - timedelta(2))
 
 #
 allHistoryDataFrames = [];
@@ -44,11 +42,13 @@ for code in fullCodeList:
 
   allHistoryDataFrames.append(histData)
 
-
+# Concatenate multiple array to pandas objects
 allHistoryData = pd.concat(allHistoryDataFrames)
-
-#
-FlexJsonBasic().generateHistoryDataToJson(allHistoryData)
+print(allHistoryDataFrames)
+print(allHistoryData)
+exit()
+jsonFilePath = FlexJsonBasic().getJsonFilePath()
+FlexJsonBasic().generateJsonFromData(jsonFilePath, allHistoryData)
 
 # for print execution time end
 print("--- %s seconds ---" % (time.time() - start_time))

@@ -33,10 +33,9 @@ class FlexJsonBasic:
 
 
   # 生成Json格式的文件
-  def generateHistoryDataToJson(self, allHistoryData):
-    filePath = self.getJsonFilePath()
-
-    allHistoryData.to_json(filePath, orient='index')
+  # @param jsonData is <class 'pandas.core.frame.DataFrame'>
+  def generateJsonFromData(self, filePath, jsonData):
+    jsonData.to_json(filePath, orient='index')
 
     print ('JSON generate success')
     return

@@ -46,6 +46,7 @@ for code in fullCodeList:
 
   allHistoryDataFrames.append(histData)
 
+
 allHistoryData = pd.concat(allHistoryDataFrames)
 
 #

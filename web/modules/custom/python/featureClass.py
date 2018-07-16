@@ -4,8 +4,10 @@ import tushare as ts
 
 from pathlib import Path
 
+
 # define a class
 class GetFeatureClass:
+
   # 生成Json格式的文件
   def generateHistoryDataToJson(self, allHistoryData):
 
@@ -16,13 +18,14 @@ class GetFeatureClass:
     print ('JSON generate success')
     return
 
+
   # get Day data
   def getHistoryData(self, code, startDay):
     histData = ts.get_hist_data(code, ktype = 'D', start = startDay)
     return histData
 
-  def getJsonFilePath(self):
 
+  def getJsonFilePath(self):
     # 运行文件从command line
     filePath = 'web/sites/default/files/json/tushare/historyDataDat.json';
     my_file = Path(filePath)

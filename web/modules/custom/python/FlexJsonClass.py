@@ -20,8 +20,8 @@ class FlexJsonBasic:
     return termCodeData
 
 
-  def convertViewsJsonToTermCodeList(self):
-    urlPath = self.getTermCodeListFromViewsJsonUrlPath()
+  def convertViewsJsonToTermCodeList(self, pageNum = 1):
+    urlPath = self.getTermCodeListFromViewsJsonUrlPath(pageNum)
 
     termCodeData = self.readJsonDecode(urlPath)
 
@@ -48,9 +48,7 @@ class FlexJsonBasic:
     return
 
 
-  def getGenerateJsonFilePath(self):
-    fileName = 'historyDataByCodeList.json'
-
+  def getGenerateJsonFilePath(self, fileName):
     # 运行文件从command line
     pathDir  = 'web/sites/default/files/json/tushare/'
     pathDirObject = Path(pathDir)

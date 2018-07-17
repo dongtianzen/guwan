@@ -19,6 +19,7 @@ class FlexTushareBasic:
     for code in codeList:
       histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate)
 
+      ? should check is empty or not
       for row in histData.index.values:
         histDataCache = histData.rename(index={row: (code + '_' + row)})
         histData = histDataCache

@@ -18,7 +18,7 @@ function taskinfo_cron() {
 
   // _taskinfo_run_python_code();
   // _taskinfo_run_batch_create_node();
-  _taskinfo_run_batch_create_node_with_piece_json();
+  // _taskinfo_run_batch_create_node_with_piece_json();
 
   // $queue = \Drupal::queue('entity_create_day_queue', TRUE);
   // $queue->createItem($code_tids);

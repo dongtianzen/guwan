@@ -38,6 +38,8 @@ class SyncJsonToNode {
       ->get('flexinfo.json.service')
       ->fetchConvertJsonToArrayFromInternalPath($this->json_file_path);
 
+    // $output = $this->getAllPiecesJsonContent();
+
     drupal_set_message('Total have - ' . count($output) . ' - records');
 
     return $output;
@@ -62,16 +64,16 @@ class SyncJsonToNode {
 
     $output = [];
 
-    for ($i = 0; $i < 6; $i++) {
+    for ($i = 0; $i < 60; $i++) {
       $piece_file_name = $this->getPiecesJsonFileName($i);
       $piece_file_url = $app_root . $piece_file_name;
 
       if (file_exists($piece_file_url)) {
-        dpm('works - ' . $piece_file_name);
-
         $json_pieces = \Drupal::getContainer()
           ->get('flexinfo.json.service')
           ->fetchConvertJsonToArrayFromInternalPath($piece_file_name);
+
+        $output = array_merge($output, $json_pieces);
       }
     }
 

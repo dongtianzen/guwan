@@ -49,18 +49,24 @@ class FlexJsonBasic:
 
 
   def getGenerateJsonFilePath(self):
+    fileName = 'historyDataByCodeList.json'
+
     # 运行文件从command line
-    filePath = 'web/sites/default/files/json/tushare/historyDataByCodeList.json';
-    my_file = Path(filePath)
-    if my_file.is_file():
+    pathDir  = 'web/sites/default/files/json/tushare/'
+    pathDirObject = Path(pathDir)
+
+    if pathDirObject.is_dir():
       print('is exist from command line')
+      filePath = pathDir + fileName
       return filePath
 
     # 运行文件从Drupal file or Devel or PHP , 要使用当前系统下的完全路径
-    filePath = '/Applications/MAMP/htdocs/agu/web/sites/default/files/json/tushare/historyDataByCodeList.json';
-    my_file = Path(filePath)
-    if my_file.is_file():
+    pathDir = '/Applications/MAMP/htdocs/agu/web/sites/default/files/json/tushare/'
+    pathDirObject = Path(pathDir)
+
+    if pathDirObject.is_dir():
       print('is exist from PHP')
+      filePath = pathDir + fileName
       return filePath
 
     return

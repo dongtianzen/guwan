@@ -18,6 +18,7 @@ function taskinfo_cron() {
 
   // _taskinfo_run_python_code();
   // _taskinfo_run_batch_create_node();
+  _taskinfo_run_batch_create_node_with_piece_json();
 
   // $queue = \Drupal::queue('entity_create_day_queue', TRUE);
   // $queue->createItem($code_tids);
@@ -42,6 +43,25 @@ function _taskinfo_run_python_code() {
 function _taskinfo_run_batch_create_node() {
   $SyncJsonToNode = new SyncJsonToNode();
   $json_content = $SyncJsonToNode->getImportJsonContent();
+
+  $every_time_excute_max_number = 2;
+  $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
+
+  foreach ($chunk as $key => $row) {
+    foreach ($row as $subkey => $subrow) {
+      $SyncJsonToNode->runBatchinfoCreateNodeEntity($subkey, $subrow);
+    }
+
+    sleep(0.5);
+  }
+}
+
+/**
+ * @see hook_cron().
+ */
+function _taskinfo_run_batch_create_node_with_piece_json() {
+  $SyncJsonToNode = new SyncJsonToNode();
+  $json_content = $SyncJsonToNode->getAllPiecesJsonContent();
 
   $every_time_excute_max_number = 2;
   $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);

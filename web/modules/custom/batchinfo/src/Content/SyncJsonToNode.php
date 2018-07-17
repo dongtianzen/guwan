@@ -25,6 +25,8 @@ class SyncJsonToNode {
    */
   public function __construct() {
     $this->json_filename = 'historyDataByCodeList.json';
+
+    $this->json_file_path = '/sites/default/files/json/tushare/' . $this->json_filename;
     $this->json_file_path = '/sites/default/files/json/tushare/' . $this->json_filename;
   }
 
@@ -37,6 +39,42 @@ class SyncJsonToNode {
       ->fetchConvertJsonToArrayFromInternalPath($this->json_file_path);
 
     drupal_set_message('Total have - ' . count($output) . ' - records');
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getPiecesJsonFileName($pageNum = 0) {
+    $json_filename = 'historyDataByCodeListPiece_' . $pageNum .  '.json';
+
+    $path = \Drupal::service('file_system')->realpath(file_default_scheme() . "://");
+    $output = $path . '/json/tushare/' . $json_filename;
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getAllPiecesJsonContent() {
+    $message = 'Run getAllPiecesJsonContent';
+    \Drupal::logger('batchinfo')->notice($message);
+
+    $output = [];
+
+    for ($i = 0; $i < 6; $i++) {
+      $piece_file_name = $this->getPiecesJsonFileName($i);
+dpm($piece_file_name);
+      if (file_exists($piece_file_name)) {
+        dpm('works - ' . $piece_file_name);
+
+        $json_pieces = \Drupal::getContainer()
+          ->get('flexinfo.json.service')
+          ->fetchConvertJsonToArrayFromInternalPath($piece_file_name);
+      }
+    }
 
     return $output;
   }

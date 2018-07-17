@@ -49,8 +49,7 @@ class SyncJsonToNode {
   public function getPiecesJsonFileName($pageNum = 0) {
     $json_filename = 'historyDataByCodeListPiece_' . $pageNum .  '.json';
 
-    $path = \Drupal::service('file_system')->realpath(file_default_scheme() . "://");
-    $output = $path . '/json/tushare/' . $json_filename;
+    $output = '/sites/default/files/json/tushare/' . $json_filename;
 
     return $output;
   }
@@ -59,15 +58,15 @@ class SyncJsonToNode {
    *
    */
   public function getAllPiecesJsonContent() {
-    $message = 'Run getAllPiecesJsonContent';
-    \Drupal::logger('batchinfo')->notice($message);
+    $app_root = \Drupal::hasService('app.root') ? \Drupal::root() : DRUPAL_ROOT;
 
     $output = [];
 
     for ($i = 0; $i < 6; $i++) {
       $piece_file_name = $this->getPiecesJsonFileName($i);
-dpm($piece_file_name);
-      if (file_exists($piece_file_name)) {
+      $piece_file_url = $app_root . $piece_file_name;
+
+      if (file_exists($piece_file_url)) {
         dpm('works - ' . $piece_file_name);
 
         $json_pieces = \Drupal::getContainer()

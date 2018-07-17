@@ -34,13 +34,21 @@ class SyncJsonToNode {
    *
    */
   public function getImportJsonContent() {
-    $output = \Drupal::getContainer()
-      ->get('flexinfo.json.service')
-      ->fetchConvertJsonToArrayFromInternalPath($this->json_file_path);
-
+    // $output = $this->getSingleJsonContent();
     // $output = $this->getAllPiecesJsonContent();
 
     drupal_set_message('Total have - ' . count($output) . ' - records');
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getSingleJsonContent() {
+    $output = \Drupal::getContainer()
+      ->get('flexinfo.json.service')
+      ->fetchConvertJsonToArrayFromInternalPath($this->json_file_path);
 
     return $output;
   }

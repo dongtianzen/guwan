@@ -26,6 +26,7 @@ class RunGetHistData:
   def specifyCodeList(self):
     # codeList = ['600006', '600007', '600008', '600009', '600010']
     codeList = ['600290', '600291']
+    codeList = ['600291', '000515']
 
     # startDate is today('2018-06-23') 减去 想开始的日期个数
     startDate = str(date.today() - timedelta(2))
@@ -51,9 +52,11 @@ class RunGetHistData:
   # -->
 
 
-for pageNum in range(6):
+for pageNum in range(16):
   print(pageNum)
   RunGetHistData().specifyCodeListWithPageNum(pageNum)
+
+# RunGetHistData().specifyCodeList()
 
 # for print execution time end
 print("--- %s seconds ---" % (time.time() - start_time))

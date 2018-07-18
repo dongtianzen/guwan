@@ -19,12 +19,19 @@ class FlexTushareBasic:
     for code in codeList:
       histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate)
 
-      ? should check is empty or not
-      for row in histData.index.values:
-        histDataCache = histData.rename(index={row: (code + '_' + row)})
-        histData = histDataCache
+      print(type(histData))
+      # should check is empty or not
 
-      allHistoryDataFrames.append(histData)
+      # check "histData" is not "NoneType":
+      if histData is not None:
+        if not histData.empty:
+          if len(histData) > 0:
+            print(code)
+            for row in histData.index.values:
+              histDataCache = histData.rename(index={row: (code + '_' + row)})
+              histData = histDataCache
+
+          allHistoryDataFrames.append(histData)
 
     # Concatenate multiple array to pandas objects
     allHistoryData = pd.concat(allHistoryDataFrames)

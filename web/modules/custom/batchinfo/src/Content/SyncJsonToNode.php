@@ -35,7 +35,7 @@ class SyncJsonToNode {
    */
   public function getImportJsonContent() {
     // $output = $this->getSingleJsonContent();
-    // $output = $this->getAllPiecesJsonContent();
+    $output = $this->getAllPiecesJsonContent();
 
     drupal_set_message('Total have - ' . count($output) . ' - records');
 

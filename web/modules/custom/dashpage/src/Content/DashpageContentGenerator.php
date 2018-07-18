@@ -84,6 +84,7 @@ class DashpageContentGenerator extends ControllerBase {
 
     $fenbu = $this->calcPercentageByNode($day_nodes);
 dpm($fenbu);
+dpm(array_sum($fenbu));
     $output = count($day_nids);
 
     return $output;

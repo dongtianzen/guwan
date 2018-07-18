@@ -59,10 +59,10 @@ class DashpageContentGenerator extends ControllerBase {
    */
   public function standardTrendPage() {
     $output = '';
-    $output .= '<div class="row">';
+    $output .= '<div class="row margin-0">';
       $output .= '<div id="standard-google-map-wrapper">';
         $output .= '<div id="map-canvas">';
-          $output .= 'Trend Page';
+          $output .= 'Trend Table';
           $output .= '<br />';
           $output .= $this->getTrendContent();
         $output .= '</div>';
@@ -78,18 +78,21 @@ class DashpageContentGenerator extends ControllerBase {
   public function getTrendContent() {
     $output = '';
 
-    $today_date = '2018-07-17';
-    $day_nids = $this->queryDayByCodeByDate($code_tid = NULL, $today_date);
+    $query_date = '2018-07-17';
+    $day_nids = $this->queryDayByCodeByDate($code_tid = NULL, $query_date);
     $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
 
     $fenbu = $this->calcPercentageByNode($day_nodes);
-dpm($fenbu);
-dpm(array_sum($fenbu));
-    $output = count($day_nids);
 
     $output .= '<table class="table table-striped">';
       $output .= '<thead>';
         $output .= '<tr>';
+          $output .= '<th>';
+            $output .= 'Date';
+          $output .= '</th>';
+          $output .= '<th>';
+            $output .= 'Total';
+          $output .= '</th>';
           foreach ($fenbu as $key => $value) {
             $output .= '<th>';
               $output .= $key;
@@ -99,10 +102,15 @@ dpm(array_sum($fenbu));
       $output .= '</thead>';
       $output .= '<tbody>';
         $output .= '<tr>';
+          $output .= '<td>';
+            $output .= $query_date;
+          $output .= '</td>';
+          $output .= '<td>';
+            $output .= array_sum($fenbu);
+          $output .= '</td>';
           foreach ($fenbu as $key => $value) {
             $output .= '<td>';
-
-              $output .= $key . ' - ' . $value;
+              $output .= $value;
             $output .= '</td>';
           }
         $output .= '</tr>';

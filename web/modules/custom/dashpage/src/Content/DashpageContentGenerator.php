@@ -87,6 +87,28 @@ dpm($fenbu);
 dpm(array_sum($fenbu));
     $output = count($day_nids);
 
+    $output .= '<table class="table table-striped">';
+      $output .= '<thead>';
+        $output .= '<tr>';
+          foreach ($fenbu as $key => $value) {
+            $output .= '<th>';
+              $output .= $key;
+            $output .= '</th>';
+          }
+        $output .= '</tr>';
+      $output .= '</thead>';
+      $output .= '<tbody>';
+        $output .= '<tr>';
+          foreach ($fenbu as $key => $value) {
+            $output .= '<td>';
+
+              $output .= $key . ' - ' . $value;
+            $output .= '</td>';
+          }
+        $output .= '</tr>';
+      $output .= '</tbody>';
+    $output .= '</table>';
+
     return $output;
   }
 

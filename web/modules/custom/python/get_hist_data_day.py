@@ -52,7 +52,7 @@ class RunGetHistData:
   # -->
 
 
-for pageNum in range(16):
+for pageNum in range(60):
   print(pageNum)
   RunGetHistData().specifyCodeListWithPageNum(pageNum)
 

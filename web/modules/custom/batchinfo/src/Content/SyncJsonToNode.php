@@ -114,6 +114,8 @@ class SyncJsonToNode {
       }
     }
 
+    sleep(0.01);
+
     return;
   }
 

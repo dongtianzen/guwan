@@ -39,5 +39,22 @@ class DashpageController extends ControllerBase {
     return $build;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function standardTrendPage($section) {
+    $DashpageContentGenerator = new DashpageContentGenerator();
+    $markup = $DashpageContentGenerator->standardTrendPage($section);
+
+    $build = array(
+      '#type' => 'markup',
+      '#header' => 'header',
+      '#markup' => $markup,
+      '#allowed_tags' => \Drupal::getContainer()->get('flexinfo.setting.service')->adminTag(),
+    );
+
+    return $build;
+  }
+
 
 }

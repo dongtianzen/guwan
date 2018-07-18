@@ -6,3 +6,12 @@ dashpage.rank.page:
     _title: 'Rank Page'
   requirements:
     _permission: 'access content'
+
+# modal
+dashpage.trend.page:
+  path: '/dashpage/trend/{section}'
+  defaults:
+    _controller: '\Drupal\dashpage\Controller\DashpageController::standardTrendPage'
+    _title: 'Trend Page'
+  requirements:
+    _permission: 'access content'

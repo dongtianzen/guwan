@@ -57,6 +57,93 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
+  public function standardTrendPage() {
+    $output = '';
+    $output .= '<div class="row">';
+      $output .= '<div id="standard-google-map-wrapper">';
+        $output .= '<div id="map-canvas">';
+          $output .= 'Trend Page';
+          $output .= '<br />';
+          $output .= $this->getTrendContent();
+        $output .= '</div>';
+      $output .= '</div>';
+    $output .= '</div>';
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getTrendContent() {
+    $output = '';
+
+    $today_date = '2018-07-17';
+    $day_nids = $this->queryDayByCodeByDate($code_tid = NULL, $today_date);
+    $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
+
+    $fenbu = $this->calcPercentageByNode($day_nodes);
+dpm($fenbu);
+    $output = count($day_nids);
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function calcPercentageByNode($day_nodes) {
+    $output = '';
+
+    $fenbu = [
+      'p9>' => 0,
+      'p5>' => 0,
+      'p0>' => 0,
+      'p0<' => 0,
+      'p5<' => 0,
+      'p9<' => 0,
+      'else' => 0,
+    ];
+
+
+    if ($day_nodes) {
+      foreach ($day_nodes as $key => $row) {
+        $day_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_volume');
+
+        if ($day_volume > 0) {
+          $day_p_change = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_p_change');
+
+          if ($day_p_change > 9) {
+            $fenbu['p9>']++;
+          }
+          elseif ($day_p_change > 5) {
+            $fenbu['p5>']++;
+          }
+          elseif ($day_p_change > 0) {
+            $fenbu['p0>']++;
+          }
+          elseif ($day_p_change > -5) {
+            $fenbu['p0<']++;
+          }
+          elseif ($day_p_change > -9) {
+            $fenbu['p5<']++;
+          }
+          elseif ($day_p_change > -11) {
+            $fenbu['p9<']++;
+          }
+          else {
+            $fenbu['else']++;
+          }
+        }
+      }
+    }
+
+    return $fenbu;
+  }
+
+  /**
+   *
+   */
   public function getDayNids() {
     $today_date = '2018-07-13';
 
@@ -96,15 +183,19 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function queryDayByCodeByDate($code_tid, $date) {
+  public function queryDayByCodeByDate($code_tid = NULL, $date = NULL) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');
 
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_code', $code_tid);
-    $query->condition($group);
+    if ($code_tid) {
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_code', $code_tid);
+      $query->condition($group);
+    }
 
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $date);
-    $query->condition($group);
+    if ($date) {
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $date);
+      $query->condition($group);
+    }
 
     $nids = $query_container->runQueryWithGroup($query);
 

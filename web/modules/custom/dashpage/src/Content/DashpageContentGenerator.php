@@ -76,14 +76,9 @@ class DashpageContentGenerator extends ControllerBase {
    *
    */
   public function getTrendContent() {
+    $fenbu = $this->getFenbuArray();
+
     $output = '';
-
-    $query_date = '2018-07-17';
-    $day_nids = $this->queryDayByCodeByDate($code_tid = NULL, $query_date);
-    $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
-
-    $fenbu = $this->calcPercentageByNode($day_nodes);
-
     $output .= '<table class="table table-striped">';
       $output .= '<thead>';
         $output .= '<tr>';
@@ -101,21 +96,60 @@ class DashpageContentGenerator extends ControllerBase {
         $output .= '</tr>';
       $output .= '</thead>';
       $output .= '<tbody>';
-        $output .= '<tr>';
-          $output .= '<td>';
-            $output .= $query_date;
-          $output .= '</td>';
-          $output .= '<td>';
-            $output .= array_sum($fenbu);
-          $output .= '</td>';
-          foreach ($fenbu as $key => $value) {
-            $output .= '<td>';
-              $output .= $value;
-            $output .= '</td>';
-          }
-        $output .= '</tr>';
+        $output .= $this->getTrendContentTbodyRow();
       $output .= '</tbody>';
     $output .= '</table>';
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getTrendContentTbodyRow() {
+    $output = '';
+
+    $current_timestamp = \Drupal::time()->getCurrentTime();
+    for ($i = 0; $i < 10; $i++) {
+      $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
+      $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
+
+      $day_nids = $this->queryDayByCodeByDate($code_tid = NULL, $query_date);
+      $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
+
+      $fenbu = $this->calcPercentageByNode($day_nodes);
+
+      $output .= '<tr>';
+        $output .= '<td>';
+          $output .= $query_date;
+        $output .= '</td>';
+        $output .= '<td>';
+          $output .= array_sum($fenbu);
+        $output .= '</td>';
+        foreach ($fenbu as $key => $value) {
+          $output .= '<td>';
+            $output .= $value;
+          $output .= '</td>';
+        }
+      $output .= '</tr>';
+    }
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getFenbuArray() {
+    $output = [
+      'p9>' => 0,
+      'p5>' => 0,
+      'p0>' => 0,
+      'p0<' => 0,
+      'p5<' => 0,
+      'p9<' => 0,
+      'else' => 0,
+    ];
 
     return $output;
   }
@@ -126,16 +160,7 @@ class DashpageContentGenerator extends ControllerBase {
   public function calcPercentageByNode($day_nodes) {
     $output = '';
 
-    $fenbu = [
-      'p9>' => 0,
-      'p5>' => 0,
-      'p0>' => 0,
-      'p0<' => 0,
-      'p5<' => 0,
-      'p9<' => 0,
-      'else' => 0,
-    ];
-
+    $fenbu = $this->getFenbuArray();
 
     if ($day_nodes) {
       foreach ($day_nodes as $key => $row) {

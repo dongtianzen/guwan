@@ -57,14 +57,14 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function standardTrendPage() {
+  public function standardTrendPage($section) {
     $output = '';
     $output .= '<div class="row margin-0">';
       $output .= '<div id="standard-google-map-wrapper">';
         $output .= '<div id="map-canvas">';
           $output .= 'Trend Table';
           $output .= '<br />';
-          $output .= $this->getTrendContent();
+          $output .= $this->getTrendContent($section);
         $output .= '</div>';
       $output .= '</div>';
     $output .= '</div>';
@@ -75,7 +75,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getTrendContent() {
+  public function getTrendContent($section) {
     $fenbu = $this->getFenbuArray();
 
     $output = '';
@@ -96,7 +96,7 @@ class DashpageContentGenerator extends ControllerBase {
         $output .= '</tr>';
       $output .= '</thead>';
       $output .= '<tbody>';
-        $output .= $this->getTrendContentTbodyRow();
+        $output .= $this->getTrendContentTbodyRow($section);
       $output .= '</tbody>';
     $output .= '</table>';
 
@@ -106,11 +106,19 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getTrendContentTbodyRow() {
+  public function getTrendContentTbodyRow($section) {
     $output = '';
 
+    $max_day = 2;
+    if ($section) {
+      $section_int = (int)$section;
+      if (is_int($section_int) && $section_int  > 0 ) {
+        $max_day = $section_int;
+      }
+    }
+
     $current_timestamp = \Drupal::time()->getCurrentTime();
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < $max_day; $i++) {
       $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 

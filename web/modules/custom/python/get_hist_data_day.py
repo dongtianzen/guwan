@@ -23,13 +23,10 @@ start_time = time.time()
 # define a class
 class RunGetHistData:
 
-  def specifyCodeList(self):
+  def specifyCodeList(self, startDate):
     # codeList = ['600006', '600007', '600008', '600009', '600010']
     codeList = ['600290', '600291']
     codeList = ['600291', '000515']
-
-    # startDate is today('2018-06-23') 减去 想开始的日期个数
-    startDate = str(date.today() - timedelta(2))
 
     allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate)
 
@@ -37,11 +34,8 @@ class RunGetHistData:
     jsonFilePath = FlexJsonBasic().getGenerateJsonFilePath(fileName)
     FlexJsonBasic().generateJsonFromData(jsonFilePath, allHistoryData)
 
-  def specifyCodeListWithPageNum(self, pageNum):
+  def specifyCodeListWithPageNum(self, pageNum, startDate):
     codeList = FlexJsonBasic().convertViewsJsonToTermCodeList(pageNum)
-
-    # startDate is today('2018-06-23') 减去 想开始的日期个数
-    startDate = str(date.today() - timedelta(2))
 
     allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate)
 
@@ -52,11 +46,14 @@ class RunGetHistData:
   # -->
 
 
-for pageNum in range(60):
-  print(pageNum)
-  RunGetHistData().specifyCodeListWithPageNum(pageNum)
+# startDate is today('2018-06-23') 减去 想开始的日期个数
+startDate = str(date.today() - timedelta(6))
 
-# RunGetHistData().specifyCodeList()
+for pageNum in range(89):
+  print(pageNum)
+  RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate)
+
+# RunGetHistData().specifyCodeList(startDate)
 
 # for print execution time end
 print("--- %s seconds ---" % (time.time() - start_time))

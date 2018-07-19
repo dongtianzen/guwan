@@ -41,7 +41,7 @@
     "prefer-stable": true,
     "config": {
         "sort-packages": true,
-        "platform": {"php": "5.6.1"}
+        "platform": {"php": "5.6.30"}
     },
     "autoload": {
         "classmap": [

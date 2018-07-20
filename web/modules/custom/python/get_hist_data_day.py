@@ -34,10 +34,10 @@ class RunGetHistData:
     jsonFilePath = FlexJsonBasic().getGenerateJsonFilePath(fileName)
     FlexJsonBasic().generateJsonFromData(jsonFilePath, allHistoryData)
 
-  def specifyCodeListWithPageNum(self, pageNum, startDate):
+  def specifyCodeListWithPageNum(self, pageNum, startDate, endDate):
     codeList = FlexJsonBasic().convertViewsJsonToTermCodeList(pageNum)
 
-    allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate)
+    allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate, endDate)
 
     fileName = 'historyDataByCodeListPiece_' + str(pageNum) + '.json'
     jsonFilePath = FlexJsonBasic().getGenerateJsonFilePath(fileName)
@@ -48,11 +48,15 @@ class RunGetHistData:
 
 
 # startDate is today('2018-06-23') 减去 想开始的日期个数
-startDate = str(date.today() - timedelta(8))
 
-for pageNum in range(95):
+startDay = 10
+startDate = str(date.today() - timedelta(startDay))
+endDate   = str(date.today() - timedelta(startDay - 1))
+# endDate   = None
+
+for pageNum in range(90):
   print(pageNum)
-  RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate)
+  RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate, endDate)
 
 # RunGetHistData().specifyCodeList(startDate)
 

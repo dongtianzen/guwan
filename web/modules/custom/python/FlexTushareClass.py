@@ -14,13 +14,12 @@ class FlexTushareBasic:
 
   # @param codeList is list like ['600290', '600291']
   # @param startDate is string like "2018-06-23"
-  def downloadHistDataByCode(self, codeList, startDate):
+  def downloadHistDataByCode(self, codeList, startDate, endDate):
 
     allHistoryDataFrames = [];
     for code in codeList:
-      histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate)
+      histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate, end = endDate)
 
-      print(type(histData))
       # should check is empty or not
 
       # check "histData" is not "NoneType":
@@ -28,7 +27,10 @@ class FlexTushareBasic:
         if not histData.empty:
           if len(histData) > 0:
             print(code)
+
             for row in histData.index.values:
+              print(row)
+
               histDataCache = histData.rename(index={row: (code + '_' + row)})
               histData = histDataCache
 
@@ -45,7 +47,4 @@ class FlexTushareBasic:
     print(todayData)
 
     return
-
-
-FlexTushareBasic().getTodayAll()
 

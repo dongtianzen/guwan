@@ -1,12 +1,13 @@
 """
 # get_hist_data and save JSON file
-# python3 web/modules/custom/python/FlexTushareClass.py
+python3 web/modules/custom/python/FlexTushareClass.py
 
 """
 
 import pandas as pd
 
 import tushare as ts
+
 
 # define a class
 class FlexTushareBasic:
@@ -37,3 +38,14 @@ class FlexTushareBasic:
     allHistoryData = pd.concat(allHistoryDataFrames)
 
     return allHistoryData
+
+  def getTodayAll(self):
+
+    todayData = ts.get_today_all()
+    print(todayData)
+
+    return
+
+
+FlexTushareBasic().getTodayAll()
+

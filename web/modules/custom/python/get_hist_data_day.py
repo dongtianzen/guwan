@@ -50,9 +50,9 @@ class RunGetHistData:
 
 # startDate is today('2018-06-23') 减去 想开始的日期个数
 
-startDay = 50
+startDay = 0
 startDate = str(date.today() - timedelta(startDay))
-endDate   = str(date.today() - timedelta(startDay - 10))
+endDate   = str(date.today() - timedelta(startDay - 50))
 # endDate   = None
 
 for pageNum in range(90):

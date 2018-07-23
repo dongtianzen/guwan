@@ -86,6 +86,9 @@ class DashpageContentGenerator extends ControllerBase {
             $output .= 'Date';
           $output .= '</th>';
           $output .= '<th>';
+            $output .= '上证指数';
+          $output .= '</th>';
+          $output .= '<th>';
             $output .= 'Total';
           $output .= '</th>';
           foreach ($fenbu as $key => $value) {
@@ -117,10 +120,21 @@ class DashpageContentGenerator extends ControllerBase {
       }
     }
 
+
     $current_timestamp = \Drupal::time()->getCurrentTime();
     for ($i = 0; $i < $max_day; $i++) {
       $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
+
+      $sz_value = NULL;
+      $sz_nids = $this->queryDayByCodeByDate($code_tid = 3610, $query_date);
+      if ($sz_nids) {
+        $sz_node = \Drupal::entityManager()->getStorage('node')->load($sz_nids[0]);
+
+        $sz_value = \Drupal::getContainer()
+          ->get('flexinfo.field.service')
+          ->getFieldFirstValue($sz_node, 'field_day_p_change');
+      }
 
       $day_nids = $this->queryDayByCodeByDate($code_tid = NULL, $query_date);
       $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
@@ -130,6 +144,9 @@ class DashpageContentGenerator extends ControllerBase {
       $output .= '<tr>';
         $output .= '<td>';
           $output .= $query_date;
+        $output .= '</td>';
+        $output .= '<td>';
+          $output .= $sz_value . '%';
         $output .= '</td>';
         $output .= '<td>';
           $output .= array_sum($fenbu);

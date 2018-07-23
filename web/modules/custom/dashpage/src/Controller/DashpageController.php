@@ -7,10 +7,11 @@
 
 namespace Drupal\dashpage\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Url;
+use Drupal\Component\Utility\Timer;
 
+use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Form\FormState;
+use Drupal\Core\Url;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -43,6 +44,9 @@ class DashpageController extends ControllerBase {
    * {@inheritdoc}
    */
   public function standardTrendPage($section) {
+    $name = 'time_one';
+    Timer::start($name);
+
     $DashpageContentGenerator = new DashpageContentGenerator();
     $markup = $DashpageContentGenerator->standardTrendPage($section);
 
@@ -52,6 +56,9 @@ class DashpageController extends ControllerBase {
       '#markup' => $markup,
       '#allowed_tags' => \Drupal::getContainer()->get('flexinfo.setting.service')->adminTag(),
     );
+
+    Timer::stop($name);
+    dpm(Timer::read($name) . 'ms');
 
     return $build;
   }

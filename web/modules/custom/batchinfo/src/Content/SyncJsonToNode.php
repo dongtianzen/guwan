@@ -27,7 +27,6 @@ class SyncJsonToNode {
     $this->json_filename = 'historyDataByCodeList.json';
 
     $this->json_file_path = '/sites/default/files/json/tushare/' . $this->json_filename;
-    $this->json_file_path = '/sites/default/files/json/tushare/' . $this->json_filename;
   }
 
   /**

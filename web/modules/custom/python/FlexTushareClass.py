@@ -18,7 +18,9 @@ class FlexTushareBasic:
 
     allHistoryDataFrames = [];
     for code in codeList:
-      histData = histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate, end = endDate)
+
+      # histData's type is <class 'pandas.core.frame.DataFrame'> or "NoneType"
+      histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate, end = endDate)
 
       # should check is empty or not
 

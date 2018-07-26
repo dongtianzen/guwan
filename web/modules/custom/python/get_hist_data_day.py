@@ -1,6 +1,6 @@
 """
 # get_hist_data and save JSON file
-# python3 web/modules/custom/python/get_hist_data_day.py
+#
 
 # alternative ts.get_k_data
 # cc = ts.get_k_data('399300', index=True, start='2016-10-01', end='2017-01-31')
@@ -27,7 +27,8 @@ class RunGetHistData:
     # codeList = ['600006', '600007', '600008', '600009', '600010']
     codeList = ['600290', '600291']
     codeList = ['600291', '000515']
-    codeList = ['sh', 'sz', '000515']
+    codeList = ['sh', '000515']
+    codeList = ['601636', '601666', '601633', '601618', '601607', '601601']
 
     allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate, endDate)
 
@@ -44,7 +45,7 @@ class RunGetHistData:
     jsonFilePath = FlexJsonBasic().getGenerateJsonFilePath(fileName)
     FlexJsonBasic().generateJsonFromData(jsonFilePath, allHistoryData)
 
-  # -->
+  #%%
 
 
 
@@ -55,16 +56,18 @@ startDate = str(date.today() - timedelta(startDay))
 endDate   = str(date.today() - timedelta(startDay - 50))
 # endDate   = None
 
-for pageNum in range(90):
-  print(pageNum)
-  RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate, endDate)
-
+RunGetHistData().specifyCodeList(startDate)
 
 # for print execution time end
 print("--- %s seconds ---" % (time.time() - start_time))
 exit()
 
-RunGetHistData().specifyCodeList(startDate)
+for pageNum in range(69, 90):
+  print(pageNum)
+  RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate, endDate)
+
+
+
 FlexTushareBasic().getTodayAll()
 
 

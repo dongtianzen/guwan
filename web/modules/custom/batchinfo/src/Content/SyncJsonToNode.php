@@ -100,12 +100,8 @@ class SyncJsonToNode {
     if (TRUE) {
       $node_nids = $this->queryNodeToCheckExist($code, $date, $json_content_piece);
 
-      if (count($node_nids) > 1) {
-        drupal_set_message('Node have - ' . count($node_nids) . ' - few same item', 'error');
-        return;
-      }
-      elseif (count($node_nids) > 0) {
-        drupal_set_message('Node have - ' . count($node_nids) . ' - same item');
+      if (count($node_nids) > 0) {
+        drupal_set_message('Node have - ' . count($node_nids) . ' - same item', 'error');
         return;
       }
       else {

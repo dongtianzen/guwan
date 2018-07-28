@@ -9,6 +9,14 @@ import pandas as pd
 import tushare as ts
 
 
+histData = ts.get_hist_data(code = '399300', ktype = 'D', start = '2018-07-10', end = '2018-07-27')
+print(histData)
+
+cc = ts.get_k_data('399300', index=True, start='2018-07-10', end='2018-07-17')
+print(cc )
+exit()
+
+
 # define a class
 class FlexTushareBasic:
 
@@ -18,25 +26,31 @@ class FlexTushareBasic:
 
     allHistoryDataFrames = [];
     for code in codeList:
+      print(code)
 
       # histData's type is <class 'pandas.core.frame.DataFrame'> or "NoneType"
       histData = ts.get_hist_data(code = code, ktype = 'D', start = startDate, end = endDate)
 
       # should check is empty or not
-
       # check "histData" is not "NoneType":
       if histData is not None:
+
         if not histData.empty:
           if len(histData) > 0:
-            print(code)
+            print(666)
+            for htmlDate in histData.index.values:
+              print(htmlDate)
 
-            for row in histData.index.values:
-              print(row)
-
-              histDataCache = histData.rename(index={row: (code + '_' + row)})
+              histDataCache = histData.rename(index={htmlDate: (code + '_' + htmlDate)})
               histData = histDataCache
 
           allHistoryDataFrames.append(histData)
+        else:
+          print('Empty DataFrame')
+
+      else:
+        print('not get data by ts.get_hist_data()')
+
 
     # Concatenate multiple array to pandas objects
     allHistoryData = pd.concat(allHistoryDataFrames)

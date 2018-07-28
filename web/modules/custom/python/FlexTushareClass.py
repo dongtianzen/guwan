@@ -29,7 +29,6 @@ class FlexTushareBasic:
 
         if not histData.empty:
           if len(histData) > 0:
-            print(666)
             for htmlDate in histData.index.values:
               print(htmlDate)
 

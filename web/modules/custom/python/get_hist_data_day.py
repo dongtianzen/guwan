@@ -50,15 +50,13 @@ class RunGetHistData:
   #%%
 
 
-
 # startDate is today('2018-06-23') 减去 想开始的日期个数
 
-startDay = 0
-startDate = str(date.today() - timedelta(startDay - 8))
-endDate   = str(date.today() - timedelta(startDay))
-endDate   = None
+startDate = str(date.today() - timedelta(6))
+endDate   = str(date.today() - timedelta(1))
+# endDate   = None
 
-for pageNum in range(1, 90):
+for pageNum in range(0, 90):
   print(pageNum)
   RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate, endDate)
 
@@ -66,10 +64,10 @@ for pageNum in range(1, 90):
 print("--- %s seconds ---" % (time.time() - start_time))
 exit()
 
+#
 RunGetHistData().specifyCodeList(startDate, endDate)
 
-
-
+#
 FlexTushareBasic().getTodayAll()
 
 

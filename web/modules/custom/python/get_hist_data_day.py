@@ -31,6 +31,7 @@ class RunGetHistData:
     codeList = ['600291', '000515']
     codeList = ['sh', '000515']
     codeList = ['601636', '601666', '601633', '601618', '601607', '601601']
+    codeList = ['601899', '601900']
 
     allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate, endDate)
 
@@ -56,7 +57,7 @@ startDate = str(date.today() - timedelta(6))
 endDate   = str(date.today() - timedelta(1))
 # endDate   = None
 
-for pageNum in range(0, 90):
+for pageNum in range(70, 90):
   print(pageNum)
   RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate, endDate)
 

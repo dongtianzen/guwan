@@ -16,6 +16,7 @@ class FlexTushareBasic:
   # @param startDate is string like "2018-06-23"
   def downloadHistDataByCode(self, codeList, startDate, endDate):
 
+    allHistoryData = None;
     allHistoryDataFrames = [];
     for code in codeList:
       print(code)
@@ -36,18 +37,19 @@ class FlexTushareBasic:
               histData = histDataCache
 
           allHistoryDataFrames.append(histData)
+
+          # Concatenate multiple array to pandas objects
+          allHistoryData = pd.concat(allHistoryDataFrames)
+
         else:
           print('Empty DataFrame')
 
       else:
         print('not get data by ts.get_hist_data()')
 
-
-    # Concatenate multiple array to pandas objects
-    allHistoryData = pd.concat(allHistoryDataFrames)
-
     return allHistoryData
 
+  #
   def getTodayAll(self):
 
     todayData = ts.get_today_all()

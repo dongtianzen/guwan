@@ -8,7 +8,7 @@ import urllib.request
 
 from pathlib import Path
 
-
+#%%
 # define a class
 class FlexJsonBasic:
 
@@ -19,7 +19,7 @@ class FlexJsonBasic:
 
     return termCodeData
 
-
+  #
   def convertViewsJsonToTermCodeList(self, pageNum = 1):
     urlPath = self.getTermCodeListFromViewsJsonUrlPath(pageNum)
 
@@ -43,12 +43,15 @@ class FlexJsonBasic:
   # @param jsonData is require as <class 'pandas.core.frame.DataFrame'>
   # orient = 'columns' or orient = 'index' is 不同转换数组List排序方法
   def generateJsonFromData(self, filePath, jsonData):
-    jsonData.to_json(filePath, orient='index')
+    if jsonData is None:
+      return
+    else:
+      jsonData.to_json(filePath, orient='index')
+      print ('JSON generate success')
 
-    print ('JSON generate success')
     return
 
-
+  #
   def getGenerateJsonFilePath(self, fileName):
     # 运行文件从command line
     pathDir  = 'web/sites/default/files/json/tushare/'
@@ -69,3 +72,5 @@ class FlexJsonBasic:
       return filePath
 
     return
+
+  #%%

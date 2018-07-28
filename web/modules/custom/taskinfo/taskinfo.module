@@ -52,7 +52,8 @@ function _taskinfo_run_batch_create_node() {
       $SyncJsonToNode->runBatchinfoCreateNodeEntity($subkey, $subrow);
     }
 
-    sleep(0.2);
+    //sleep for 0.2 seconds
+    usleep(200000);
   }
 }
 
@@ -71,6 +72,7 @@ function _taskinfo_run_batch_create_node_with_piece_json() {
       $SyncJsonToNode->runBatchinfoCreateNodeEntity($subkey, $subrow);
     }
 
-    sleep(0.5);
+    //sleep for 0.2 seconds
+    usleep(200000);
   }
 }

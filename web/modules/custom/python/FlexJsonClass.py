@@ -55,7 +55,7 @@ class FlexJsonBasic:
     pathDirObject = Path(pathDir)
 
     if pathDirObject.is_dir():
-      print('is exist from command line')
+      print('path is run from command line')
       filePath = pathDir + fileName
       return filePath
 
@@ -64,7 +64,7 @@ class FlexJsonBasic:
     pathDirObject = Path(pathDir)
 
     if pathDirObject.is_dir():
-      print('is exist from PHP')
+      print('path is run from PHP')
       filePath = pathDir + fileName
       return filePath
 

@@ -6,6 +6,8 @@
 # cc = ts.get_k_data('399300', index=True, start='2016-10-01', end='2017-01-31')
 # print (cc)
 
+python3 web/modules/custom/python/get_hist_data_day.py
+
 """
 
 import pandas as pd
@@ -53,18 +55,18 @@ class RunGetHistData:
 
 startDay = 0
 startDate = str(date.today() - timedelta(startDay))
-endDate   = str(date.today() - timedelta(startDay - 50))
-# endDate   = None
+endDate   = str(date.today() - timedelta(startDay - 8))
+endDate   = None
 
-RunGetHistData().specifyCodeList(startDate)
+for pageNum in range(1, 90):
+  print(pageNum)
+  RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate, endDate)
 
 # for print execution time end
 print("--- %s seconds ---" % (time.time() - start_time))
 exit()
 
-for pageNum in range(69, 90):
-  print(pageNum)
-  RunGetHistData().specifyCodeListWithPageNum(pageNum, startDate, endDate)
+RunGetHistData().specifyCodeList(startDate, endDate)
 
 
 

@@ -71,7 +71,7 @@ class SyncJsonToNode {
 
     $output = [];
 
-    for ($i = 0; $i < 60; $i++) {
+    for ($i = 0; $i < 90; $i++) {
       $piece_file_name = $this->getPiecesJsonFileName($i);
       $piece_file_url = $app_root . $piece_file_name;
 

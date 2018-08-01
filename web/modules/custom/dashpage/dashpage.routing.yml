@@ -15,3 +15,12 @@ dashpage.trend.page:
     _title: 'Trend Page'
   requirements:
     _permission: 'access content'
+
+# modal
+dashpage.query.page:
+  path: '/dashpage/query/{section}'
+  defaults:
+    _controller: '\Drupal\dashpage\Controller\DashpageController::standardQueryPage'
+    _title: 'Query Page'
+  requirements:
+    _permission: 'access content'

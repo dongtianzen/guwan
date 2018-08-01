@@ -75,8 +75,60 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
+  public function standardQueryPage($section) {
+    $output = '';
+    $output .= '<div class="row margin-0">';
+      $output .= '<div id="standard-google-map-wrapper">';
+        $output .= '<div id="map-canvas">';
+          $output .= 'Query Table';
+          $output .= '<br />';
+          $output .= $this->getQueryContent($section);
+        $output .= '</div>';
+      $output .= '</div>';
+    $output .= '</div>';
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getQueryContent($section) {
+    $fenbu = $this->getFenbuHeads();
+
+    $output = '';
+    $output .= '<table class="table table-striped">';
+      $output .= '<thead>';
+        $output .= '<tr>';
+          $output .= '<th>';
+            $output .= 'Date';
+          $output .= '</th>';
+          $output .= '<th>';
+            $output .= '上证指数';
+          $output .= '</th>';
+          $output .= '<th>';
+            $output .= 'Total';
+          $output .= '</th>';
+          foreach ($fenbu as $key => $value) {
+            $output .= '<th>';
+              $output .= $key;
+            $output .= '</th>';
+          }
+        $output .= '</tr>';
+      $output .= '</thead>';
+      $output .= '<tbody>';
+        $output .= $this->getTrendContentTbodyRow($section);
+      $output .= '</tbody>';
+    $output .= '</table>';
+
+    return $output;
+  }
+
+  /**
+   *
+   */
   public function getTrendContent($section) {
-    $fenbu = $this->getFenbuArray();
+    $fenbu = $this->getFenbuHeads();
 
     $output = '';
     $output .= '<table class="table table-striped">';
@@ -165,7 +217,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getFenbuArray() {
+  public function getFenbuHeads() {
     $output = [
       'p9>' => 0,
       'p5>' => 0,
@@ -185,7 +237,7 @@ class DashpageContentGenerator extends ControllerBase {
   public function calcPercentageByNode($day_nodes) {
     $output = '';
 
-    $fenbu = $this->getFenbuArray();
+    $fenbu = $this->getFenbuHeads();
 
     if ($day_nodes) {
       foreach ($day_nodes as $key => $row) {

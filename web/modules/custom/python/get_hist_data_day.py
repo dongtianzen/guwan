@@ -44,6 +44,7 @@ class RunGetHistData:
 
     allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate, endDate)
 
+
     fileName = 'historyDataByCodeListPiece_' + str(pageNum) + '.json'
     jsonFilePath = FlexJsonBasic().getGenerateJsonFilePath(fileName)
     FlexJsonBasic().generateJsonFromData(jsonFilePath, allHistoryData)

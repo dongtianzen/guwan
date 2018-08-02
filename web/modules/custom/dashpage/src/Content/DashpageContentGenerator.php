@@ -319,11 +319,11 @@ class DashpageContentGenerator extends ControllerBase {
     $fenbu = $this->getFenbuHeads();
 
     if ($day_nodes) {
-      foreach ($day_nodes as $key => $row) {
-        $day_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_volume');
-
-        if ($day_volume > 0) {
-          $day_p_change = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_p_change');
+      foreach ($day_nodes->field_day_p_change as $key => $row) {
+        // $day_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_volume');
+        $day_p_change = 0;
+        // if ($day_volume > 0) {
+          // $day_p_change = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_p_change');
 
           if ($day_p_change > 9) {
             $fenbu['p9>']++;
@@ -346,7 +346,7 @@ class DashpageContentGenerator extends ControllerBase {
           else {
             $fenbu['else']++;
           }
-        }
+        // }
       }
     }
 

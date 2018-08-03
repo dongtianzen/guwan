@@ -237,26 +237,28 @@ class DashpageContentGenerator extends ControllerBase {
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
       $day_nids = $this->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
-      $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
+      if ($day_nids) {
+        $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
 
-      $fenbu = $this->calcPercentageByNode($day_nodes);
+        $fenbu = $this->calcPercentageByNode($day_nodes);
 
-      $output .= '<tr>';
-        $output .= '<td>';
-          $output .= $query_date;
-        $output .= '</td>';
-        $output .= '<td>';
-          $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
-        $output .= '</td>';
-        $output .= '<td>';
-          $output .= count($day_nids);
-        $output .= '</td>';
-        foreach ($fenbu as $key => $value) {
+        $output .= '<tr>';
           $output .= '<td>';
-            $output .= $value;
+            $output .= $query_date;
           $output .= '</td>';
-        }
-      $output .= '</tr>';
+          $output .= '<td>';
+            $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
+          $output .= '</td>';
+          $output .= '<td>';
+            $output .= count($day_nids);
+          $output .= '</td>';
+          foreach ($fenbu as $key => $value) {
+            $output .= '<td>';
+              $output .= $value;
+            $output .= '</td>';
+          }
+        $output .= '</tr>';
+      }
     }
 
     return $output;
@@ -308,13 +310,13 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function calcPercentageByNode($day_nodes) {
+  public function calcPercentageByNode($day_nodes = array()) {
     $output = '';
 
     $fenbu = $this->getFenbuHeads();
 
     if ($day_nodes) {
-      foreach ($day_nodes->field_day_p_change as $key => $row) {
+      foreach ($day_nodes as $key => $row) {
         $day_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_volume');
 
         if ($day_volume > 0) {

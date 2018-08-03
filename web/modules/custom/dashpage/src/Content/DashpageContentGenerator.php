@@ -177,17 +177,7 @@ class DashpageContentGenerator extends ControllerBase {
       $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
-      $sz_value = NULL;
-      $sz_nids = $this->queryDayByCodeByDate($code_tid = 3610, $query_date);
-      if ($sz_nids) {
-        $sz_node = \Drupal::entityManager()->getStorage('node')->load($sz_nids[0]);
-
-        $sz_value = \Drupal::getContainer()
-          ->get('flexinfo.field.service')
-          ->getFieldFirstValue($sz_node, 'field_day_p_change');
-      }
-
-      $day_nids = $this->queryDayByCodeByDate($code_tid = NULL, $query_date);
+      $day_nids = $this->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
 
       $fenbu = $this->queryCountPercentageByNode($day_nids);
 
@@ -196,10 +186,10 @@ class DashpageContentGenerator extends ControllerBase {
           $output .= $query_date;
         $output .= '</td>';
         $output .= '<td>';
-          $output .= $sz_value . '%';
+          $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
         $output .= '</td>';
         $output .= '<td>';
-          $output .= array_sum($fenbu);
+          $output .= count($day_nids);
         $output .= '</td>';
         foreach ($fenbu as $key => $value) {
           $output .= '<td>';
@@ -213,8 +203,23 @@ class DashpageContentGenerator extends ControllerBase {
   }
 
   /**
-   *
+   * 3610 is 'sz' shangzhengzhishu
    */
+  public function getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date = NULL) {
+    $output = NULL;
+    $nids = $this->queryDayNidsByCodeByDate($code_tid = 3610, $query_date);
+
+    if ($nids) {
+      $node = \Drupal::entityManager()->getStorage('node')->load($nids[0]);
+
+      $output = \Drupal::getContainer()
+        ->get('flexinfo.field.service')
+        ->getFieldFirstValue($node, 'field_day_p_change');
+    }
+
+    return $output;
+  }
+
   public function getTrendContentTbodyRow($section) {
     $output = '';
 
@@ -231,17 +236,7 @@ class DashpageContentGenerator extends ControllerBase {
       $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
-      $sz_value = NULL;
-      $sz_nids = $this->queryDayByCodeByDate($code_tid = 3610, $query_date);
-      if ($sz_nids) {
-        $sz_node = \Drupal::entityManager()->getStorage('node')->load($sz_nids[0]);
-
-        $sz_value = \Drupal::getContainer()
-          ->get('flexinfo.field.service')
-          ->getFieldFirstValue($sz_node, 'field_day_p_change');
-      }
-
-      $day_nids = $this->queryDayByCodeByDate($code_tid = NULL, $query_date);
+      $day_nids = $this->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
       $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
 
       $fenbu = $this->calcPercentageByNode($day_nodes);
@@ -251,10 +246,10 @@ class DashpageContentGenerator extends ControllerBase {
           $output .= $query_date;
         $output .= '</td>';
         $output .= '<td>';
-          $output .= $sz_value . '%';
+          $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
         $output .= '</td>';
         $output .= '<td>';
-          $output .= array_sum($fenbu);
+          $output .= count($day_nids);
         $output .= '</td>';
         foreach ($fenbu as $key => $value) {
           $output .= '<td>';
@@ -320,10 +315,10 @@ class DashpageContentGenerator extends ControllerBase {
 
     if ($day_nodes) {
       foreach ($day_nodes->field_day_p_change as $key => $row) {
-        // $day_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_volume');
-        $day_p_change = 0;
-        // if ($day_volume > 0) {
-          // $day_p_change = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_p_change');
+        $day_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_volume');
+
+        if ($day_volume > 0) {
+          $day_p_change = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row, 'field_day_p_change');
 
           if ($day_p_change > 9) {
             $fenbu['p9>']++;
@@ -346,7 +341,7 @@ class DashpageContentGenerator extends ControllerBase {
           else {
             $fenbu['else']++;
           }
-        // }
+        }
       }
     }
 
@@ -365,7 +360,7 @@ class DashpageContentGenerator extends ControllerBase {
 
     $tids_array = [];
     foreach ($code_tids as $key => $code_tid) {
-      $nids = $this->queryDayByCodeByDate($code_tid, $today_date);
+      $nids = $this->queryDayNidsByCodeByDate($code_tid, $today_date);
 
       if ($nids) {
         $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid);
@@ -395,7 +390,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function queryDayByCodeByDate($code_tid = NULL, $date = NULL) {
+  public function queryDayNidsByCodeByDate($code_tid = NULL, $date = NULL) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');
 

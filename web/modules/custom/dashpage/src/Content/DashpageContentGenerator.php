@@ -289,12 +289,12 @@ class DashpageContentGenerator extends ControllerBase {
   public function queryCountPercentageByNode($day_nids) {
     $output = array();
 
-    $fenbuRaw['z9'] = count($this->queryNidsByNidsByFieldValue($day_nids, 9));
-    $fenbuRaw['z5'] = count($this->queryNidsByNidsByFieldValue($day_nids, 5));
-    $fenbuRaw['z0'] = count($this->queryNidsByNidsByFieldValue($day_nids, 0));
-    $fenbuRaw['f0'] = count($this->queryNidsByNidsByFieldValue($day_nids, -5));
-    $fenbuRaw['f5'] = count($this->queryNidsByNidsByFieldValue($day_nids, -9));
-    $fenbuRaw['f9'] = count($this->queryNidsByNidsByFieldValue($day_nids, -11));
+    $fenbuRaw['z9'] = count($this->queryNidsByNidsByFieldValue($day_nids, 9, '>'));
+    $fenbuRaw['z5'] = count($this->queryNidsByNidsByFieldValue($day_nids, 5, '>'));
+    $fenbuRaw['z0'] = count($this->queryNidsByNidsByFieldValue($day_nids, 0.000001, '>'));
+    $fenbuRaw['f0'] = count($this->queryNidsByNidsByFieldValue($day_nids, '-5', '>'));
+    $fenbuRaw['f5'] = count($this->queryNidsByNidsByFieldValue($day_nids, -9, '>'));
+    $fenbuRaw['f9'] = count($this->queryNidsByNidsByFieldValue($day_nids, -11, '>'));
 
     if ($day_nids) {
       $output['p9>'] = $fenbuRaw['z9'];
@@ -416,7 +416,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function queryNidsByNidsByFieldValue($nids = NULL, $value = NULL) {
+  public function queryNidsByNidsByFieldValue($nids = NULL, $value = NULL, $operator = NULL) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');
 
@@ -426,7 +426,7 @@ class DashpageContentGenerator extends ControllerBase {
     }
 
     if ($value) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_day_p_change', $value, '>');
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_p_change', $value, $operator);
       $query->condition($group);
     }
 

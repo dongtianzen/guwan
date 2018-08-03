@@ -293,17 +293,17 @@ class DashpageContentGenerator extends ControllerBase {
     $fenbuRaw['z5'] = count($this->queryNidsByNidsByFieldValue($day_nids, 5, '>'));
     $fenbuRaw['z0'] = count($this->queryNidsByNidsByFieldValue($day_nids, 0.000001, '>'));
     $fenbuRaw['f0'] = count($this->queryNidsByNidsByFieldValue($day_nids, '-5', '>'));
-    $fenbuRaw['f5'] = count($this->queryNidsByNidsByFieldValue($day_nids, -9, '>'));
-    $fenbuRaw['f9'] = count($this->queryNidsByNidsByFieldValue($day_nids, -11, '>'));
+    $fenbuRaw['f5'] = count($this->queryNidsByNidsByFieldValue($day_nids, '-9', '>'));
+    $fenbuRaw['f9'] = count($this->queryNidsByNidsByFieldValue($day_nids, '-11', '>'));
 
     if ($day_nids) {
       $output['p9>'] = $fenbuRaw['z9'];
       $output['p5>'] = $fenbuRaw['z5'] - $fenbuRaw['z9'];
-      $output['p0>'] = $fenbuRaw['z0'] - $fenbuRaw['z9'] - $fenbuRaw['z5'];
-      $output['p0<'] = $fenbuRaw['f0'] - $fenbuRaw['z9'] - $fenbuRaw['z5'] - $fenbuRaw['z0'];
-      $output['p5<'] = $fenbuRaw['f5'] - $fenbuRaw['z9'] - $fenbuRaw['z5'] - $fenbuRaw['z0'] - $fenbuRaw['f0'];
-      $output['p9<'] = $fenbuRaw['f9'] - $fenbuRaw['z9'] - $fenbuRaw['z5'] - $fenbuRaw['z0'] - $fenbuRaw['f0'] - $fenbuRaw['f5'];
-      $output['else'] = count($day_nids) - count($fenbuRaw);
+      $output['p0>'] = $fenbuRaw['z0'] - $fenbuRaw['z5'];
+      $output['p0<'] = $fenbuRaw['f0'] - $fenbuRaw['z0'];
+      $output['p5<'] = $fenbuRaw['f5'] - $fenbuRaw['f0'];
+      $output['p9<'] = $fenbuRaw['f9'] - $fenbuRaw['f5'];
+      $output['else'] = count($day_nids) - $fenbuRaw['f9'];
     }
 
     return $output;

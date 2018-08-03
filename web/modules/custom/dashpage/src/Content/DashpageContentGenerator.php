@@ -179,24 +179,26 @@ class DashpageContentGenerator extends ControllerBase {
 
       $day_nids = $this->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
 
-      $fenbu = $this->queryCountPercentageByNode($day_nids);
+      if ($day_nids) {
+        $fenbu = $this->queryCountPercentageByNode($day_nids);
 
-      $output .= '<tr>';
-        $output .= '<td>';
-          $output .= $query_date;
-        $output .= '</td>';
-        $output .= '<td>';
-          $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
-        $output .= '</td>';
-        $output .= '<td>';
-          $output .= count($day_nids);
-        $output .= '</td>';
-        foreach ($fenbu as $key => $value) {
+        $output .= '<tr>';
           $output .= '<td>';
-            $output .= $value;
+            $output .= $query_date;
           $output .= '</td>';
-        }
-      $output .= '</tr>';
+          $output .= '<td>';
+            $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
+          $output .= '</td>';
+          $output .= '<td>';
+            $output .= count($day_nids);
+          $output .= '</td>';
+          foreach ($fenbu as $key => $value) {
+            $output .= '<td>';
+              $output .= $value;
+            $output .= '</td>';
+          }
+        $output .= '</tr>';
+      }
     }
 
     return $output;

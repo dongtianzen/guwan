@@ -93,6 +93,64 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
+  public function standardVolumeRatioPage($section) {
+    $output = '';
+    $output .= '<div class="row margin-0">';
+      $output .= '<div id="standard-volume-ratio-page-wrapper">';
+        $output .= '<div id="map-canvas">';
+          $output .= 'Volume Ratio Table';
+          $output .= '<br />';
+          $output .= $this->getVolumeRatioContent($section);
+        $output .= '</div>';
+      $output .= '</div>';
+    $output .= '</div>';
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getVolumeRatioContent($section) {
+    $thead = [
+      1,
+      2,
+      3,
+      4,
+      5,
+    ];
+
+    $output = '';
+    $output .= '<table class="table table-striped">';
+      $output .= '<thead>';
+        $output .= '<tr>';
+          $output .= '<th>';
+            $output .= 'Date';
+          $output .= '</th>';
+          $output .= '<th>';
+            $output .= '上证指数';
+          $output .= '</th>';
+          $output .= '<th>';
+            $output .= 'Total';
+          $output .= '</th>';
+          foreach ($fenbu as $key => $value) {
+            $output .= '<th>';
+              $output .= $key;
+            $output .= '</th>';
+          }
+        $output .= '</tr>';
+      $output .= '</thead>';
+      $output .= '<tbody>';
+        $output .= $this->getQueryContentTbodyRow($section);
+      $output .= '</tbody>';
+    $output .= '</table>';
+
+    return $output;
+  }
+
+  /**
+   *
+   */
   public function getQueryContent($section) {
     $fenbu = $this->getFenbuHeads();
 

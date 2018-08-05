@@ -86,4 +86,27 @@ class DashpageController extends ControllerBase {
     return $build;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function standardVolumeRatioPage($section) {
+    $name = 'time_query';
+    Timer::start($name);
+
+    $DashpageContentGenerator = new DashpageContentGenerator();
+    $markup = $DashpageContentGenerator->standardVolumeRatioPage($section);
+
+    $build = array(
+      '#type' => 'markup',
+      '#header' => 'header',
+      '#markup' => $markup,
+      '#allowed_tags' => \Drupal::getContainer()->get('flexinfo.setting.service')->adminTag(),
+    );
+
+    Timer::stop($name);
+    dpm(Timer::read($name) . 'ms');
+
+    return $build;
+  }
+
 }

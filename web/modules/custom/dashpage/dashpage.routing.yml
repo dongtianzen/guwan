@@ -24,3 +24,12 @@ dashpage.query.page:
     _title: 'Query Page'
   requirements:
     _permission: 'access content'
+
+# modal
+dashpage.volumeratio.page:
+  path: '/dashpage/volumeratio/{section}'
+  defaults:
+    _controller: '\Drupal\dashpage\Controller\DashpageController::standardVolumeRatioPage'
+    _title: 'Volume Ratio'
+  requirements:
+    _permission: 'access content'

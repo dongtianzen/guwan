@@ -207,32 +207,39 @@ class DashpageContentGenerator extends ControllerBase {
 
     $query_date = '2018-08-03';
 
-    $day_nids = \Drupal::getContainer()
+    $today_nids = \Drupal::getContainer()
       ->get('baseinfo.querynode.service')
       ->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
 
-    if ($day_nids) {
-      foreach ($day_nids as $key => $value) {
+    $tids_array = [];
+    foreach ($today_nids as $key => $today_nid) {
+      $nids = \Drupal::getContainer()
+        ->get('baseinfo.querynode.service')
+        ->queryDayNidsByCodeByDate($code_tid, $today_date);
 
-      }
+      if ($nids) {
+        $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid);
 
-      $output .= '<tr>';
-        $output .= '<td>';
-          $output .= $query_date;
-        $output .= '</td>';
-        $output .= '<td>';
-          $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
-        $output .= '</td>';
-        $output .= '<td>';
-          $output .= count($day_nids);
-        $output .= '</td>';
-        foreach ($fenbu as $key => $value) {
-          $output .= '<td>';
-            $output .= $value;
-          $output .= '</td>';
+        if ($checkPreviousDayResult) {
+          $tids_array[] = $code_tid;
         }
-      $output .= '</tr>';
+      }
     }
+
+    $num = 1;
+    $output = ' ';
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids_array);
+    foreach ($terms as $key => $term) {
+      $output .= $num . ' ';
+      $output .= $term->getName();
+      $output .= ' ';
+      $output .= \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($term, 'field_code_name');
+      $output .= '<br />';
+
+      $num++;
+    }
+
+    return $output;
 
     return $output;
   }

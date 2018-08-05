@@ -218,7 +218,7 @@ class DashpageContentGenerator extends ControllerBase {
         ->queryDayNidsByCodeByDate($code_tid, $today_date);
 
       if ($nids) {
-        $checkPreviousDayResult = $this->compareVolumeRatio($nids[0], $code_tid, $start_date = '2018-08-03', $end_date = '2018-07-27');
+        $checkPreviousDayResult = $this->comparePriceRatio($nids[0], 0.9, 1.1);
 
         if ($checkPreviousDayResult) {
           $tids_array[] = $code_tid;
@@ -484,34 +484,29 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function compareVolumeRatio($nid, $code_tid, $start_date = NULL, $end_date = NULL) {
+  public function comparePriceRatio($entity, $min = 0.9, $max = 1.1) {
     $output = FALSE;
 
-    $today_entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
-
-    if ($today_entity) {
-      $ma5_volume = \Drupal::getContainer()
+    if ($entity) {
+      $price_ma5 = \Drupal::getContainer()
         ->get('flexinfo.field.service')
-        ->getFieldFirstValue($today_entity, ' field_day_ma5');
+        ->getFieldFirstValue($entity, ' field_day_ma5');
 
-      $ma10_volume = \Drupal::getContainer()
+      $price_ma10 = \Drupal::getContainer()
         ->get('flexinfo.field.service')
-        ->getFieldFirstValue($today_entity, ' field_day_ma10');
+        ->getFieldFirstValue($entity, ' field_day_ma10');
 
-      if ($today_volume) {
+      if ($price_ma10) {
+        $ratio = \Drupal::getContainer()
+          ->get('flexinfo.calc.service')
+          ->getPercentage($price_ma5, $price_ma10);
 
-        foreach ($previous_entitys as $key => $row_entity) {
-          $row_volume = \Drupal::getContainer()
-            ->get('flexinfo.field.service')
-            ->getFieldFirstValue($row_entity, ' field_day_ma5');
-
-          if ($today_volume > $row_volume) {
-            $output = TRUE;
-          }
-          else {
-            $output = FALSE;
-            break;
-          }
+        if ($min < $ratio < $max) {
+          $output = TRUE;
+        }
+        else {
+          $output = FALSE;
+          break;
         }
       }
     }

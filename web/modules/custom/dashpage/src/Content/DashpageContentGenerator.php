@@ -207,36 +207,39 @@ class DashpageContentGenerator extends ControllerBase {
 
     $query_date = '2018-08-03';
 
-    $code_tids = \Drupal::getContainer()
-      ->get('flexinfo.term.service')
-      ->getTidsFromVidName($vid = 'code');
+    $day_nodes = \Drupal::getContainer()
+      ->get('baseinfo.querynode.service')
+      ->queryDayNodesByCodeByDate($code_tid = NULL, $query_date);
 
-    $tids_array = [];
-    foreach ($code_tids as $key => $code_tid) {
-      $nids = \Drupal::getContainer()
-        ->get('baseinfo.querynode.service')
-        ->queryDayNidsByCodeByDate($code_tid, $today_date);
+    foreach ($day_nodes as $key => $day_node) {
+      $checkPreviousDayResult = $this->comparePriceRatio($day_node, 0.9, 1.1);
 
-      if ($nids) {
-        $checkPreviousDayResult = $this->comparePriceRatio($nids[0], 0.9, 1.1);
+      if ($checkPreviousDayResult) {
+        $tids_array[] = $code_tid;
 
-        if ($checkPreviousDayResult) {
-          $tids_array[] = $code_tid;
-        }
+
       }
     }
 
     $num = 1;
-    $output = ' ';
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids_array);
-    foreach ($terms as $key => $term) {
-      $output .= $num . ' ';
-      $output .= $term->getName();
-      $output .= ' ';
-      $output .= \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($term, 'field_code_name');
-      $output .= '<br />';
+    if ($tids_array) {
+      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids_array);
 
-      $num++;
+      foreach ($terms as $key => $term) {
+        $output .= '<tr>';
+          $output .= '<td>';
+            $output .= $num;
+          $output .= '</td>';
+          $output .= '<td>';
+            $output .= $code_tid;
+          $output .= '</td>';
+          $output .= '<td>';
+            $output .= $term->getName();;
+          $output .= '</td>';
+        $output .= '</tr>';
+
+        $num++;
+      }
     }
 
     return $output;

@@ -205,17 +205,18 @@ class DashpageContentGenerator extends ControllerBase {
   public function getVolumeRatioTbodyRow($section) {
     $output = '';
 
-    $query_date = '2018-08-03';
+    $query_date = '2018-07-27';
 
     $day_nodes = \Drupal::getContainer()
       ->get('baseinfo.querynode.service')
       ->queryDayNodesByCodeByDate($code_tid = NULL, $query_date);
 
+    $tids_array = [];
     foreach ($day_nodes as $key => $day_node) {
       $checkPreviousDayResult = $this->comparePriceRatio($day_node, 0.9, 1.1);
 
       if ($checkPreviousDayResult) {
-        $tids_array[] = $code_tid;
+        $tids_array[] = $day_node->getFieldFirstTargetId($day_node, 'field_day_code');
       }
     }
 
@@ -341,7 +342,7 @@ class DashpageContentGenerator extends ControllerBase {
             $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
           $output .= '</td>';
           $output .= '<td>';
-            $output .= count($day_nids);
+            $output .= count($day_nodes);
           $output .= '</td>';
           foreach ($fenbu as $key => $value) {
             $output .= '<td>';
@@ -491,23 +492,19 @@ class DashpageContentGenerator extends ControllerBase {
     if ($entity) {
       $price_ma5 = \Drupal::getContainer()
         ->get('flexinfo.field.service')
-        ->getFieldFirstValue($entity, ' field_day_ma5');
+        ->getFieldFirstValue($entity, 'field_day_ma5');
 
       $price_ma10 = \Drupal::getContainer()
         ->get('flexinfo.field.service')
-        ->getFieldFirstValue($entity, ' field_day_ma10');
+        ->getFieldFirstValue($entity, 'field_day_ma10');
 
       if ($price_ma10) {
         $ratio = \Drupal::getContainer()
           ->get('flexinfo.calc.service')
           ->getPercentage($price_ma5, $price_ma10);
 
-        if ($min < $ratio < $max) {
+        if ($min < $ratio && $ratio < $max) {
           $output = TRUE;
-        }
-        else {
-          $output = FALSE;
-          break;
         }
       }
     }

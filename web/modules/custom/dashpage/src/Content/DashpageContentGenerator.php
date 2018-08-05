@@ -218,7 +218,7 @@ class DashpageContentGenerator extends ControllerBase {
         ->queryDayNidsByCodeByDate($code_tid, $today_date);
 
       if ($nids) {
-        $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid, $start_date = '2018-08-03', $end_date = '2018-07-27');
+        $checkPreviousDayResult = $this->compareVolumeRatio($nids[0], $code_tid, $start_date = '2018-08-03', $end_date = '2018-07-27');
 
         if ($checkPreviousDayResult) {
           $tids_array[] = $code_tid;
@@ -490,29 +490,27 @@ class DashpageContentGenerator extends ControllerBase {
     $today_entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
 
     if ($today_entity) {
-      $previous_entitys = \Drupal::getContainer()
-        ->get('baseinfo.querynode.service')
-        ->queryDayNodesByCodeByDateRange($code_tid, $start_date, $end_date);
+      $ma5_volume = \Drupal::getContainer()
+        ->get('flexinfo.field.service')
+        ->getFieldFirstValue($today_entity, ' field_day_ma5');
 
-      if ($previous_entitys) {
-        $today_volume = \Drupal::getContainer()
-          ->get('flexinfo.field.service')
-          ->getFieldFirstValue($today_entity, 'field_day_volume');
+      $ma10_volume = \Drupal::getContainer()
+        ->get('flexinfo.field.service')
+        ->getFieldFirstValue($today_entity, ' field_day_ma10');
 
-        if ($today_volume) {
+      if ($today_volume) {
 
-          foreach ($previous_entitys as $key => $row_entity) {
-            $row_volume = \Drupal::getContainer()
-              ->get('flexinfo.field.service')
-              ->getFieldFirstValue($row_entity, 'field_day_volume');
+        foreach ($previous_entitys as $key => $row_entity) {
+          $row_volume = \Drupal::getContainer()
+            ->get('flexinfo.field.service')
+            ->getFieldFirstValue($row_entity, ' field_day_ma5');
 
-            if ($today_volume > $row_volume) {
-              $output = TRUE;
-            }
-            else {
-              $output = FALSE;
-              break;
-            }
+          if ($today_volume > $row_volume) {
+            $output = TRUE;
+          }
+          else {
+            $output = FALSE;
+            break;
           }
         }
       }

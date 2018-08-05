@@ -112,13 +112,7 @@ class DashpageContentGenerator extends ControllerBase {
    *
    */
   public function getVolumeRatioContent($section) {
-    $thead = [
-      1,
-      2,
-      3,
-      4,
-      5,
-    ];
+    $thead = range(0, 8);
 
     $output = '';
     $output .= '<table class="table table-striped">';
@@ -128,20 +122,20 @@ class DashpageContentGenerator extends ControllerBase {
             $output .= 'Date';
           $output .= '</th>';
           $output .= '<th>';
-            $output .= '上证指数';
+            $output .= 'Name';
           $output .= '</th>';
           $output .= '<th>';
-            $output .= 'Total';
+            $output .= 'Code';
           $output .= '</th>';
-          foreach ($fenbu as $key => $value) {
+          foreach ($thead as $key => $value) {
             $output .= '<th>';
-              $output .= $key;
+              $output .= $value;
             $output .= '</th>';
           }
         $output .= '</tr>';
       $output .= '</thead>';
       $output .= '<tbody>';
-        $output .= $this->getQueryContentTbodyRow($section);
+        $output .= $this->getVolumeRatioTbodyRow($section);
       $output .= '</tbody>';
     $output .= '</table>';
 
@@ -212,6 +206,44 @@ class DashpageContentGenerator extends ControllerBase {
         $output .= $this->getTrendContentTbodyRow($section);
       $output .= '</tbody>';
     $output .= '</table>';
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function getVolumeRatioTbodyRow($section) {
+    $output = '';
+
+    $query_date = '2018-08-03';
+
+    $day_nids = \Drupal::getContainer()
+      ->get('baseinfo.querynode.service')
+      ->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
+
+    if ($day_nids) {
+      foreach ($day_nids as $key => $value) {
+
+      }
+
+      $output .= '<tr>';
+        $output .= '<td>';
+          $output .= $query_date;
+        $output .= '</td>';
+        $output .= '<td>';
+          $output .= $this->getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date) . '%';
+        $output .= '</td>';
+        $output .= '<td>';
+          $output .= count($day_nids);
+        $output .= '</td>';
+        foreach ($fenbu as $key => $value) {
+          $output .= '<td>';
+            $output .= $value;
+          $output .= '</td>';
+        }
+      $output .= '</tr>';
+    }
 
     return $output;
   }

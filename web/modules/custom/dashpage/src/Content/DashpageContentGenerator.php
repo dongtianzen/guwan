@@ -11,7 +11,7 @@ use Drupal\Core\Controller\ControllerBase;
  *
  use Drupal\dashpage\Content\DashpageContentGenerator;
  $DashpageContentGenerator = new DashpageContentGenerator();
- $nids = $DashpageContentGenerator->queryDayNidsByCodeByDateGreater(2392);
+ $nids = $DashpageContentGenerator->demo(2392);
 
  */
 
@@ -207,12 +207,12 @@ class DashpageContentGenerator extends ControllerBase {
 
     $query_date = '2018-08-03';
 
-    $today_nids = \Drupal::getContainer()
-      ->get('baseinfo.querynode.service')
-      ->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
+    $code_tids = \Drupal::getContainer()
+      ->get('flexinfo.term.service')
+      ->getTidsFromVidName($vid = 'code');
 
     $tids_array = [];
-    foreach ($today_nids as $key => $today_nid) {
+    foreach ($code_tids as $key => $code_tid) {
       $nids = \Drupal::getContainer()
         ->get('baseinfo.querynode.service')
         ->queryDayNidsByCodeByDate($code_tid, $today_date);
@@ -238,8 +238,6 @@ class DashpageContentGenerator extends ControllerBase {
 
       $num++;
     }
-
-    return $output;
 
     return $output;
   }
@@ -496,7 +494,8 @@ class DashpageContentGenerator extends ControllerBase {
 
       $previous_entitys = \Drupal::getContainer()
         ->get('baseinfo.querynode.service')
-        ->queryDayNodesByCodeByDateGreater($code_tid);
+        ->queryDayNodesByCodeByDateGreater($code_tid, $start_date = '2018-07-08', $end_date = '2018-07-13');
+
       if ($previous_entitys) {
         $today_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($today_entity, 'field_day_volume');
 

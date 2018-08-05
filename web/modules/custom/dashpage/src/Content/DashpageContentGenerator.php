@@ -332,12 +332,10 @@ class DashpageContentGenerator extends ControllerBase {
       $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
-      $day_nids = \Drupal::getContainer()
+      $day_nodes = \Drupal::getContainer()
         ->get('baseinfo.querynode.service')
-        ->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
-      if ($day_nids) {
-        $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
-
+        ->queryDayNodesByCodeByDate($code_tid = NULL, $query_date);
+      if ($day_nodes) {
         $fenbu = $this->calcPercentageByNode($day_nodes);
 
         $output .= '<tr>';

@@ -75,4 +75,26 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
     return $nids;
   }
 
+  /**
+   * @param $code_tid is tid, not code name like 600117
+   */
+  public function queryDayNidsByCodeByDateGreater($code_tid = NULL, $date = NULL) {
+    $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
+    $query = $query_container->queryNidsByBundle('day');
+
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_code', $code_tid);
+    $query->condition($group);
+
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', '2018-07-08', '>');
+    $query->condition($group);
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', '2018-07-13', '<');
+    $query->condition($group);
+
+    $query->sort('field_day_date', 'DESC');
+    $query->range(0, 2);
+    $nids = $query_container->runQueryWithGroup($query);
+
+    return $nids;
+  }
+
 }

@@ -13,17 +13,6 @@ use Drupal\Core\Controller\ControllerBase;
  $DashpageContentGenerator = new DashpageContentGenerator();
  $nids = $DashpageContentGenerator->queryDayNidsByCodeByDateGreater(2392);
 
- dpm($nids);
- $previous_entitys = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
-
- foreach ($previous_entitys as $key => $row_entity) {
-   $row_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row_entity, 'field_day_volume');
-   $row_date = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row_entity, 'field_day_date');
-
-   dpm($row_date);
-   dpm($row_volume);
-   dpm(' - ');
- }
  */
 
 /**
@@ -487,27 +476,6 @@ class DashpageContentGenerator extends ControllerBase {
     return $output;
   }
 
-  /**
-   * @param $code_tid is tid, not code name like 600117
-   */
-  public function queryDayNidsByCodeByDateGreater($code_tid = NULL, $date = NULL) {
-    $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
-    $query = $query_container->queryNidsByBundle('day');
-
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_code', $code_tid);
-    $query->condition($group);
-
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', '2018-07-08', '>');
-    $query->condition($group);
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', '2018-07-13', '<');
-    $query->condition($group);
-
-    $query->sort('field_day_date', 'DESC');
-    $query->range(0, 2);
-    $nids = $query_container->runQueryWithGroup($query);
-
-    return $nids;
-  }
 
   /**
    *
@@ -518,7 +486,10 @@ class DashpageContentGenerator extends ControllerBase {
     $today_entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
 
     if ($today_entity) {
-      $previous_nids = $this->queryDayNidsByCodeByDateGreater($code_tid);
+      $previous_nids = \Drupal::getContainer()
+        ->get('baseinfo.querynode.service')
+        ->queryDayNidsByCodeByDateGreater($code_tid);
+
       $previous_entitys = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($previous_nids);
 
       if ($previous_entitys) {

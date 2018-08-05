@@ -486,12 +486,10 @@ class DashpageContentGenerator extends ControllerBase {
     $today_entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
 
     if ($today_entity) {
-      $previous_nids = \Drupal::getContainer()
+
+      $previous_entitys = \Drupal::getContainer()
         ->get('baseinfo.querynode.service')
-        ->queryDayNidsByCodeByDateGreater($code_tid);
-
-      $previous_entitys = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($previous_nids);
-
+        ->queryDayNodesByCodeByDateGreater($code_tid);
       if ($previous_entitys) {
         $today_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($today_entity, 'field_day_volume');
 

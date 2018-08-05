@@ -78,6 +78,16 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
   /**
    * @param $code_tid is tid, not code name like 600117
    */
+  public function queryDayNodesByCodeByDateGreater($code_tid = NULL, $date = NULL) {
+    $nids = $this->queryDayNidsByCodeByDateGreater($code_tid, $date);
+    $nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($nids);
+
+    return $nodes;
+  }
+
+  /**
+   *
+   */
   public function queryDayNidsByCodeByDateGreater($code_tid = NULL, $date = NULL) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');

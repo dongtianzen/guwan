@@ -218,7 +218,7 @@ class DashpageContentGenerator extends ControllerBase {
         ->queryDayNidsByCodeByDate($code_tid, $today_date);
 
       if ($nids) {
-        $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid, $start_date = '2018-07-08', $end_date = '2018-07-13');
+        $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid, $start_date = '2018-08-03', $end_date = '2018-07-27');
 
         if ($checkPreviousDayResult) {
           $tids_array[] = $code_tid;
@@ -481,6 +481,45 @@ class DashpageContentGenerator extends ControllerBase {
     return $output;
   }
 
+  /**
+   *
+   */
+  public function compareVolumeRatio($nid, $code_tid, $start_date = NULL, $end_date = NULL) {
+    $output = FALSE;
+
+    $today_entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+
+    if ($today_entity) {
+      $previous_entitys = \Drupal::getContainer()
+        ->get('baseinfo.querynode.service')
+        ->queryDayNodesByCodeByDateRange($code_tid, $start_date, $end_date);
+
+      if ($previous_entitys) {
+        $today_volume = \Drupal::getContainer()
+          ->get('flexinfo.field.service')
+          ->getFieldFirstValue($today_entity, 'field_day_volume');
+
+        if ($today_volume) {
+
+          foreach ($previous_entitys as $key => $row_entity) {
+            $row_volume = \Drupal::getContainer()
+              ->get('flexinfo.field.service')
+              ->getFieldFirstValue($row_entity, 'field_day_volume');
+
+            if ($today_volume > $row_volume) {
+              $output = TRUE;
+            }
+            else {
+              $output = FALSE;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    return $output;
+  }
 
   /**
    *
@@ -494,15 +533,19 @@ class DashpageContentGenerator extends ControllerBase {
 
       $previous_entitys = \Drupal::getContainer()
         ->get('baseinfo.querynode.service')
-        ->queryDayNodesByCodeByDateGreater($code_tid, $start_date = '2018-07-08', $end_date = '2018-07-13');
+        ->queryDayNodesByCodeByDateRange($code_tid, $start_date, $end_date);
 
       if ($previous_entitys) {
-        $today_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($today_entity, 'field_day_volume');
+        $today_volume = \Drupal::getContainer()
+          ->get('flexinfo.field.service')
+          ->getFieldFirstValue($today_entity, 'field_day_volume');
 
         if ($today_volume) {
 
           foreach ($previous_entitys as $key => $row_entity) {
-            $row_volume = \Drupal::getContainer()->get('flexinfo.field.service')->getFieldFirstValue($row_entity, 'field_day_volume');
+            $row_volume = \Drupal::getContainer()
+              ->get('flexinfo.field.service')
+              ->getFieldFirstValue($row_entity, 'field_day_volume');
 
             if ($today_volume > $row_volume) {
               $output = TRUE;

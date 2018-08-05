@@ -46,8 +46,8 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
   /**
    *
    */
-  public function queryDayNodesByCodeByDate($code_tid = NULL, $date = NULL) {
-    $nids = $this->queryDayNidsByCodeByDate($code_tid, $date);
+  public function queryDayNodesByCodeByDate($code_tid = NULL, $date = NULL, $operator = NULL) {
+    $nids = $this->queryDayNidsByCodeByDate($code_tid, $date, $operator);
     $nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($nids);
 
     return $nodes;
@@ -56,7 +56,7 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
   /**
    *
    */
-  public function queryDayNidsByCodeByDate($code_tid = NULL, $date = NULL) {
+  public function queryDayNidsByCodeByDate($code_tid = NULL, $date = NULL, $operator = NULL)) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');
 
@@ -66,7 +66,7 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
     }
 
     if ($date) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $date);
+      $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $date, $operator);
       $query->condition($group);
     }
 
@@ -78,8 +78,8 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
   /**
    * @param $code_tid is tid, not code name like 600117
    */
-  public function queryDayNodesByCodeByDateGreater($code_tid = NULL, $date = NULL) {
-    $nids = $this->queryDayNidsByCodeByDateGreater($code_tid, $date);
+  public function queryDayNodesByCodeByDateRange($code_tid = NULL, $date = NULL) {
+    $nids = $this->queryDayNidsByCodeByDateRange($code_tid, $date);
     $nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($nids);
 
     return $nodes;
@@ -88,7 +88,7 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
   /**
    *
    */
-  public function queryDayNidsByCodeByDateGreater($code_tid = NULL, $start_date = NULL, $end_date = NULL) {
+  public function queryDayNidsByCodeByDateRange($code_tid = NULL, $start_date = NULL, $end_date = NULL) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
     $query = $query_container->queryNidsByBundle('day');
 

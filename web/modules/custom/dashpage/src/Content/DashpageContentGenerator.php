@@ -218,7 +218,7 @@ class DashpageContentGenerator extends ControllerBase {
         ->queryDayNidsByCodeByDate($code_tid, $today_date);
 
       if ($nids) {
-        $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid);
+        $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid, $start_date = '2018-07-08', $end_date = '2018-07-13');
 
         if ($checkPreviousDayResult) {
           $tids_array[] = $code_tid;
@@ -457,7 +457,7 @@ class DashpageContentGenerator extends ControllerBase {
         ->queryDayNidsByCodeByDate($code_tid, $today_date);
 
       if ($nids) {
-        $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid);
+        $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid, $start_date = '2018-07-08', $end_date = '2018-07-13');
 
         if ($checkPreviousDayResult) {
           $tids_array[] = $code_tid;
@@ -485,7 +485,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function checkPreviousDay($nid, $code_tid) {
+  public function checkPreviousDay($nid, $code_tid, $start_date = NULL, $end_date = NULL) {
     $output = FALSE;
 
     $today_entity = \Drupal::entityTypeManager()->getStorage('node')->load($nid);

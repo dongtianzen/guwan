@@ -216,8 +216,6 @@ class DashpageContentGenerator extends ControllerBase {
 
       if ($checkPreviousDayResult) {
         $tids_array[] = $code_tid;
-
-
       }
     }
 

@@ -177,7 +177,9 @@ class DashpageContentGenerator extends ControllerBase {
       $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
-      $day_nids = $this->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
+      $day_nids = \Drupal::getContainer()
+        ->get('baseinfo.querynode.service')
+        ->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
 
       if ($day_nids) {
         $fenbu = $this->queryCountPercentageByNode($day_nids);
@@ -209,7 +211,9 @@ class DashpageContentGenerator extends ControllerBase {
    */
   public function getDayPercentChangeByCodeByDay($code_tid = 3610, $query_date = NULL) {
     $output = NULL;
-    $nids = $this->queryDayNidsByCodeByDate($code_tid = 3610, $query_date);
+    $nids = \Drupal::getContainer()
+      ->get('baseinfo.querynode.service')
+      ->queryDayNidsByCodeByDate($code_tid = 3610, $query_date);
 
     if ($nids) {
       $node = \Drupal::entityManager()->getStorage('node')->load($nids[0]);
@@ -238,7 +242,9 @@ class DashpageContentGenerator extends ControllerBase {
       $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
-      $day_nids = $this->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
+      $day_nids = \Drupal::getContainer()
+        ->get('baseinfo.querynode.service')
+        ->queryDayNidsByCodeByDate($code_tid = NULL, $query_date);
       if ($day_nids) {
         $day_nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($day_nids);
 
@@ -289,12 +295,12 @@ class DashpageContentGenerator extends ControllerBase {
   public function queryCountPercentageByNode($day_nids) {
     $output = array();
 
-    $fenbuRaw['z9'] = count($this->queryNidsByNidsByFieldValue($day_nids, 9, '>'));
-    $fenbuRaw['z5'] = count($this->queryNidsByNidsByFieldValue($day_nids, 5, '>'));
-    $fenbuRaw['z0'] = count($this->queryNidsByNidsByFieldValue($day_nids, 0.000001, '>'));
-    $fenbuRaw['f0'] = count($this->queryNidsByNidsByFieldValue($day_nids, '-5', '>'));
-    $fenbuRaw['f5'] = count($this->queryNidsByNidsByFieldValue($day_nids, '-9', '>'));
-    $fenbuRaw['f9'] = count($this->queryNidsByNidsByFieldValue($day_nids, '-11', '>'));
+    $fenbuRaw['z9'] = count(\Drupal::getContainer()->get('baseinfo.querynode.service')->queryDayNidsByNidsByFieldValue($day_nids, 'field_day_p_change', 9, '>'));
+    $fenbuRaw['z5'] = count(\Drupal::getContainer()->get('baseinfo.querynode.service')->queryDayNidsByNidsByFieldValue($day_nids, 'field_day_p_change', 5, '>'));
+    $fenbuRaw['z0'] = count(\Drupal::getContainer()->get('baseinfo.querynode.service')->queryDayNidsByNidsByFieldValue($day_nids, 'field_day_p_change', 0.000001, '>'));
+    $fenbuRaw['f0'] = count(\Drupal::getContainer()->get('baseinfo.querynode.service')->queryDayNidsByNidsByFieldValue($day_nids, 'field_day_p_change', '-5', '>'));
+    $fenbuRaw['f5'] = count(\Drupal::getContainer()->get('baseinfo.querynode.service')->queryDayNidsByNidsByFieldValue($day_nids, 'field_day_p_change', '-9', '>'));
+    $fenbuRaw['f9'] = count(\Drupal::getContainer()->get('baseinfo.querynode.service')->queryDayNidsByNidsByFieldValue($day_nids, 'field_day_p_change', '-11', '>'));
 
     if ($day_nids) {
       $output['p9>'] = $fenbuRaw['z9'];
@@ -364,7 +370,9 @@ class DashpageContentGenerator extends ControllerBase {
 
     $tids_array = [];
     foreach ($code_tids as $key => $code_tid) {
-      $nids = $this->queryDayNidsByCodeByDate($code_tid, $today_date);
+      $nids = \Drupal::getContainer()
+        ->get('baseinfo.querynode.service')
+        ->queryDayNidsByCodeByDate($code_tid, $today_date);
 
       if ($nids) {
         $checkPreviousDayResult = $this->checkPreviousDay($nids[0], $code_tid);
@@ -389,50 +397,6 @@ class DashpageContentGenerator extends ControllerBase {
     }
 
     return $output;
-  }
-
-  /**
-   *
-   */
-  public function queryDayNidsByCodeByDate($code_tid = NULL, $date = NULL) {
-    $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
-    $query = $query_container->queryNidsByBundle('day');
-
-    if ($code_tid) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_day_code', $code_tid);
-      $query->condition($group);
-    }
-
-    if ($date) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $date);
-      $query->condition($group);
-    }
-
-    $nids = $query_container->runQueryWithGroup($query);
-
-    return $nids;
-  }
-
-  /**
-   *
-   */
-  public function queryNidsByNidsByFieldValue($nids = NULL, $value = NULL, $operator = NULL) {
-    $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
-    $query = $query_container->queryNidsByBundle('day');
-
-    if ($nids) {
-      $group = $query_container->groupStandardByFieldValue($query, 'nid', $nids, 'IN');
-      $query->condition($group);
-    }
-
-    if ($value) {
-      $group = $query_container->groupStandardByFieldValue($query, 'field_day_p_change', $value, $operator);
-      $query->condition($group);
-    }
-
-    $nids = $query_container->runQueryWithGroup($query);
-
-    return $nids;
   }
 
   /**

@@ -111,10 +111,13 @@ class DashpageContentGenerator extends ControllerBase {
       $output .= '<thead>';
         $output .= '<tr>';
           $output .= '<th>';
-            $output .= 'Name';
+            $output .= 'Num';
           $output .= '</th>';
           $output .= '<th>';
             $output .= 'Code';
+          $output .= '</th>';
+          $output .= '<th>';
+            $output .= 'Name';
           $output .= '</th>';
           foreach ($thead as $key => $value) {
             $output .= '<th>';
@@ -213,16 +216,20 @@ class DashpageContentGenerator extends ControllerBase {
 
     $tids_array = [];
     foreach ($day_nodes as $key => $day_node) {
-      $checkPreviousDayResult = $this->comparePriceRatio($day_node, 0.9, 1.1);
+      $checkPreviousDayResult = $this->comparePriceRatio($day_node, 90, 110);
 
       if ($checkPreviousDayResult) {
-        $tids_array[] = $day_node->getFieldFirstTargetId($day_node, 'field_day_code');
+        $tids_array[] = \Drupal::getContainer()
+          ->get('flexinfo.field.service')
+          ->getFieldFirstTargetId($day_node, 'field_day_code');
       }
     }
 
     $num = 1;
     if ($tids_array) {
-      $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids_array);
+      $terms = \Drupal::entityTypeManager()
+        ->getStorage('taxonomy_term')
+        ->loadMultiple($tids_array);
 
       foreach ($terms as $key => $term) {
         $output .= '<tr>';
@@ -230,10 +237,12 @@ class DashpageContentGenerator extends ControllerBase {
             $output .= $num;
           $output .= '</td>';
           $output .= '<td>';
-            $output .= $code_tid;
+            $output .= $term->getName();
           $output .= '</td>';
           $output .= '<td>';
-            $output .= $term->getName();;
+            $output .= \Drupal::getContainer()
+              ->get('flexinfo.field.service')
+              ->getFieldFirstValue($term, 'field_code_name');
           $output .= '</td>';
         $output .= '</tr>';
 
@@ -486,7 +495,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function comparePriceRatio($entity, $min = 0.9, $max = 1.1) {
+  public function comparePriceRatio($entity, $min = 90, $max = 110) {
     $output = FALSE;
 
     if ($entity) {

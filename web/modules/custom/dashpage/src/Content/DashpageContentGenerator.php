@@ -87,7 +87,7 @@ class DashpageContentGenerator extends ControllerBase {
     $output .= '<div class="row margin-0">';
       $output .= '<div id="standard-volume-ratio-page-wrapper">';
         $output .= '<div id="map-canvas">';
-          $output .= 'Volume Ratio Table';
+          $output .= 'Volume Ratio Table Date';
           $output .= '<br />';
           $output .= $this->getVolumeRatioContent($section);
         $output .= '</div>';
@@ -101,15 +101,15 @@ class DashpageContentGenerator extends ControllerBase {
    *
    */
   public function getVolumeRatioContent($section) {
-    $thead = range(0, 8);
+    $thead = [
+      'Price 5 / Price10',
+      'Price 5 / Price20',
+    ];
 
     $output = '';
     $output .= '<table class="table table-striped">';
       $output .= '<thead>';
         $output .= '<tr>';
-          $output .= '<th>';
-            $output .= 'Date';
-          $output .= '</th>';
           $output .= '<th>';
             $output .= 'Name';
           $output .= '</th>';

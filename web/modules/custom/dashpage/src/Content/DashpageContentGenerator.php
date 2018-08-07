@@ -208,7 +208,7 @@ class DashpageContentGenerator extends ControllerBase {
   public function getVolumeRatioTbodyRow($section) {
     $output = '';
 
-    $query_date = '2018-07-27';
+    $query_date = '2018-08-06';
 
     $day_nodes = \Drupal::getContainer()
       ->get('baseinfo.querynode.service')
@@ -216,12 +216,16 @@ class DashpageContentGenerator extends ControllerBase {
 
     $tids_array = [];
     foreach ($day_nodes as $key => $day_node) {
-      $checkPreviousDayResult = $this->comparePriceRatio($day_node, 90, 110);
+      $checkPriceRation = $this->comparePriceRatio($day_node, 97, 100);
 
-      if ($checkPreviousDayResult) {
-        $tids_array[] = \Drupal::getContainer()
-          ->get('flexinfo.field.service')
-          ->getFieldFirstTargetId($day_node, 'field_day_code');
+      if ($checkPriceRation) {
+
+        $checkVolumeRation = $this->compareVolumeRatio($day_node, 97, 100);
+        if ($checkVolumeRation) {
+          $tids_array[] = \Drupal::getContainer()
+            ->get('flexinfo.field.service')
+            ->getFieldFirstTargetId($day_node, 'field_day_code');
+        }
       }
     }
 
@@ -508,12 +512,45 @@ class DashpageContentGenerator extends ControllerBase {
         ->getFieldFirstValue($entity, 'field_day_ma10');
 
       if ($price_ma10) {
-        $ratio = \Drupal::getContainer()
+        $price_ratio = \Drupal::getContainer()
           ->get('flexinfo.calc.service')
           ->getPercentage($price_ma5, $price_ma10);
 
-        if ($min < $ratio && $ratio < $max) {
+        if ($min < $price_ratio && $price_ratio < $max) {
           $output = TRUE;
+        }
+        else {
+        }
+      }
+    }
+
+    return $output;
+  }
+
+  /**
+   *
+   */
+  public function compareVolumeRatio($entity, $min = 90, $max = 110) {
+    $output = FALSE;
+
+    if ($entity) {
+      $volume_ma5 = \Drupal::getContainer()
+        ->get('flexinfo.field.service')
+        ->getFieldFirstValue($entity, 'field_day_v_ma5');
+
+      $volume_ma10 = \Drupal::getContainer()
+        ->get('flexinfo.field.service')
+        ->getFieldFirstValue($entity, 'field_day_v_ma10');
+
+      if ($volume_ma10) {
+        $volume_ratio = \Drupal::getContainer()
+          ->get('flexinfo.calc.service')
+          ->getPercentage($volume_ma5, $volume_ma10);
+
+        if ($min < $volume_ratio && $volume_ratio < $max) {
+          $output = TRUE;
+        }
+        else {
         }
       }
     }

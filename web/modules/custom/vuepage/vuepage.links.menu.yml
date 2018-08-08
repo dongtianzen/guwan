@@ -1,0 +1,5 @@
+vuepage.game.list.menu:
+  title: 'Game List'
+  route_name: vuepage.game.list
+  menu_name: main
+  weight: 30

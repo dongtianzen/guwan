@@ -1,0 +1,109 @@
+#
+vue:
+  remote: https://github.com/vuejs/vue
+  version: 2.5.16
+  license:
+    name: MIT
+    gpl-compatible: true
+  js:
+    /libraries/node_modules/vue/dist/vue.min.js: {}
+
+#
+axios:
+  remote: https://github.com/axios/axios
+  version: 0.15.3
+  license:
+    name: MIT
+    gpl-compatible: true
+  js:
+    /libraries/node_modules/axios/dist/axios.min.js: {}
+
+#
+bootstrap:
+  remote: https://getbootstrap.com/
+  version: bootstrap-4.1.3
+  license:
+    name: MIT
+    gpl-compatible: true
+  css:
+    theme:
+      /libraries/node_modules/bootstrap/dist/bootstrap.min.css: {}
+
+#
+babel-polyfill:
+  remote: https://babeljs.io/docs/en/babel-polyfill/
+  version: 6.0
+  license:
+    name: MIT
+    gpl-compatible: true
+  js:
+    /libraries/node_modules/babel-polyfill/dist/polyfill.min.js: {}
+
+#
+bootstrap-vue:
+  remote: https://www.npmjs.com/package/bootstrap-vue
+  version: 2.0.0-rc.11
+  license:
+    name: MIT
+    gpl-compatible: true
+  css:
+    theme:
+      /libraries/node_modules/bootstrap-vue/dist/bootstrap-vue.css: {}
+  js:
+    /libraries/node_modules/bootstrap-vue/dist/bootstrap-vue.js: {}
+
+#
+chart.js:
+  version: 2.7.2
+  license:
+    name: MIT
+    gpl-compatible: true
+  js:
+    /libraries/node_modules/chart.js/dist/chart.min.js: {}
+
+#
+vue-chartjs:
+  version: 3.4.0
+  license:
+    name: MIT
+    gpl-compatible: true
+  js:
+    /libraries/node_modules/vue-chartjs/dist/vue-chartjs.min.js: {}
+
+#
+vue_report:
+  css:
+    theme:
+      css/vue_report.css: {}
+  js:
+    vue/vue_report.js: {}
+
+#
+vue_game_list:
+  css:
+    theme:
+      css/vue_game_list.css: {}
+  js:
+    vue/vue_game_list.js: {}
+
+# @todo vuetable-2 custom controller
+vue_table_js:
+  css:
+    theme:
+      css/vue_table_controller.css: {}
+  js:
+    vue/vue_table_controller.js: {}
+
+#
+vuetable-2:
+  remote: https://github.com/ratiw/vuetable-2
+  version: 1.7.5
+  license:
+    name: MIT
+    gpl-compatible: true
+  css:
+    theme:
+      /libraries/node_modules/vuetable-2/dist/vuetable-2.css: {}
+  js:
+    /libraries/node_modules/vuetable-2/dist/vuetable-2.js: {}
+

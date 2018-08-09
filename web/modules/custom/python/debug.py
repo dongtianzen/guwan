@@ -7,8 +7,10 @@ python3 web/modules/custom/python/debug.py
 
 import socket
 
-ipAddress = socket.gethostbyname(socket.gethostname())
-print(ipAddress)
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+print(s.getsockname()[0])
+s.close()
 
 exit()
 

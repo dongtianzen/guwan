@@ -35,6 +35,7 @@ class FlexJsonBasic:
   #
   def getTermCodeListFromViewsJsonUrlPath(self, pageNum = 1):
     urlPath = ("http://localhost:8888/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json")
+    urlPath = ("54.183.85.173/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json")
 
     return urlPath
 

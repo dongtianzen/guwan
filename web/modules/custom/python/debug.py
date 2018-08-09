@@ -5,15 +5,6 @@ python3 web/modules/custom/python/debug.py
 """
 
 
-import socket
-
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-print(s.getsockname()[0])
-s.close()
-
-exit()
-
 import pandas as pd
 
 import tushare as ts
@@ -38,4 +29,16 @@ print(histData)
 #
 cc = ts.get_k_data('399300', index=True, start='2018-07-10', end='2018-07-17')
 print(cc )
+exit()
+
+
+
+
+import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+print(s.getsockname()[0])
+s.close()
+
 exit()

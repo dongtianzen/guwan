@@ -83,13 +83,15 @@ class DashpageContentGenerator extends ControllerBase {
    *
    */
   public function standardVolumeRatioPage($section) {
+    $query_date = '2018-08-06';
+
     $output = '';
     $output .= '<div class="row margin-0">';
       $output .= '<div id="standard-volume-ratio-page-wrapper">';
         $output .= '<div id="map-canvas">';
-          $output .= 'Volume Ratio Table Date';
+          $output .= 'Volume Ratio Table Date - ' . $query_date;
           $output .= '<br />';
-          $output .= $this->getVolumeRatioContent($section);
+          $output .= $this->getVolumeRatioContent($section, $query_date);
         $output .= '</div>';
       $output .= '</div>';
     $output .= '</div>';
@@ -100,7 +102,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getVolumeRatioContent($section) {
+  public function getVolumeRatioContent($section, $query_date = '2018-08-06') {
     $thead = [
       'Price 5 / Price10',
       'Price 5 / Price20',
@@ -119,15 +121,15 @@ class DashpageContentGenerator extends ControllerBase {
           $output .= '<th>';
             $output .= 'Name';
           $output .= '</th>';
-          foreach ($thead as $key => $value) {
-            $output .= '<th>';
-              $output .= $value;
-            $output .= '</th>';
-          }
+          // foreach ($thead as $key => $value) {
+          //   $output .= '<th>';
+          //     $output .= $value;
+          //   $output .= '</th>';
+          // }
         $output .= '</tr>';
       $output .= '</thead>';
       $output .= '<tbody>';
-        $output .= $this->getVolumeRatioTbodyRow($section);
+        $output .= $this->getVolumeRatioTbodyRow($section, $query_date);
       $output .= '</tbody>';
     $output .= '</table>';
 
@@ -205,10 +207,8 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getVolumeRatioTbodyRow($section) {
+  public function getVolumeRatioTbodyRow($section, $query_date = '2018-08-06') {
     $output = '';
-
-    $query_date = '2018-08-06';
 
     $day_nodes = \Drupal::getContainer()
       ->get('baseinfo.querynode.service')

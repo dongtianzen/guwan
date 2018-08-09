@@ -4,9 +4,6 @@ python3 web/modules/custom/python/debug.py
 
 """
 
-import pandas as pd
-
-import tushare as ts
 
 import socket
 
@@ -14,6 +11,10 @@ ipAddress = socket.gethostbyname(socket.gethostname())
 print(ipAddress)
 
 exit()
+
+import pandas as pd
+
+import tushare as ts
 
 histData = ts.get_hist_data(code = 'hs300', start = '2017-07-20')
 

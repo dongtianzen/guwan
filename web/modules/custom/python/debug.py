@@ -8,6 +8,12 @@ import pandas as pd
 
 import tushare as ts
 
+import socket
+
+ipAddress = socket.gethostbyname(socket.gethostname())
+print(ipAddress)
+
+exit()
 
 histData = ts.get_hist_data(code = 'hs300', start = '2017-07-20')
 

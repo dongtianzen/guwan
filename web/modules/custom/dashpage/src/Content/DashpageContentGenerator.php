@@ -80,18 +80,16 @@ class DashpageContentGenerator extends ControllerBase {
   }
 
   /**
-   *
+   * @param $query_date like '2018-08-06';
    */
-  public function standardVolumeRatioPage($section) {
-    $query_date = '2018-08-06';
-
+  public function standardVolumeRatioPage($query_date) {
     $output = '';
     $output .= '<div class="row margin-0">';
       $output .= '<div id="standard-volume-ratio-page-wrapper">';
         $output .= '<div id="map-canvas">';
           $output .= 'Volume Ratio Table Date - ' . $query_date;
           $output .= '<br />';
-          $output .= $this->getVolumeRatioContent($section, $query_date);
+          $output .= $this->getVolumeRatioContent($query_date);
         $output .= '</div>';
       $output .= '</div>';
     $output .= '</div>';
@@ -102,7 +100,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getVolumeRatioContent($section, $query_date = '2018-08-06') {
+  public function getVolumeRatioContent($query_date = '2018-08-06') {
     $thead = [
       'Price 5 / Price10',
       'Price 5 / Price20',
@@ -129,7 +127,7 @@ class DashpageContentGenerator extends ControllerBase {
         $output .= '</tr>';
       $output .= '</thead>';
       $output .= '<tbody>';
-        $output .= $this->getVolumeRatioTbodyRow($section, $query_date);
+        $output .= $this->getVolumeRatioTbodyRow($query_date);
       $output .= '</tbody>';
     $output .= '</table>';
 
@@ -207,7 +205,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getVolumeRatioTbodyRow($section, $query_date = '2018-08-06') {
+  public function getVolumeRatioTbodyRow($query_date = '2018-08-06') {
     $output = '';
 
     $day_nodes = \Drupal::getContainer()

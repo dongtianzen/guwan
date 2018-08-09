@@ -53,7 +53,7 @@ class FlexJsonBasic:
 
   #
   def getGenerateJsonFilePath(self, fileName):
-    # 运行文件从command line
+    # 运行文件从server or local command line, 在当前Repository下
     pathDir  = 'web/sites/default/files/json/tushare/'
     pathDirObject = Path(pathDir)
 
@@ -68,6 +68,15 @@ class FlexJsonBasic:
 
     if pathDirObject.is_dir():
       print('path is run from PHP')
+      filePath = pathDir + fileName
+      return filePath
+
+    # 运行文件从Server Cron command，所以要服务器上的绝对路径
+    pathDir = '/var/www/html/agu/web/sites/default/files/json/tushare/'
+    pathDirObject = Path(pathDir)
+
+    if pathDirObject.is_dir():
+      print('is exist from Ubuntu Server')
       filePath = pathDir + fileName
       return filePath
 

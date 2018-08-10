@@ -57,6 +57,8 @@ web/sites/default/settings.php
 web/sites/default/files/*
 !web/sites/default/files/gitsync/
 
+web/modules/custom/python/baseSiteClass.py
+
 # Pantheon commits a settings.php for environment-specific settings.
 # Place local settings in settings.local.php
 web/sites/*/settings.local.php

@@ -8,6 +8,9 @@ import urllib.request
 
 from pathlib import Path
 
+from BaseSiteClass import Baseinfo
+
+
 #%%
 # define a class
 class FlexJsonBasic:
@@ -31,14 +34,12 @@ class FlexJsonBasic:
 
     return fullCodeList
 
-
   #
   def getTermCodeListFromViewsJsonUrlPath(self, pageNum = 1):
     urlPath = ("http://localhost:8888/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json")
-    urlPath = ("54.183.85.173/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json")
+    urlPath = Baseinfo().getServerUrl() + "/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
 
     return urlPath
-
 
   # use pandas.DataFrame.to_json 生成Json格式的文件
   # @param jsonData is require as <class 'pandas.core.frame.DataFrame'>

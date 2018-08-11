@@ -5,7 +5,7 @@ batchinfo.importJson.guide:
     _controller: '\Drupal\batchinfo\Controller\BatchinfoController::guideImportJson'
     _title: 'Batchinfo Guide Import Json'
   requirements:
-    _permission: 'access content'
+    _permission: 'access site reports'
 
 batchinfo.importJson.run:
   path: '/batchinfo/importjson/run'
@@ -13,7 +13,7 @@ batchinfo.importJson.run:
     _controller: '\Drupal\batchinfo\Controller\BatchinfoController::runImportJson'
     _title: 'Batchinfo Run Import Json'
   requirements:
-    _permission: 'access content'
+    _permission: 'access site reports'
 
 batchinfo.createTerm.run:
   path: '/batchinfo/createterm/run'
@@ -21,4 +21,4 @@ batchinfo.createTerm.run:
     _controller: '\Drupal\batchinfo\Controller\BatchinfoController::runCreateTerm'
     _title: 'Batchinfo Run Create Term'
   requirements:
-    _permission: 'access content'
+    _permission: 'access site reports'

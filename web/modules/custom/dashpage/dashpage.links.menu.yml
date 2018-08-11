@@ -3,3 +3,9 @@ dashpage.rank.page.menu:
   route_name: dashpage.rank.page
   route_parameters: { section: 'page' }
   menu_name: main
+
+dashpage.volumeratio.page.menu:
+  title: 'Volume Ratio'
+  route_name: dashpage.volumeratio.page
+  route_parameters: { section: '2018-08-10' }
+  menu_name: main

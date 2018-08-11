@@ -5,7 +5,7 @@ dashpage.rank.page:
     _controller: '\Drupal\dashpage\Controller\DashpageController::standardRankPage'
     _title: 'Rank Page'
   requirements:
-    _permission: 'access content'
+    _permission: 'access site reports'
 
 # modal
 dashpage.trend.page:
@@ -14,7 +14,7 @@ dashpage.trend.page:
     _controller: '\Drupal\dashpage\Controller\DashpageController::standardTrendPage'
     _title: 'Trend Page'
   requirements:
-    _permission: 'access content'
+    _permission: 'access site reports'
 
 # modal
 dashpage.query.page:
@@ -23,7 +23,7 @@ dashpage.query.page:
     _controller: '\Drupal\dashpage\Controller\DashpageController::standardQueryPage'
     _title: 'Query Page'
   requirements:
-    _permission: 'access content'
+    _permission: 'access site reports'
 
 # modal
 dashpage.volumeratio.page:

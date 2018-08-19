@@ -1,3 +1,9 @@
 /**
  * Place your custom styles here.
  */
+
+/* Disable Edit term page Relations section */
+
+.taxonomy-term-form #edit-relations {
+  display: none;
+}

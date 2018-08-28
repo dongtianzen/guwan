@@ -37,11 +37,16 @@ class FlexJsonBasic:
 
   #
   def getTermCodeListFromViewsJsonUrlPath(self, pageNum = 1):
-    urlPath = "http://localhost:8888/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
-    if self.checkUrlExists(urlPath):
-      return urlPath
+    # 服务器上的绝对路径
+    pathDir = '/var/www/html/agu/web/sites/default/files/json/tushare/'
+    pathDirObject = Path(pathDir)
 
-    urlPath = Baseinfo().getServerUrl() + "/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
+    if pathDirObject.is_dir():
+      urlPath = Baseinfo().getServerUrl() + "/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
+      if self.checkUrlExists(urlPath):
+        return urlPath
+
+    urlPath = "http://localhost:8888/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
     if self.checkUrlExists(urlPath):
       return urlPath
 

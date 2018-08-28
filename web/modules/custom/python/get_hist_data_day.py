@@ -54,7 +54,7 @@ class RunGetHistData:
 
 # startDate is today('2018-06-23') 减去 想开始的日期个数
 
-startDate = str(date.today() - timedelta(5))
+startDate = str(date.today() - timedelta(6))
 endDate   = str(date.today() - timedelta(0))
 # endDate   = None
 

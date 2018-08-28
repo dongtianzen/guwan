@@ -5,6 +5,7 @@
 """
 import json
 import urllib.request
+import requests
 
 from pathlib import Path
 
@@ -36,10 +37,21 @@ class FlexJsonBasic:
 
   #
   def getTermCodeListFromViewsJsonUrlPath(self, pageNum = 1):
-    urlPath = ("http://localhost:8888/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json")
-    # urlPath = Baseinfo().getServerUrl() + "/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
+    urlPath = "http://localhost:8888/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
+    if self.checkUrlExists(urlPath):
+      return urlPath
+
+    urlPath = Baseinfo().getServerUrl() + "/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
+    if self.checkUrlExists(urlPath):
+      return urlPath
 
     return urlPath
+
+  #
+  def checkUrlExists(self, path):
+    r = requests.head(path)
+    return r.status_code == requests.codes.ok
+
 
   # use pandas.DataFrame.to_json 生成Json格式的文件
   # @param jsonData is require as <class 'pandas.core.frame.DataFrame'>

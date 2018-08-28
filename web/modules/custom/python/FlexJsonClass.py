@@ -43,6 +43,7 @@ class FlexJsonBasic:
 
     if pathDirObject.is_dir():
       urlPath = Baseinfo().getServerUrl() + "/agu/web/views/json/debug-term-code-table?page=" + str(pageNum) + "&_format=json"
+      print(urlPath)
       if self.checkUrlExists(urlPath):
         return urlPath
 

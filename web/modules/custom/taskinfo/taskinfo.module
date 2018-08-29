@@ -11,14 +11,19 @@ use Drupal\batchinfo\Content\SyncJsonToNode;
  * @see Drupal\taskinfo\Plugin\QueueWorker\EntityCreateDayQueue
  */
 function taskinfo_cron() {
-  $code_tids = \Drupal::getContainer()
-    ->get('flexinfo.term.service')
-    ->getTidsFromVidName($vid = 'code');
+
+  // run create JSON
+  if (date('G') == 5 && date('i') == 10) {
+    _taskinfo_run_batch_create_node_with_piece_json();
+  }
+
+  // $code_tids = \Drupal::getContainer()
+  //   ->get('flexinfo.term.service')
+  //   ->getTidsFromVidName($vid = 'code');
 
 
   // _taskinfo_run_python_code();
   // _taskinfo_run_batch_create_node();
-  // _taskinfo_run_batch_create_node_with_piece_json();
 
   // $queue = \Drupal::queue('entity_create_day_queue', TRUE);
   // $queue->createItem($code_tids);

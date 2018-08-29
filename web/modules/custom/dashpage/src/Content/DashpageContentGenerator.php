@@ -83,13 +83,17 @@ class DashpageContentGenerator extends ControllerBase {
    * @param $query_date like '2018-08-06';
    */
   public function standardVolumeRatioPage($query_date) {
+    $day_nodes = \Drupal::getContainer()
+      ->get('baseinfo.querynode.service')
+      ->queryDayNodesByCodeByDate($code_tid = NULL, $query_date);
+
     $output = '';
     $output .= '<div class="row margin-0">';
       $output .= '<div id="standard-volume-ratio-page-wrapper">';
         $output .= '<div id="map-canvas">';
-          $output .= 'Volume Ratio Table Date - ' . $query_date;
+          $output .= 'Volume Ratio Table Date - ' . $query_date . ' Total - ' . count($day_nodes);
           $output .= '<br />';
-          $output .= $this->getVolumeRatioContent($query_date);
+          $output .= $this->getVolumeRatioContent($day_nodes);
         $output .= '</div>';
       $output .= '</div>';
     $output .= '</div>';
@@ -100,12 +104,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getVolumeRatioContent($query_date = '2018-08-06') {
-    $thead = [
-      'Price 5 / Price10',
-      'Price 5 / Price20',
-    ];
-
+  public function getVolumeRatioContent($day_nodes) {
     $output = '';
     $output .= '<table class="table table-striped">';
       $output .= '<thead>';
@@ -119,15 +118,10 @@ class DashpageContentGenerator extends ControllerBase {
           $output .= '<th>';
             $output .= 'Name';
           $output .= '</th>';
-          // foreach ($thead as $key => $value) {
-          //   $output .= '<th>';
-          //     $output .= $value;
-          //   $output .= '</th>';
-          // }
         $output .= '</tr>';
       $output .= '</thead>';
       $output .= '<tbody>';
-        $output .= $this->getVolumeRatioTbodyRow($query_date);
+        $output .= $this->getVolumeRatioTbodyRow($day_nodes);
       $output .= '</tbody>';
     $output .= '</table>';
 
@@ -205,12 +199,8 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getVolumeRatioTbodyRow($query_date = '2018-08-06') {
+  public function getVolumeRatioTbodyRow($day_nodes) {
     $output = '';
-
-    $day_nodes = \Drupal::getContainer()
-      ->get('baseinfo.querynode.service')
-      ->queryDayNodesByCodeByDate($code_tid = NULL, $query_date);
 
     $tids_array = [];
     foreach ($day_nodes as $key => $day_node) {

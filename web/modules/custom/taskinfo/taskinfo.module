@@ -12,14 +12,15 @@ use Drupal\batchinfo\Content\SyncJsonToNode;
  */
 function taskinfo_cron() {
 
-  $message = 'run taskinfo_cron on ' . date('G');
+  $hour = date('G');
+  $message = 'run taskinfo_cron on ' . $hour . ' type - ' . gettype($hour);
   \Drupal::logger('taskinfo')->notice($message);
 
   // run create JSON
-  if (date('G') == 18) {
+  if (date('G') == '18') {
+    $message = 'run taskinfo_cron on again' . $hour;
     _taskinfo_run_batch_create_node_with_piece_json();
 
-    $message = 'run taskinfo_cron on ' . date('G');
     \Drupal::logger('taskinfo')->notice($message);
   }
 

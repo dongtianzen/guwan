@@ -18,7 +18,7 @@ function taskinfo_cron() {
 
   // run create JSON
   if (date('G') == '18') {
-    $message = 'run taskinfo_cron on again' . $hour;
+    $message = 'again taskinfo_cron on ' . $hour;
     _taskinfo_run_batch_create_node_with_piece_json();
 
     \Drupal::logger('taskinfo')->notice($message);

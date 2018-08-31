@@ -52,7 +52,7 @@ function _taskinfo_run_batch_create_node() {
   $SyncJsonToNode = new SyncJsonToNode();
   $json_content = $SyncJsonToNode->getImportJsonContent();
 
-  _taskinfo_run_batch_create_node_with_json($json_content);
+  _taskinfo_excute_create_nodes_by_json($json_content);
 }
 
 /**
@@ -62,13 +62,15 @@ function _taskinfo_run_batch_create_node_with_piece_json() {
   $SyncJsonToNode = new SyncJsonToNode();
   $json_content = $SyncJsonToNode->getAllPiecesJsonContent();
 
-  _taskinfo_run_batch_create_node_with_json($json_content);
+  _taskinfo_excute_create_nodes_by_json($json_content);
 }
 
 /**
  * @see hook_cron().
  */
 function _taskinfo_excute_create_nodes_by_json($json_content) {
+  $SyncJsonToNode = new SyncJsonToNode();
+
   $every_time_excute_max_number = 2;
   $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
 
@@ -78,6 +80,6 @@ function _taskinfo_excute_create_nodes_by_json($json_content) {
     }
 
     // sleep for 0.2 seconds
-    usleep(200000);
+    usleep(300000);
   }
 }

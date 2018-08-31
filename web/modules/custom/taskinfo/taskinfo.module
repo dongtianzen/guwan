@@ -11,14 +11,10 @@ use Drupal\batchinfo\Content\SyncJsonToNode;
  * @see Drupal\taskinfo\Plugin\QueueWorker\EntityCreateDayQueue
  */
 function taskinfo_cron() {
-
-  $hour = date('G');
-  $message = 'run taskinfo_cron on ' . $hour . ' type - ' . gettype($hour);
-  \Drupal::logger('taskinfo')->notice($message);
-
-  // run create JSON
-  if ($hour == '20') {
-    $message = 'again taskinfo_cron on ' . $hour;
+  $time_hour = date('G');
+  $time_minute = date('i');
+  if ($time_hour == '5' && $time_minute == '15') {
+    $message = 'again taskinfo_cron on ' . $time_hour;
     _taskinfo_run_batch_create_node_with_piece_json();
 
     \Drupal::logger('taskinfo')->notice($message);
@@ -56,17 +52,7 @@ function _taskinfo_run_batch_create_node() {
   $SyncJsonToNode = new SyncJsonToNode();
   $json_content = $SyncJsonToNode->getImportJsonContent();
 
-  $every_time_excute_max_number = 2;
-  $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
-
-  foreach ($chunk as $key => $row) {
-    foreach ($row as $subkey => $subrow) {
-      $SyncJsonToNode->runBatchinfoCreateNodeEntity($subkey, $subrow);
-    }
-
-    //sleep for 0.2 seconds
-    usleep(200000);
-  }
+  _taskinfo_run_batch_create_node_with_json($json_content);
 }
 
 /**
@@ -76,6 +62,13 @@ function _taskinfo_run_batch_create_node_with_piece_json() {
   $SyncJsonToNode = new SyncJsonToNode();
   $json_content = $SyncJsonToNode->getAllPiecesJsonContent();
 
+  _taskinfo_run_batch_create_node_with_json($json_content);
+}
+
+/**
+ * @see hook_cron().
+ */
+function _taskinfo_excute_create_nodes_by_json($json_content) {
   $every_time_excute_max_number = 2;
   $chunk = array_chunk($json_content, $every_time_excute_max_number, TRUE);
 
@@ -84,7 +77,7 @@ function _taskinfo_run_batch_create_node_with_piece_json() {
       $SyncJsonToNode->runBatchinfoCreateNodeEntity($subkey, $subrow);
     }
 
-    //sleep for 0.2 seconds
+    // sleep for 0.2 seconds
     usleep(200000);
   }
 }

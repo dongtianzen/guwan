@@ -13,10 +13,10 @@ use Drupal\batchinfo\Content\SyncJsonToNode;
 function taskinfo_cron() {
   $time_hour = date('G');
   $time_minute = date('i');
-  if ($time_hour == '5' && $time_minute == '15') {
-    $message = 'again taskinfo_cron on ' . $time_hour;
+  if ($time_hour == '5' && $time_minute > '14' && $time_minute < '25') {
     _taskinfo_run_batch_create_node_with_piece_json();
 
+    $message = '...Again taskinfo_cron on ' . $time_hour;
     \Drupal::logger('taskinfo')->notice($message);
   }
 

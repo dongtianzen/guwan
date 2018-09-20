@@ -199,9 +199,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getVolumeRatioTbodyRow($day_nodes) {
-    $output = '';
-
+  public function getTidsByCheckCondition($day_nodes) {
     $tids_array = [];
     foreach ($day_nodes as $key => $day_node) {
       $checkPriceRation = $this->comparePriceRatio($day_node, 97, 100);
@@ -216,6 +214,17 @@ class DashpageContentGenerator extends ControllerBase {
         }
       }
     }
+
+    return $tids_array;
+  }
+
+  /**
+   *
+   */
+  public function getVolumeRatioTbodyRow($day_nodes) {
+    $output = '';
+
+    $tids_array = $this->getTidsByCheckCondition($day_nodes);
 
     $num = 1;
     if ($tids_array) {

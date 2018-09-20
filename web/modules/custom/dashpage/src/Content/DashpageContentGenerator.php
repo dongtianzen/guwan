@@ -221,6 +221,20 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
+  public function compareMacd($day_nodes, $fastPeriod = 12, $slowPeriod = 9, $signalPeriod = 9) {
+  }
+
+  /**
+   *
+   */
+  public function calcMacd($close_price = array(), $fastPeriod = 12, $slowPeriod = 9, $signalPeriod = 9) {
+    $close = array(12.33,15.21,14.54);
+    $macd = trader_macd($close,15,30,9);
+  }
+
+  /**
+   *
+   */
   public function getVolumeRatioTbodyRow($day_nodes) {
     $output = '';
 

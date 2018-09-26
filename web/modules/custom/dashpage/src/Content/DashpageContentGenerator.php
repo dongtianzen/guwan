@@ -221,15 +221,25 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function compareMacd($day_nodes, $fastPeriod = 12, $slowPeriod = 9, $signalPeriod = 9) {
+  public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
+    $macd = $this->calcMacd($close_price = array(), $fastPeriod, $slowPeriod, $signalPeriod);
   }
 
   /**
-   *
+   * @param $close_price = array(12.33, 15.21, 14.54, .....) count($close_price) > 33;
+   * @return
+      index [0]: MACD values
+      index [1]: Signal values
+      index [2]: Divergence values
    */
-  public function calcMacd($close_price = array(), $fastPeriod = 12, $slowPeriod = 9, $signalPeriod = 9) {
-    $close = array(12.33,15.21,14.54);
-    $macd = trader_macd($close,15,30,9);
+  public function calcMacd($close_price = array(), $fastPeriod, $slowPeriod, $signalPeriod) {
+    $output = FALSE;
+
+    if ($close_price && count($close_price) > 33) {
+      $output = trader_macd($close_price, $fastPeriod, $slowPeriod, $signalPeriod);
+    }
+
+    return $output;
   }
 
   /**
@@ -239,6 +249,7 @@ class DashpageContentGenerator extends ControllerBase {
     $output = '';
 
     $tids_array = $this->getTidsByCheckCondition($day_nodes);
+    $tids_array = $this->compareMacd($tids_array);
 
     $num = 1;
     if ($tids_array) {
@@ -336,6 +347,9 @@ class DashpageContentGenerator extends ControllerBase {
     return $output;
   }
 
+  /**
+   *
+   */
   public function getTrendContentTbodyRow($section) {
     $output = '';
 

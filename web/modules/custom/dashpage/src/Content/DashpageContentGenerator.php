@@ -222,7 +222,18 @@ class DashpageContentGenerator extends ControllerBase {
    *
    */
   public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
-    $macd = $this->calcMacd($close_price = array(), $fastPeriod, $slowPeriod, $signalPeriod);
+    $output = array();
+
+    foreach ($tids_array as $key => $value) {
+      $close_price = $this->getClosePrice($tid, $end_date, $days);
+      $macd = $this->calcMacd($close_price = array(), $fastPeriod, $slowPeriod, $signalPeriod);
+
+      if ($macd[0] > 0) {
+
+      }
+    }
+
+    return $output;
   }
 
   /**

@@ -77,16 +77,18 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
 
   /**
    * @param $code_tid is tid, not code name like 600117
+   *        $start_date = '2018-07-08'
    */
-  public function queryDayNodesByCodeByDateRange($code_tid = NULL, $date = NULL) {
-    $nids = $this->queryDayNidsByCodeByDateRange($code_tid, $date);
+  public function queryDayNodesByCodeByDateRange($code_tid = NULL, $start_date = NULL, $end_date = NULL) {
+    $nids = $this->queryDayNidsByCodeByDateRange($code_tid, $start_date, $end_date);
     $nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($nids);
 
     return $nodes;
   }
 
   /**
-   *
+   * @param $code_tid is tid, not code name like 600117
+   *        $start_date = '2018-07-08'
    */
   public function queryDayNidsByCodeByDateRange($code_tid = NULL, $start_date = NULL, $end_date = NULL) {
     $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
@@ -95,13 +97,13 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
     $group = $query_container->groupStandardByFieldValue($query, 'field_day_code', $code_tid);
     $query->condition($group);
 
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', '2018-07-08', '>');
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $start_date, '>');
     $query->condition($group);
-    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', '2018-07-13', '<');
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $end_date, '<');
     $query->condition($group);
 
     $query->sort('field_day_date', 'DESC');
-    $query->range(0, 2);
+    // $query->range(0, 2);
     $nids = $query_container->runQueryWithGroup($query);
 
     return $nids;

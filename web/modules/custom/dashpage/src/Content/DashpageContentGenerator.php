@@ -225,11 +225,32 @@ class DashpageContentGenerator extends ControllerBase {
     $output = array();
 
     foreach ($tids_array as $key => $value) {
-      $close_price = $this->getClosePrice($tid, $end_date, $days);
-      $macd = $this->calcMacd($close_price = array(), $fastPeriod, $slowPeriod, $signalPeriod);
+      $close_price = $this->getClosePrice($tid, $end_date, $length);
+      $macd = $this->calcMacd($close_price, $fastPeriod, $slowPeriod, $signalPeriod);
 
       if ($macd[0] > 0) {
 
+      }
+    }
+
+    return $tids_array;
+  }
+
+  /**
+   * @return array
+   */
+  public function getClosePrices($tid = NULL, $end_date = NULL, $length = 34) {
+    $output = array();
+
+    $previous_entitys = \Drupal::getContainer()
+      ->get('baseinfo.querynode.service')
+      ->queryDayNodesByCodeByDateRange($tid, $start_date, $end_date);
+
+    if ($previous_entitys) {
+      foreach ($previous_entitys as $key => $row_entity) {
+        $output[] = \Drupal::getContainer()
+          ->get('flexinfo.field.service')
+          ->getFieldFirstValue($row_entity, 'field_day_close');
       }
     }
 
@@ -243,7 +264,7 @@ class DashpageContentGenerator extends ControllerBase {
       index [1]: Signal values
       index [2]: Divergence values
    */
-  public function calcMacd($close_price = array(), $fastPeriod, $slowPeriod, $signalPeriod) {
+  public function calcMacd($close_price = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
     $output = FALSE;
 
     if ($close_price && count($close_price) > 33) {

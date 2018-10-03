@@ -199,7 +199,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    *
    */
-  public function getTidsByCheckCondition($day_nodes) {
+  public function getTidsByCheckPriceRatio($day_nodes) {
     $tids_array = [];
     foreach ($day_nodes as $key => $day_node) {
       $checkPriceRation = $this->comparePriceRatio($day_node, 97, 100);
@@ -224,12 +224,25 @@ class DashpageContentGenerator extends ControllerBase {
   public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
     $output = array();
 
-    foreach ($tids_array as $tid) {
-      $close_price = $this->getClosePrice($tid, $end_date, $length);
-      $traderMacdValue = $this->getTraderMacdValue($close_price, $fastPeriod, $slowPeriod, $signalPeriod);
+    $current_timestamp = \Drupal::time()->getCurrentTime();
 
-      if ($traderMacdValue[2] <= 0.2) {
+    foreach ($tids_array as $tid) {
+
+      for ($i = 0; $i < 7; $i++) {
+        $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
+        $end_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
+
+        $close_price = $this->getClosePrice($tid, $end_date, $length = 42);
+        $traderMacdValue = $this->getTraderMacdValue($close_price, $fastPeriod, $slowPeriod, $signalPeriod);
+
+        if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.2) {
+        }
+        else {
+          break;
+        }
+
         $output[] = $tid;
+        }
       }
     }
 
@@ -239,7 +252,7 @@ class DashpageContentGenerator extends ControllerBase {
   /**
    * @return array
    */
-  public function getClosePrices($tid = NULL, $end_date = NULL, $length = 34) {
+  public function getClosePrice($tid = NULL, $end_date = NULL, $length = 34) {
     $output = array();
 
     $previous_entitys = \Drupal::getContainer()
@@ -280,7 +293,7 @@ class DashpageContentGenerator extends ControllerBase {
   public function getVolumeRatioTbodyRow($day_nodes) {
     $output = '';
 
-    $tids_array = $this->getTidsByCheckCondition($day_nodes);
+    $tids_array = $this->getTidsByCheckPriceRatio($day_nodes);
     $tids_array = $this->compareMacd($tids_array);
 
     $num = 1;

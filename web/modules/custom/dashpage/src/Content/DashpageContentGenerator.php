@@ -219,17 +219,17 @@ class DashpageContentGenerator extends ControllerBase {
   }
 
   /**
-   *
+   * 统计5~7个交易日macd dif（白线）数值 从小于macd（黄线）到趋近或重合macd（黄线）
    */
   public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
     $output = array();
 
-    foreach ($tids_array as $key => $value) {
+    foreach ($tids_array as $tid) {
       $close_price = $this->getClosePrice($tid, $end_date, $length);
-      $macd = $this->calcMacd($close_price, $fastPeriod, $slowPeriod, $signalPeriod);
+      $traderMacdValue = $this->getTraderMacdValue($close_price, $fastPeriod, $slowPeriod, $signalPeriod);
 
-      if ($macd[0] > 0) {
-
+      if ($traderMacdValue[2] <= 0.2) {
+        $output[] = $tid;
       }
     }
 
@@ -264,7 +264,7 @@ class DashpageContentGenerator extends ControllerBase {
       index [1]: Signal values
       index [2]: Divergence values
    */
-  public function calcMacd($close_price = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
+  public function getTraderMacdValue($close_price = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
     $output = FALSE;
 
     if ($close_price && count($close_price) > 33) {

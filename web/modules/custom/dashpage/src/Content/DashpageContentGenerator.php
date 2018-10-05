@@ -224,12 +224,9 @@ class DashpageContentGenerator extends ControllerBase {
   public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
     $output = array();
 
-    $current_timestamp = \Drupal::time()->getCurrentTime();
-
     foreach ($tids_array as $tid) {
-
       for ($i = 0; $i < 7; $i++) {
-        $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
+        $query_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
         $end_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
         $close_price = $this->getClosePrice($tid, $end_date, $length = 42);
@@ -255,17 +252,16 @@ class DashpageContentGenerator extends ControllerBase {
   public function getClosePrice($tid = NULL, $end_date = NULL, $length = 34) {
     $output = array();
 
+    $start_date_timestamp = \Drupal::time()->getCurrentTime() - ($length * 60 * 60 * 24);
+    $start_date = \Drupal::service('date.formatter')->format($start_date_timestamp, 'html_date');
+
     $previous_entitys = \Drupal::getContainer()
       ->get('baseinfo.querynode.service')
       ->queryDayNodesByCodeByDateRange($tid, $start_date, $end_date);
 
-    if ($previous_entitys) {
-      foreach ($previous_entitys as $key => $row_entity) {
-        $output[] = \Drupal::getContainer()
-          ->get('flexinfo.field.service')
-          ->getFieldFirstValue($row_entity, 'field_day_close');
-      }
-    }
+    $output = \Drupal::getContainer()
+      ->get('flexinfo.field.service')
+      ->getFieldFirstValueCollection($previous_entitys, 'field_day_close');
 
     return $output;
   }
@@ -338,9 +334,8 @@ class DashpageContentGenerator extends ControllerBase {
       }
     }
 
-    $current_timestamp = \Drupal::time()->getCurrentTime();
     for ($i = 0; $i < $max_day; $i++) {
-      $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
+      $query_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
       $day_nids = \Drupal::getContainer()
@@ -406,9 +401,8 @@ class DashpageContentGenerator extends ControllerBase {
       }
     }
 
-    $current_timestamp = \Drupal::time()->getCurrentTime();
     for ($i = 0; $i < $max_day; $i++) {
-      $query_timestamp = $current_timestamp - ($i * 60 * 60 * 24);
+      $query_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
       $query_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
       $day_nodes = \Drupal::getContainer()

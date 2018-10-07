@@ -226,24 +226,23 @@ class DashpageContentGenerator extends ControllerBase {
     $output = array();
 dpm($tids_array);
     foreach ($tids_array as $tid) {
-      for ($i = 0; $i < 7; $i++) {
-        $end_date_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
-        $end_date = \Drupal::service('date.formatter')->format($end_date_timestamp, 'html_date');
+      $end_date_timestamp = \Drupal::time()->getCurrentTime() - (60 * 60 * 24);
+      $end_date = \Drupal::service('date.formatter')->format($end_date_timestamp, 'html_date');
 
-        $close_prices = $this->getClosePriceByQueryRange($tid, $end_date, $range_num = 42);
-        dpm($close_prices);
-        $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
-        dpm($traderMacdValue);
+      $close_prices = $this->getClosePriceByQueryRange($tid, $end_date, $range_num = 42);
 
-        if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.1) {
+      $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
+      dpm($traderMacdValue);
 
-        }
-        else {
-          break;
+      if (isset($traderMacdValue[2]) && is_array(isset($traderMacdValue[2]))) {
+        foreach (isset($traderMacdValue[2]) as $row) {
+          if ($row <= 0.1) {
+            break;
+          }
+
+          $output[] = $tid;
         }
       }
-
-      $output[] = $tid;
     }
 
     return $output;

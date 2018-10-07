@@ -103,7 +103,6 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
     $query->condition($group);
 
     $query->sort('field_day_date', 'DESC');
-    // $query->range(0, 2);
     $nids = $query_container->runQueryWithGroup($query);
 
     return $nids;

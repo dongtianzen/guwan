@@ -222,7 +222,7 @@ class DashpageContentGenerator extends ControllerBase {
    * 统计5~7个交易日macd dif（白线）数值 从小于macd（黄线）到趋近或重合macd（黄线）
    * @param $start_date = '2018-07-08', $end_date = '2018-07-13'
    */
-  public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9, $dayLength = 42) {
+  public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9, $dayLength = 58) {
     $output = array();
 dpm($tids_array);
     foreach ($tids_array as $tid) {
@@ -230,15 +230,12 @@ dpm($tids_array);
         $end_date_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
         $end_date = \Drupal::service('date.formatter')->format($end_date_timestamp, 'html_date');
 
-        $start_date_timestamp = $end_date_timestamp - ($dayLength * 60 * 60 * 24);
-        $start_date = \Drupal::service('date.formatter')->format($start_date_timestamp, 'html_date');
-
-        $close_prices = $this->getClosePriceByDateRange($tid, $start_date, $end_date);
+        $close_prices = $this->getClosePriceByQueryRange($tid, $end_date, $range_num = 42);
         dpm($close_prices);
         $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
         dpm($traderMacdValue);
 
-        if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.8) {
+        if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.1) {
 
         }
         else {
@@ -256,10 +253,10 @@ dpm($tids_array);
    * @param $start_date = '2018-07-08', $end_date = '2018-07-13'
    * @return array
    */
-  public function getClosePriceByDateRange($tid = NULL, $start_date = NULL, $end_date = NULL) {
+  public function getClosePriceByQueryRange($tid = NULL, $end_date = NULL, $range_num = 42) {
     $previous_entitys = \Drupal::getContainer()
       ->get('baseinfo.querynode.service')
-      ->queryDayNodesByCodeByDateRange($tid, $start_date, $end_date);
+      ->queryDayNodesByCodeByQueryRange($tid, $end_date);
 
     $output = \Drupal::getContainer()
       ->get('flexinfo.field.service')

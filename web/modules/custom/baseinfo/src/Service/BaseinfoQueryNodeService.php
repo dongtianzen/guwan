@@ -109,4 +109,36 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
     return $nids;
   }
 
+  /**
+   * @param $code_tid is tid, not code name like 600117
+   *        $start_date = '2018-07-08'
+   */
+  public function queryDayNodesByCodeByQueryRange($code_tid = NULL, $end_date = NULL, $range_num = 42) {
+    $nids = $this->queryDayNidsByCodeByQueryRange($code_tid, $end_date, $range_num);
+    $nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($nids);
+
+    return $nodes;
+  }
+
+  /**
+   * @param $code_tid is tid, not code name like 600117
+   *        $start_date = '2018-07-08'
+   */
+  public function queryDayNidsByCodeByQueryRange($code_tid = NULL, $end_date = NULL, $range_num = 42) {
+    $query_container = \Drupal::getContainer()->get('flexinfo.querynode.service');
+    $query = $query_container->queryNidsByBundle('day');
+
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_code', $code_tid);
+    $query->condition($group);
+
+    $group = $query_container->groupStandardByFieldValue($query, 'field_day_date', $end_date, '<');
+    $query->condition($group);
+
+    $query->sort('field_day_date', 'DESC');
+    $query->range(0, $range_num);
+    $nids = $query_container->runQueryWithGroup($query);
+
+    return $nids;
+  }
+
 }

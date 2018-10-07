@@ -242,7 +242,7 @@ dpm($tids_array);
 
         }
         else {
-          break 2;
+          break;
         }
       }
 

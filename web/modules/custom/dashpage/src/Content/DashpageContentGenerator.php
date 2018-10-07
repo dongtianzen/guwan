@@ -224,7 +224,7 @@ class DashpageContentGenerator extends ControllerBase {
    */
   public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9, $dayLength = 58) {
     $output = array();
-dpm($tids_array);
+
     foreach ($tids_array as $tid) {
       $end_date_timestamp = \Drupal::time()->getCurrentTime() - (60 * 60 * 24);
       $end_date = \Drupal::service('date.formatter')->format($end_date_timestamp, 'html_date');
@@ -233,11 +233,9 @@ dpm($tids_array);
 
       $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
       if (isset($traderMacdValue[2]) && is_array($traderMacdValue[2])) {
-dpm($tid);
-dpm($traderMacdValue[2]);
+
         foreach ($traderMacdValue[2] as $row) {
-          dpm($row);
-          if ($row <= 0.1) {
+          if ($row <= 0.05) {
           }
           else {
             break;

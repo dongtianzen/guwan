@@ -220,25 +220,27 @@ class DashpageContentGenerator extends ControllerBase {
 
   /**
    * 统计5~7个交易日macd dif（白线）数值 从小于macd（黄线）到趋近或重合macd（黄线）
+   * @param $start_date = '2018-07-08', $end_date = '2018-07-13'
    */
-  public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
+  public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9, $dayLength = 42) {
     $output = array();
 
     foreach ($tids_array as $tid) {
       for ($i = 0; $i < 7; $i++) {
-        $query_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
-        $end_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
+        $end_date_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
+        $end_date = \Drupal::service('date.formatter')->format($end_date_timestamp, 'html_date');
 
-        $close_prices = $this->getClosePrice($tid, $end_date, $length = 42);
+        $start_date_timestamp = $end_date_timestamp - ($length * 60 * 60 * 24);
+        $start_date = \Drupal::service('date.formatter')->format($start_date_timestamp, 'html_date');
+
+        $close_prices = $this->getClosePriceByDateRange($tid, $start_date, $end_date);
         $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
 
         if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.2) {
+          $output[] = $tid;
         }
         else {
           break;
-        }
-
-        $output[] = $tid;
         }
       }
     }
@@ -250,12 +252,7 @@ class DashpageContentGenerator extends ControllerBase {
    * @param $start_date = '2018-07-08', $end_date = '2018-07-13'
    * @return array
    */
-  public function getClosePrice($tid = NULL, $end_date = NULL, $length = 34) {
-    $output = array();
-
-    $start_date_timestamp = \Drupal::time()->getCurrentTime() - ($length * 60 * 60 * 24);
-    $start_date = \Drupal::service('date.formatter')->format($start_date_timestamp, 'html_date');
-
+  public function getClosePriceByDateRange($tid = NULL, $start_date = NULL, $end_date = NULL) {
     $previous_entitys = \Drupal::getContainer()
       ->get('baseinfo.querynode.service')
       ->queryDayNodesByCodeByDateRange($tid, $start_date, $end_date);

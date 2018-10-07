@@ -237,6 +237,8 @@ dpm($tids_array);
       if (isset($traderMacdValue[2]) && is_array(isset($traderMacdValue[2]))) {
         foreach (isset($traderMacdValue[2]) as $row) {
           if ($row <= 0.1) {
+          }
+          else {
             break;
           }
 

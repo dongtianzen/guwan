@@ -224,7 +224,7 @@ class DashpageContentGenerator extends ControllerBase {
    */
   public function compareMacd($tids_array = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9, $dayLength = 42) {
     $output = array();
-
+dpm($tids_array);
     foreach ($tids_array as $tid) {
       for ($i = 0; $i < 7; $i++) {
         $end_date_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);

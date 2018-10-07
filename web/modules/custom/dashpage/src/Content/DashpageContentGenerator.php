@@ -245,7 +245,7 @@ class DashpageContentGenerator extends ControllerBase {
       }
     }
 
-    return $tids_array;
+    return $output;
   }
 
   /**

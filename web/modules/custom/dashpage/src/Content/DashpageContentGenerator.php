@@ -229,8 +229,8 @@ class DashpageContentGenerator extends ControllerBase {
         $query_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
         $end_date = \Drupal::service('date.formatter')->format($query_timestamp, 'html_date');
 
-        $close_price = $this->getClosePrice($tid, $end_date, $length = 42);
-        $traderMacdValue = $this->getTraderMacdValue($close_price, $fastPeriod, $slowPeriod, $signalPeriod);
+        $close_prices = $this->getClosePrice($tid, $end_date, $length = 42);
+        $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
 
         if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.2) {
         }
@@ -247,6 +247,7 @@ class DashpageContentGenerator extends ControllerBase {
   }
 
   /**
+   * @param $start_date = '2018-07-08', $end_date = '2018-07-13'
    * @return array
    */
   public function getClosePrice($tid = NULL, $end_date = NULL, $length = 34) {
@@ -267,17 +268,17 @@ class DashpageContentGenerator extends ControllerBase {
   }
 
   /**
-   * @param $close_price = array(12.33, 15.21, 14.54, .....) count($close_price) > 33;
+   * @param $close_prices = array(12.33, 15.21, 14.54, .....) count($close_prices) > 33;
    * @return
       index [0]: MACD values
       index [1]: Signal values
       index [2]: Divergence values
    */
-  public function getTraderMacdValue($close_price = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
+  public function getTraderMacdValue($close_prices = array(), $fastPeriod = 12, $slowPeriod = 26, $signalPeriod = 9) {
     $output = FALSE;
 
-    if ($close_price && count($close_price) > 33) {
-      $output = trader_macd($close_price, $fastPeriod, $slowPeriod, $signalPeriod);
+    if ($close_prices && count($close_prices) > 33) {
+      $output = trader_macd($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
     }
 
     return $output;

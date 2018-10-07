@@ -234,7 +234,9 @@ dpm($tids_array);
         $start_date = \Drupal::service('date.formatter')->format($start_date_timestamp, 'html_date');
 
         $close_prices = $this->getClosePriceByDateRange($tid, $start_date, $end_date);
+        dpm($close_prices);
         $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
+        dpm($traderMacdValue);
 
         if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.8) {
 

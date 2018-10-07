@@ -236,7 +236,7 @@ dpm($tids_array);
         $close_prices = $this->getClosePriceByDateRange($tid, $start_date, $end_date);
         $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
 
-        if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.2) {
+        if (isset($traderMacdValue[2]) && $traderMacdValue[2] <= 0.8) {
 
         }
         else {

@@ -230,7 +230,7 @@ class DashpageContentGenerator extends ControllerBase {
         $end_date_timestamp = \Drupal::time()->getCurrentTime() - ($i * 60 * 60 * 24);
         $end_date = \Drupal::service('date.formatter')->format($end_date_timestamp, 'html_date');
 
-        $start_date_timestamp = $end_date_timestamp - ($length * 60 * 60 * 24);
+        $start_date_timestamp = $end_date_timestamp - ($dayLength * 60 * 60 * 24);
         $start_date = \Drupal::service('date.formatter')->format($start_date_timestamp, 'html_date');
 
         $close_prices = $this->getClosePriceByDateRange($tid, $start_date, $end_date);

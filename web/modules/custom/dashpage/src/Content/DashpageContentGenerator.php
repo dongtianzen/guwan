@@ -235,7 +235,7 @@ class DashpageContentGenerator extends ControllerBase {
       if (isset($traderMacdValue[2]) && is_array($traderMacdValue[2])) {
 
         foreach ($traderMacdValue[2] as $row) {
-          if ($row <= 0.05) {
+          if ($row <= 0.02) {
           }
           else {
             break;

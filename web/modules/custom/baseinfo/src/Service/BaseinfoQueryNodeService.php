@@ -118,7 +118,7 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
 
     $queryRangeDate = \Drupal::getContainer()
       ->get('flexinfo.field.service')
-      ->getFieldFirstValueCollection($previous_entitys, 'field_day_date');
+      ->getFieldFirstValueCollection($nodes, 'field_day_date');
 
     dpm($queryRangeDate);
 

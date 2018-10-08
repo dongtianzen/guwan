@@ -116,11 +116,11 @@ class BaseinfoQueryNodeService extends FlexinfoQueryNodeService {
     $nids = $this->queryDayNidsByCodeByQueryRange($code_tid, $end_date, $range_num);
     $nodes = \Drupal::entityManager()->getStorage('node')->loadMultiple($nids);
 
-    $queryRangeDate = \Drupal::getContainer()
-      ->get('flexinfo.field.service')
-      ->getFieldFirstValueCollection($nodes, 'field_day_date');
+    // $queryRangeDate = \Drupal::getContainer()
+    //   ->get('flexinfo.field.service')
+    //   ->getFieldFirstValueCollection($nodes, 'field_day_date');
 
-    dpm($queryRangeDate);
+    // dpm($queryRangeDate);
 
     return $nodes;
   }

@@ -6,6 +6,5 @@ dashpage.rank.page.menu:
 
 dashpage.volumeratio.page.menu:
   title: 'Volume Ratio'
-  route_name: dashpage.volumeratio.page
-  route_parameters: { section: '2018-08-10' }
+  route_name: dashpage.volumeratio.redirect
   menu_name: main

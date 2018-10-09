@@ -88,6 +88,20 @@ class DashpageController extends ControllerBase {
 
   /**
    * {@inheritdoc}
+   * redirect page to today date like /dashpage/volumeratio/2018-10-19
+   */
+  public function standardVolumeRatioRedirect() {
+    $date_timestamp = \Drupal::time()->getCurrentTime() - (0 * 60 * 60 * 24);
+    $date = \Drupal::service('date.formatter')->format($date_timestamp, 'html_date');
+
+    $uri = '/dashpage/volumeratio/' . $date;
+    $url = Url::fromUserInput($uri)->toString();
+
+    return new RedirectResponse($url);
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function standardVolumeRatioPage($section) {
     $name = 'time_query';

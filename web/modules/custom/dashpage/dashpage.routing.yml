@@ -25,7 +25,16 @@ dashpage.query.page:
   requirements:
     _permission: 'access site reports'
 
-# modal
+#
+dashpage.volumeratio.redirect:
+  path: '/dashpage/volumeratio/redirect'
+  defaults:
+    _controller: '\Drupal\dashpage\Controller\DashpageController::standardVolumeRatioRedirect'
+    _title: 'Volume Ratio'
+  requirements:
+    _permission: 'access content'
+
+#
 dashpage.volumeratio.page:
   path: '/dashpage/volumeratio/{section}'
   defaults:

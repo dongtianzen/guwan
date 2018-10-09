@@ -234,15 +234,15 @@ class DashpageContentGenerator extends ControllerBase {
       $traderMacdValue = $this->getTraderMacdValue($close_prices, $fastPeriod, $slowPeriod, $signalPeriod);
       if (isset($traderMacdValue[2]) && is_array($traderMacdValue[2])) {
 
-        foreach ($traderMacdValue[2] as $row) {
+        foreach ($traderMacdValue[2] as $key => $row) {
           if ($row <= 0.02) {
           }
           else {
             break;
           }
-
-          $output[] = $tid;
         }
+
+        $output[] = $tid;
       }
     }
 

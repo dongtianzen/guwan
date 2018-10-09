@@ -289,18 +289,20 @@ class DashpageContentGenerator extends ControllerBase {
     $output = '';
 
     $tids_array = $this->getTidsByCheckPriceRatio($day_nodes);
+    dpm($tids_array);
     $tids_array = $this->compareMacd($tids_array);
+    dpm($tids_array);
 
-    $num = 1;
     if ($tids_array) {
       $terms = \Drupal::entityTypeManager()
         ->getStorage('taxonomy_term')
         ->loadMultiple($tids_array);
 
+      $num = 1;
       foreach ($terms as $key => $term) {
         $output .= '<tr>';
           $output .= '<td>';
-            $output .= $num;
+            $output .= $key;
           $output .= '</td>';
           $output .= '<td>';
             $output .= $term->getName();

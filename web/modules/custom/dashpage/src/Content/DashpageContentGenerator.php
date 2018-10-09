@@ -298,11 +298,10 @@ class DashpageContentGenerator extends ControllerBase {
         ->getStorage('taxonomy_term')
         ->loadMultiple($tids_array);
 
-      $num = 1;
-      foreach ($terms as $key => $term) {
+      foreach (array_values($terms) as $key => $term) {
         $output .= '<tr>';
           $output .= '<td>';
-            $output .= $key;
+            $output .= $key + 1 ;
           $output .= '</td>';
           $output .= '<td>';
             $output .= $term->getName();
@@ -313,8 +312,6 @@ class DashpageContentGenerator extends ControllerBase {
               ->getFieldFirstValue($term, 'field_code_name');
           $output .= '</td>';
         $output .= '</tr>';
-
-        $num++;
       }
     }
 

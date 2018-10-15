@@ -237,7 +237,7 @@ class DashpageContentGenerator extends ControllerBase {
         // Since PHP 7.3 (2018) there is (finally) function for this
         // $last_key = array_key_last($traderMacdValue[2]);
         $get_array_keys = array_keys($traderMacdValue[2]);
-        $last_key = end();
+        $last_key = end($get_array_keys);
 
         foreach ($traderMacdValue[2] as $key => $row) {
           if ($row <= 0.02) {

@@ -218,13 +218,13 @@ class DashpageContentGenerator extends ControllerBase {
           if ($lastElement == 2134) {
             $price_ma5 = \Drupal::getContainer()
               ->get('flexinfo.field.service')
-              ->getFieldFirstValue($entity, 'field_day_ma5');
+              ->getFieldFirstValue($day_node, 'field_day_ma5');
 
 
 dpm('$price_ma5 - ' . $price_ma5);
             $price_ma10 = \Drupal::getContainer()
               ->get('flexinfo.field.service')
-              ->getFieldFirstValue($entity, 'field_day_ma10');
+              ->getFieldFirstValue($day_node, 'field_day_ma10');
 dpm('$price_ma10 - ' . $price_ma10);
           }
         }
@@ -254,10 +254,6 @@ dpm('$price_ma10 - ' . $price_ma10);
         // $last_key = array_key_last($traderMacdValue[2]);
         $get_macd_array_keys = array_keys($traderMacdValue[2]);
         $last_key = end($get_macd_array_keys);
-
-        if ($tid == 2768) {
-          dpm($traderMacdValue[2]);
-        }
 
         foreach ($traderMacdValue[2] as $key => $row) {
           if ($row <= 0.02) {

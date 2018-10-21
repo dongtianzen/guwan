@@ -255,6 +255,10 @@ dpm('$price_ma10 - ' . $price_ma10);
         $get_macd_array_keys = array_keys($traderMacdValue[2]);
         $last_key = end($get_macd_array_keys);
 
+        if ($tid == 2134) {
+          dpm($traderMacdValue[2]);
+        }
+
         foreach ($traderMacdValue[2] as $key => $row) {
           if ($row <= 0.02) {
           }

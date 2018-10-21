@@ -201,6 +201,7 @@ class DashpageContentGenerator extends ControllerBase {
    */
   public function getTidsByCheckPriceRatio($day_nodes) {
     $tids_array = [];
+
     foreach ($day_nodes as $key => $day_node) {
       $checkPriceRation = $this->comparePriceRatio($day_node, 97, 100);
 
@@ -211,6 +212,21 @@ class DashpageContentGenerator extends ControllerBase {
           $tids_array[] = \Drupal::getContainer()
             ->get('flexinfo.field.service')
             ->getFieldFirstTargetId($day_node, 'field_day_code');
+
+
+          $lastElement = array_values(array_slice($tids_array, -1))[0];
+          if ($lastElement == 2134) {
+            $price_ma5 = \Drupal::getContainer()
+              ->get('flexinfo.field.service')
+              ->getFieldFirstValue($entity, 'field_day_ma5');
+
+
+dpm('$price_ma5 - ' . $price_ma5);
+            $price_ma10 = \Drupal::getContainer()
+              ->get('flexinfo.field.service')
+              ->getFieldFirstValue($entity, 'field_day_ma10');
+dpm('$price_ma10 - ' . $price_ma10);
+          }
         }
       }
     }
@@ -574,7 +590,7 @@ class DashpageContentGenerator extends ControllerBase {
   }
 
   /**
-   *
+   * compare ma5 ma10 on the min < (ma5/ma10) < max
    */
   public function comparePriceRatio($entity, $min = 90, $max = 110) {
     $output = FALSE;

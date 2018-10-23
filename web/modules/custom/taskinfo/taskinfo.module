@@ -37,7 +37,7 @@ function taskinfo_cron() {
  */
 function _taskinfo_run_python_code() {
   // Build the command string
-  $cmd = '/usr/local/bin/python3 modules/custom/python/get_hist_data_day.py';
+  $cmd = '/usr/local/bin/python3 modules/custom/python/getHistDataByTushare.py';
 
   // Execute the script and store the output in a variable
   $py_output = shell_exec($cmd);

@@ -6,7 +6,7 @@
 # cc = ts.get_k_data('399300', index=True, start='2016-10-01', end='2017-01-31')
 # print (cc)
 
-python3 web/modules/custom/python/get_hist_data_day.py
+python3 web/modules/custom/python/getHistDataByTushare.py
 
 """
 

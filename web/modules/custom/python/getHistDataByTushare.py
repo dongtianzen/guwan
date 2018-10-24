@@ -26,11 +26,7 @@ start_time = time.time()
 class RunGetHistData:
 
   def specifyCodeList(self, startDate, endDate = None):
-    # codeList = ['600006', '600007', '600008', '600009', '600010']
-    codeList = ['600290', '600291']
-    codeList = ['600291', '000515']
     codeList = ['sh', '000515']
-    codeList = ['601636', '601666', '601633', '601618', '601607', '601601']
     codeList = ['601899', '601900']
 
     allHistoryData = FlexTushareBasic().downloadHistDataByCode(codeList, startDate, endDate)

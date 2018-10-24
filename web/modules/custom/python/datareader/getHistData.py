@@ -28,7 +28,7 @@ import pandas_datareader.data as web
 
 #%%
 # define a class
-class GetPriceBasic:
+class GetPriceBasicClass:
 
   # @return DataFrame
   def getHistData(self):
@@ -47,7 +47,7 @@ class GetPriceBasic:
     return pricesDf
 
 
-pricesDf = GetPriceBasic().getHistData()
+pricesDf = GetPriceBasicClass().getHistData()
 print(pricesDf.info())
 # print(pricesDf.head())
 # print(pricesDf.describe())

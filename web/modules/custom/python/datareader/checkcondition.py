@@ -9,16 +9,16 @@ python3 web/modules/custom/python/datareader/checkcondition.py
 # define a class
 class checkCondition:
 
+  #
+  def getAveragePrice(self, pricesDf, key, num = 5):
+
+
   # compare ma5 ma10 on the min < (ma5/ma10) < max
   # @return Boolean, true or false
   def comparePriceRatio(self):
-    $price_ma5 = \Drupal::getContainer()
-      ->get('flexinfo.field.service')
-      ->getFieldFirstValue($entity, 'field_day_ma5');
+    priceMa5  = self.getAveragePrice(pricesDf, key, num = 5);
 
-    $price_ma10 = \Drupal::getContainer()
-      ->get('flexinfo.field.service')
-      ->getFieldFirstValue($entity, 'field_day_ma10');
+    priceMa10 = self.getAveragePrice(pricesDf, key, num = 10);
 
     if ($price_ma10) {
       $price_ratio = \Drupal::getContainer()

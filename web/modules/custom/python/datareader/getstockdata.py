@@ -35,7 +35,7 @@ class GetPriceBasic:
     start = datetime.datetime(2018, 10, 18)
 
     end   = datetime.date.today()
-    start = end - datetime.timedelta(days = 10)
+    start = end - datetime.timedelta(days = 60)
 
     stockCode = '601628'
     stockCode = stockCode + '.SS'

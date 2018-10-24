@@ -1,6 +1,6 @@
 """
 
-python3 web/modules/custom/python/datareader/runCheckStockPrice.py
+python3 web/modules/custom/python/datareader/runstockrank.py
 
 """
 

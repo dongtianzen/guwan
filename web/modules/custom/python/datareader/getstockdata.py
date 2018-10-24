@@ -18,7 +18,7 @@ DataReader函数中第二个参数代表数据来源
   Nasdaq Trader symbol definitions //纳斯达克
 
 
-python3 web/modules/custom/python/datareader/getHistData.py
+python3 web/modules/custom/python/datareader/getstockdata.py
 
 """
 
@@ -28,12 +28,14 @@ import pandas_datareader.data as web
 
 #%%
 # define a class
-class GetPriceBasicClass:
+class GetPriceBasic:
 
   # @return DataFrame
-  def getHistData(self):
-    start = datetime.datetime(2018, 10, 18) # or start = '1/1/2018'
+  def getHistPrice(self):
+    start = datetime.datetime(2018, 10, 18)
+
     end   = datetime.date.today()
+    start = end - datetime.timedelta(days = 10)
 
     stockCode = '601628'
     stockCode = stockCode + '.SS'
@@ -47,9 +49,7 @@ class GetPriceBasicClass:
     return pricesDf
 
 
-pricesDf = GetPriceBasicClass().getHistData()
-print(pricesDf.info())
+# print(pricesDf.info())
 # print(pricesDf.head())
 # print(pricesDf.describe())
 
-  # 1 获取股价数据

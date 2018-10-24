@@ -4,7 +4,7 @@ python3 web/modules/custom/python/datareader/runCheckStockPrice.py
 
 """
 
-from GetHistData import GetPriceBasicClass
+from getstockdata import GetPriceBasic
 
-pricesDf = GetPriceBasicClass().getHistData()
+pricesDf = GetPriceBasic().getHistPrice()
 print(pricesDf.info())

@@ -13,10 +13,8 @@ pricesDf = GetPriceBasic().getHistPrice()
 
 
 
-ma5 = CheckCondition().getAveragePrice(pricesDf, -1, 5)
-ma10 = CheckCondition().getAveragePrice(pricesDf, -1, 10)
+ma5 = CheckCondition().comparePriceRatio(pricesDf, -1)
 print(ma5)
-print(ma10)
 # CheckCondition().comparePriceRatio(pricesDf, -1)
 
 

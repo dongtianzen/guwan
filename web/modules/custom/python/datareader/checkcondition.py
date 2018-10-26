@@ -4,6 +4,7 @@
 python3 web/modules/custom/python/datareader/checkcondition.py
 
 """
+import pandas as pd
 
 #%%
 # define a class
@@ -24,12 +25,13 @@ class CheckCondition:
     return output
 
   #
-  def getAveragePrice(self, pricesDf, key, num = 5):
-    output = 0
+  def getAveragePrice(self, pricesDf, endRow, num = 5):
+    startRow = endRow - num
 
-    sumPrice = self.getSumPrice(pricesDf, key, num)
-    if (num > 0):
-      output = sumPrice / num
+    # closeDaysSeries = pricesDf['Close'][-6:-1]
+    closeDaysSeries = pricesDf['Close'][startRow:endRow]
+
+    output = pd.Series(closeDaysSeries).mean()
 
     return output
 

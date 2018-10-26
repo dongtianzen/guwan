@@ -9,7 +9,8 @@ from getstockdata import GetPriceBasic
 from checkcondition import CheckCondition
 
 pricesDf = GetPriceBasic().getHistPrice()
-# print(pricesDf.head())
+print(pricesDf.info())
+print(pricesDf.head())
 
 
 

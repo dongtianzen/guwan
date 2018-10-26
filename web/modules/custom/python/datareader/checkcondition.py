@@ -28,16 +28,41 @@ class CheckCondition:
 
     return output
 
+  #
+  def getAverageVolume(self, pricesDf, endRow, num = 5):
+    startRow = endRow - num
+
+    closeDaysSeries = pricesDf['Volume'][startRow:endRow]
+
+    output = pd.Series(closeDaysSeries).mean()
+
+    return output
+
 
   # compare ma5 ma10 on the min < (ma5/ma10) < max
   # @return Boolean, true or false
-  def comparePriceRatio(self, pricesDf, endRow, min = 0.90, max = 1.10):
+  def comparePriceRatio(self, pricesDf, endRow, min = 0.97, max = 1.10):
     output = False
 
-    priceMa5  = self.getAveragePrice(pricesDf, endRow, num = 5);
-    priceMa10 = self.getAveragePrice(pricesDf, endRow, num = 10);
+    ma5  = self.getAveragePrice(pricesDf, endRow, num = 5);
+    ma10 = self.getAveragePrice(pricesDf, endRow, num = 10);
 
-    percentage = priceMa5 / priceMa10
+    percentage = ma5 / ma10
+    print(percentage)
+
+    if ((percentage > min) and (percentage < max)):
+      output = True
+
+    return output
+
+  # @return Boolean, true or false
+  def compareVolumeRatio(self, pricesDf, endRow, min = 0.97, max = 1.10):
+    output = False
+
+    ma5  = self.getAverageVolume(pricesDf, endRow, num = 5);
+    ma10 = self.getAverageVolume(pricesDf, endRow, num = 10);
+
+    percentage = ma5 / ma10
     print(percentage)
 
     if ((percentage > min) and (percentage < max)):

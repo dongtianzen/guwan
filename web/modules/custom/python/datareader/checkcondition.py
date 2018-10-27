@@ -10,31 +10,31 @@ import pandas as pd
 # define a class
 class CheckCondition:
 
-  #
+  ###
   def getSumPrice(self, pricesDf, key, num = 5):
     output = 0
 
     return output
 
 
-  #
+  ###
   def getAveragePrice(self, pricesDf, endRow, num = 5):
     startRow = endRow - num
 
-    # closeDaysSeries = pricesDf['Close'][-6:-1]
-    closeDaysSeries = pricesDf['Close'][startRow:endRow]
+    # valueSeries = pricesDf['Close'][-6:-1]
+    valueSeries = pricesDf['Close'][startRow:endRow]
 
-    output = pd.Series(closeDaysSeries).mean()
+    output = pd.Series(valueSeries).mean()
 
     return output
 
-  #
+  ###
   def getAverageVolume(self, pricesDf, endRow, num = 5):
     startRow = endRow - num
 
-    closeDaysSeries = pricesDf['Volume'][startRow:endRow]
+    valueSeries = pricesDf['Volume'][startRow:endRow]
 
-    output = pd.Series(closeDaysSeries).mean()
+    output = pd.Series(valueSeries).mean()
 
     return output
 
@@ -48,7 +48,6 @@ class CheckCondition:
     ma10 = self.getAveragePrice(pricesDf, endRow, num = 10);
 
     percentage = ma5 / ma10
-    print(percentage)
 
     if ((percentage > min) and (percentage < max)):
       output = True
@@ -63,7 +62,6 @@ class CheckCondition:
     ma10 = self.getAverageVolume(pricesDf, endRow, num = 10);
 
     percentage = ma5 / ma10
-    print(percentage)
 
     if ((percentage > min) and (percentage < max)):
       output = True

@@ -9,12 +9,13 @@ from getstockdata import GetPriceBasic
 from checkcondition import CheckCondition
 
 pricesDf = GetPriceBasic().getHistPrice()
-print(pricesDf.info())
-print(pricesDf.head())
+# print(pricesDf.head())
 
 
 
 ma5 = CheckCondition().comparePriceRatio(pricesDf, -1)
+print(ma5)
+ma5 = CheckCondition().compareVolumeRatio(pricesDf, -1)
 print(ma5)
 # CheckCondition().comparePriceRatio(pricesDf, -1)
 

@@ -22,6 +22,16 @@ class FlexJsonBasic:
     return termCodeData
 
   #
+  def getAllTermCodeList(self):
+    codeList = []
+    for pageNum in range(0, 2):
+      print(pageNum)
+      tempList = self.convertViewsJsonToTermCodeList(pageNum)
+      codeList.extend(tempList)
+
+    return codeList
+
+  #
   def convertViewsJsonToTermCodeList(self, pageNum = 1):
     urlPath = self.getTermCodeListFromViewsJsonUrlPath(pageNum)
 

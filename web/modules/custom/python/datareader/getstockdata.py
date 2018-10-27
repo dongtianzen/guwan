@@ -37,7 +37,10 @@ class GetPriceBasic:
     start = end - datetime.timedelta(days = 60)
     # start = datetime.datetime(2018, 10, 18)
 
-    stockCode = codeNum + '.SS'
+    if int(float(codeNum)) > 599999:
+      stockCode = codeNum + '.SS'
+    else:
+      stockCode = codeNum + '.SZ'
 
     # get DataFrame "pricesDf",
     # DataReader函数中第二个参数代表数据来源，DataReader支持包括雅虎、谷歌在内的十数种数据来源，本篇笔记只关注来源为雅虎财经的数据。

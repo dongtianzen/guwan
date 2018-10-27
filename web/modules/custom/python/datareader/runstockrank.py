@@ -10,8 +10,9 @@ from checkcondition import CheckCondition
 
 from FlexJsonClass import FlexJsonBasic
 
-# pricesDf = GetPriceBasic().getHistPrice('000014')
+# pricesDf = GetPriceBasic().getHistPrice('000005')
 # print(pricesDf.head())
+# exit()
 
 codeList = FlexJsonBasic().getAllStockCodeList()
 for codeNum in codeList:

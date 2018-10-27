@@ -8,10 +8,17 @@ import pandas as pd
 from getstockdata import GetPriceBasic
 from checkcondition import CheckCondition
 
-pricesDf = GetPriceBasic().getHistPrice()
+from FlexJsonClass import FlexJsonBasic
+
+pricesDf = GetPriceBasic().getHistPrice('601628')
 # print(pricesDf.head())
 
 
+
+for pageNum in range(0, 90):
+  print(pageNum)
+  codeList = FlexJsonBasic().convertViewsJsonToTermCodeList(pageNum)
+  print(codeList)
 
 ma5 = CheckCondition().comparePriceRatio(pricesDf, -1)
 print(ma5)

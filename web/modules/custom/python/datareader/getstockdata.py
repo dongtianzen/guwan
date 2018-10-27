@@ -43,7 +43,12 @@ class GetPriceBasic:
     # DataReader函数中第二个参数代表数据来源，DataReader支持包括雅虎、谷歌在内的十数种数据来源，本篇笔记只关注来源为雅虎财经的数据。
     # 通常情况下我们只关注最后一列Adjusted Closing Price 并使用它计算收益率。Adj Close的好处是已将所有的权重、分割和股利分发等因素考虑在了价格中进行调整。
     # 值得一提的是，如果在给定日期内，该证券并没有操作活动，DataReader函数将返回一个空的DataFrame，既没有index，也没有列名。
-    pricesDf = web.DataReader(stockCode, 'yahoo', start, end)
+
+    pricesDf = pd.DataFrame()
+    try:
+      pricesDf = web.DataReader(stockCode, 'yahoo', start, end)
+    except:
+      print('did not find: ' + codeNum)
 
     return pricesDf
 

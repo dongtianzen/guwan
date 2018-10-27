@@ -22,9 +22,9 @@ class FlexJsonBasic:
     return termCodeData
 
   #
-  def getAllTermCodeList(self):
+  def getAllStockCodeList(self):
     codeList = []
-    for pageNum in range(0, 2):
+    for pageNum in range(0, 1):
       print(pageNum)
       tempList = self.convertViewsJsonToTermCodeList(pageNum)
       codeList.extend(tempList)

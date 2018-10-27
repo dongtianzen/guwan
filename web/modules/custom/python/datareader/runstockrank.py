@@ -10,22 +10,33 @@ from checkcondition import CheckCondition
 
 from FlexJsonClass import FlexJsonBasic
 
-pricesDf = GetPriceBasic().getHistPrice('000014')
-print(pricesDf.head())
-exit()
+# pricesDf = GetPriceBasic().getHistPrice('000014')
+# print(pricesDf.head())
+
 
 codeList = FlexJsonBasic().getAllStockCodeList()
-for code in codeList:
-  print(code)
-  pricesDf = GetPriceBasic().getHistPrice(code)
+for codeNum in codeList:
+  print(codeNum)
+  pricesDf = GetPriceBasic().getHistPrice(codeNum)
 
-  comparePrice = CheckCondition().comparePriceRatio(pricesDf, -1)
-  print(comparePrice)
+  if not(pricesDf.empty):
 
-  if comparePrice:
-    compareVolum = CheckCondition().compareVolumeRatio(pricesDf, -1)
-    print(compareVolum)
+    for endRow in range(-1, -6, -1):
+      comparePrice = CheckCondition().comparePriceRatio(pricesDf, endRow)
+      print('comparePrice ' + str(endRow))
 
+      if comparePrice:
+        compareVolum = CheckCondition().compareVolumeRatio(pricesDf, endRow)
+        print('compareVolum ' + str(endRow))
+        if compareVolum:
+          pass
+        else:
+          break
+
+      else:
+        break
+
+    print ('It pass all condition : ' + codeNum)
 
 # CheckCondition().comparePriceRatio(pricesDf, -1)
 

@@ -24,16 +24,6 @@ for codeNum in codeList:
   print(codeNum)
 
   pricesDf = GetPriceBasic().getHistPrice(codeNum)
-  short_day = 12    # 短期EMA平滑天数
-  long_day  = 26    # 长期EMA平滑天数
-  macd_day  = 9    # DEA线平滑天数
-
-  # talib计算MACD
-  macd_tmp = talib.MACD(pricesDf['Close'], fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
-
-  print(pricesDf.shape)
-  macdDf = pd.DataFrame(list(macd_tmp))
-  print(macdDf.transpose())
 
   if not(pricesDf.empty):
 

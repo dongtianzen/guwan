@@ -73,6 +73,11 @@ class CheckCondition:
 
   ###
   # @return Boolean, true or false
+  # talib计算MACD
+  # macd, signal, hist = talib.MACD(pricesDf['Close'], fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
+  # macd_tmp = [macd, signal, hist]
+  # macdDf = pd.DataFrame(list(macd_tmp))
+  # print(macdDf.transpose())
   def checkMacd(self, pricesDf, endRow, min = -0.2, max = 0.1):
     output = False
 
@@ -92,12 +97,11 @@ class CheckCondition:
     macd_day  = 9    # DEA线平滑天数
 
     # talib计算MACD
-    macd_tmp = talib.MACD(pricesDf['Close'], fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
-    DIF  = macd_tmp[0]
-    DEA  = macd_tmp[1]
-    MACD = macd_tmp[2]
+    DIF, DEA, MACD = talib.MACD(pricesDf['Close'], fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
 
-    return MACD
+    output = MACD * 2
+    print(output)
+    return output
 
 
 

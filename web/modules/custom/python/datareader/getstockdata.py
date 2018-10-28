@@ -34,7 +34,7 @@ class GetPriceBasic:
   def getHistPrice(self, codeNum = '600000'):
 
     end   = datetime.date.today()
-    start = end - datetime.timedelta(days = 60)  # MACD 需要至少63天
+    start = end - datetime.timedelta(days = 200)  # MACD 需要至150天,时间越长越准确
     # start = datetime.datetime(2018, 10, 18)
 
     if int(float(codeNum)) > 599999:

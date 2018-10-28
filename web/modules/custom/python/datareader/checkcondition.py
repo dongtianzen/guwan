@@ -91,10 +91,8 @@ class CheckCondition:
     long_day  = 26    # 长期EMA平滑天数
     macd_day  = 9    # DEA线平滑天数
 
-    pricesArray = pricesDf['Close'];
-
     # talib计算MACD
-    macd_tmp = talib.MACD(pricesArray, fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
+    macd_tmp = talib.MACD(pricesDf['Close'], fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
     DIF  = macd_tmp[0]
     DEA  = macd_tmp[1]
     MACD = macd_tmp[2]

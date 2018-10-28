@@ -4,6 +4,8 @@ python3 web/modules/custom/python/datareader/runstockrank.py
 
 """
 import pandas as pd
+import talib
+
 
 from getstockdata import GetPriceBasic
 from checkcondition import CheckCondition
@@ -16,10 +18,22 @@ from FlexJsonClass import FlexJsonBasic
 # print(pricesDf['Close'])
 
 
-codeList = FlexJsonBasic().getAllStockCodeList()
+# codeList = FlexJsonBasic().getAllStockCodeList()
+codeList = ['600372']
 for codeNum in codeList:
   print(codeNum)
+
   pricesDf = GetPriceBasic().getHistPrice(codeNum)
+  short_day = 12    # 短期EMA平滑天数
+  long_day  = 26    # 长期EMA平滑天数
+  macd_day  = 9    # DEA线平滑天数
+
+  # talib计算MACD
+  macd_tmp = talib.MACD(pricesDf['Close'], fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
+
+  print(pricesDf)
+  macdDf = pd.DataFrame(list(macd_tmp))
+  print(macdDf.transpose())
 
   if not(pricesDf.empty):
 

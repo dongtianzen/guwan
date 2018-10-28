@@ -5,6 +5,8 @@ python3 web/modules/custom/python/datareader/checkcondition.py
 
 """
 import pandas as pd
+import talib
+
 
 #%%
 # define a class
@@ -38,7 +40,7 @@ class CheckCondition:
 
     return output
 
-
+  ###
   # compare ma5 ma10 on the min < (ma5/ma10) < max
   # @return Boolean, true or false
   def comparePriceRatio(self, pricesDf, endRow, min = 0.97, max = 1.10):
@@ -54,6 +56,7 @@ class CheckCondition:
 
     return output
 
+  ###
   # @return Boolean, true or false
   def compareVolumeRatio(self, pricesDf, endRow, min = 0.97, max = 1.10):
     output = False
@@ -67,6 +70,36 @@ class CheckCondition:
       output = True
 
     return output
+
+  ###
+  # @return Boolean, true or false
+  def checkMacd(self, pricesDf, endRow, min = -0.2, max = 0.1):
+    output = False
+
+    MACD = self.getMacd(pricesDf)
+
+    if ((MACD[endRow] > min) and (MACD[endRow] < max)):
+      output = True
+
+    return output
+
+  ###
+  def getMacd(self, pricesDf):
+
+    ## 使用talib计算MACD的参数
+    short_day = 12    # 短期EMA平滑天数
+    long_day  = 26    # 长期EMA平滑天数
+    macd_day  = 9    # DEA线平滑天数
+
+    pricesArray = pricesDf['Close'];
+
+    # talib计算MACD
+    macd_tmp = talib.MACD(pricesArray, fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
+    DIF  = macd_tmp[0]
+    DEA  = macd_tmp[1]
+    MACD = macd_tmp[2]
+
+    return MACD
 
 
 

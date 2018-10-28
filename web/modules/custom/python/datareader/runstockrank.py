@@ -18,8 +18,8 @@ from FlexJsonClass import FlexJsonBasic
 # print(pricesDf['Close'])
 
 
-# codeList = FlexJsonBasic().getAllStockCodeList()
-codeList = ['600372']
+codeList = FlexJsonBasic().getAllStockCodeList()
+# codeList = ['600372']
 for codeNum in codeList:
   print(codeNum)
 

@@ -31,7 +31,7 @@ for codeNum in codeList:
   # talib计算MACD
   macd_tmp = talib.MACD(pricesDf['Close'], fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
 
-  print(pricesDf)
+  print(pricesDf.shape)
   macdDf = pd.DataFrame(list(macd_tmp))
   print(macdDf.transpose())
 

@@ -32,15 +32,15 @@ for codeNum in codeList:
       comparePrice = CheckCondition().comparePriceRatio(pricesDf, endRow)
 
       if comparePrice:
-        print('comparePrice ' + str(endRow))
+        # print('comparePrice ' + str(endRow))
 
         compareVolume = CheckCondition().compareVolumeRatio(pricesDf, endRow)
         if compareVolume:
-          print('compareVolume ' + str(endRow))
+          # print('compareVolume ' + str(endRow))
 
           checkMacd = CheckCondition().checkMacd(pricesDf, endRow)
           if checkMacd:
-            print('checkMacd ' + str(endRow))
+            # print('checkMacd ' + str(endRow))
 
           else:
             break

@@ -39,6 +39,8 @@ class GetPriceBasic:
 
     if int(float(codeNum)) > 599999:
       stockCode = codeNum + '.SS'
+      stockCode = 'NYSE:GE'
+      print(stockCode)
     else:
       stockCode = codeNum + '.SZ'
 
@@ -49,7 +51,8 @@ class GetPriceBasic:
 
     pricesDf = pd.DataFrame()
     try:
-      pricesDf = web.DataReader(stockCode, 'yahoo', start, end)
+      pricesDf = web.DataReader(stockCode, 'google', start, end)
+      # pricesDf = web.DataReader('DEXJPUS', 'fred', start, end) # forex
     except:
       print('did not find: ' + codeNum)
 

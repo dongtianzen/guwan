@@ -19,12 +19,12 @@ from FlexJsonClass import FlexJsonBasic
 
 
 codeList = FlexJsonBasic().getAllStockCodeList()
-# codeList = ['600372']
+codeList = ['601898']
 for codeNum in codeList:
   print(codeNum)
 
   pricesDf = GetPriceBasic().getHistPrice(codeNum)
-
+  print(pricesDf)
   if not(pricesDf.empty):
 
     maxDay = -6
@@ -32,14 +32,17 @@ for codeNum in codeList:
       comparePrice = CheckCondition().comparePriceRatio(pricesDf, endRow)
 
       if comparePrice:
+        pass
         # print('comparePrice ' + str(endRow))
 
         compareVolume = CheckCondition().compareVolumeRatio(pricesDf, endRow)
         if compareVolume:
+          pass
           # print('compareVolume ' + str(endRow))
 
           checkMacd = CheckCondition().checkMacd(pricesDf, endRow)
           if checkMacd:
+            pass
             # print('checkMacd ' + str(endRow))
 
           else:

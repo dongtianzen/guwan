@@ -39,7 +39,6 @@ class GetPriceBasic:
 
     if int(float(codeNum)) > 599999:
       stockCode = codeNum + '.SS'
-      stockCode = 'NYSE:GE'
       print(stockCode)
     else:
       stockCode = codeNum + '.SZ'

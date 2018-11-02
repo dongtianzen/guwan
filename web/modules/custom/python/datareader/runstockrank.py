@@ -24,55 +24,39 @@ for codeNum in codeList:
   print(codeNum)
 
   pricesDf = GetPriceBasic().getHistPrice(codeNum)
-  print(pricesDf)
-  if not(pricesDf.empty):
+  # print(pricesDf)
+  # if not(pricesDf.empty):
 
-    maxDay = -6
-    for endRow in range(-1, maxDay, -1):
-      comparePrice = CheckCondition().comparePriceRatio(pricesDf, endRow)
+  #   maxDay = -6
+  #   for endRow in range(-1, maxDay, -1):
+  #     comparePrice = CheckCondition().comparePriceRatio(pricesDf, endRow)
 
-      if comparePrice:
-        pass
-        # print('comparePrice ' + str(endRow))
+  #     if comparePrice:
+  #       pass
+  #       # print('comparePrice ' + str(endRow))
 
-        compareVolume = CheckCondition().compareVolumeRatio(pricesDf, endRow)
-        if compareVolume:
-          pass
-          # print('compareVolume ' + str(endRow))
+  #       compareVolume = CheckCondition().compareVolumeRatio(pricesDf, endRow)
+  #       if compareVolume:
+  #         pass
+  #         # print('compareVolume ' + str(endRow))
 
-          checkMacd = CheckCondition().checkMacd(pricesDf, endRow)
-          if checkMacd:
-            pass
-            # print('checkMacd ' + str(endRow))
+  #         checkMacd = CheckCondition().checkMacd(pricesDf, endRow)
+  #         if checkMacd:
+  #           pass
+  #           # print('checkMacd ' + str(endRow))
 
-          else:
-            break
+  #         else:
+  #           break
 
-        else:
-          break
+  #       else:
+  #         break
 
-      else:
-        break
+  #     else:
+  #       break
 
-      if (endRow == (maxDay + 1)):
-        print ('It pass all condition : ' + codeNum)
+  #     if (endRow == (maxDay + 1)):
+  #       print ('It pass all condition : ' + codeNum)
 
-# CheckCondition().comparePriceRatio(pricesDf, -1)
-
-
-# print(ss.mean)
-# print(pricesDf['Close'][-8:-2])
-# print(pricesDf['Close'])
-# print(pricesDf['Close'][-2:])
+CheckCondition().checkMacd(pricesDf, -1)
 
 
-
-# 选取DataFrame最后一行，返回的是DataFrame
-# cc = pricesDf.iloc[-1:]['Close']
-# print(type(cc))
-# print(pricesDf.iloc[-1:]['Close'])
-# print(pricesDf['Close'][-8:-2])
-
-#选取最后一行, 第5列，用于已知行、列位置的选
-# print(pricesDf.iat[-1, 3])
-# print(pricesDf.loc['2018-10-24',['Close']])

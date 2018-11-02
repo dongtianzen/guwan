@@ -82,7 +82,7 @@ class CheckCondition:
     output = False
 
     MACD = self.getMacd(pricesDf)
-
+    print(type(MACD))
     if ((MACD[endRow] > min) and (MACD[endRow] < max)):
       output = True
 

@@ -82,7 +82,6 @@ class CheckCondition:
     output = False
 
     MACD = self.getMacd(pricesDf)
-    print(type(MACD))
     if ((MACD[endRow] > min) and (MACD[endRow] < max)):
       output = True
 
@@ -100,7 +99,6 @@ class CheckCondition:
     DIF, DEA, MACD = talib.MACD(pricesDf['Close'], fastperiod = short_day, slowperiod = long_day, signalperiod = macd_day)
 
     output = MACD * 2
-    print(output)
     return output
 
 
